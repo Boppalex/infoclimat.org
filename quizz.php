@@ -5,6 +5,9 @@
     <style>
         /* Add your CSS styles here */
     </style>
+    <a href="index.html">
+        <img src="images/terre.jpg" alt="logo"class="w-40 h-40">
+      </a>
 </head>
 <body>
     <h1>Welcome to the Quiz!</h1>
