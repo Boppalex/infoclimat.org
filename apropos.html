@@ -4,16 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>À propos</title>
-    <!-- Utilisation du CDN pour Tailwind CSS (à des fins de démonstration) -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>À Propos</title>
 </head>
 
-<body>
-    <!-- Exemple de div avec Tailwind CSS -->
-    <div class="text-gray-600"> 
-        <span class="text-blue-600">L'équipe</span> : </br>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Le projet: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit. sint non proident, sunt in culpa qui officia deserunt mollit anim id est laborum 
+<body class="bg-gray-100">
+
+    <div class="container mx-auto p-8">
+        <h1 class="text-3xl font-bold mb-8">À Propos</h1>
+
+        <div class="grid grid-cols-2 gap-8">
+            <!-- Premier block -->
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-2">L'équipe : </h2>
+                <p class="text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            </div>
+
+            <!-- Deuxième block -->
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <img src="Images/ImageClimat.jpg" alt="Image 1" class="w-full h-48 object-cover mb-4">
+            </div>
+
+            <!-- Troisème block -->
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <img src="Images/ImageClimat2.jpg" alt="Image 2" class="w-full h-48 object-cover mb-4">
+            </div>
+
+            <!-- Quatrième block -->
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-2">Le projet : </h2>
+                <p class="text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.  sint   non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+            </div>
+        </div>
     </div>
+
 </body>
 
 </html>
