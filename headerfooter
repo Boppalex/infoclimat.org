@@ -1,0 +1,22 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <header>
+            <nav>    
+                <img=><!-- logo-->
+                <a href="">Accueil</a>
+                <a href="">Blog</a>
+                <a href="">A propos</a>
+            </nav>
+        </header>
+
+
+
+        <footer>
+            <p>@SIO2Groupe2</p>
+            <p>By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel Azoulay, Hugo Moreaux</p>
+        </footer>
+    </body>
+</html>
