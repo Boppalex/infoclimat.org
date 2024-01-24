@@ -6,11 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>À Propos</title>
-    <a href="index.html">
-        <img src="images/terre.jpg" alt="logo"class="w-40 h-40">
-      </a>
+    
 </head>
-
+<header class="bg-green-600 flex row justify-center p-8">
+    <a href="index.html">
+        <img src="images/terre1.jpg" alt="logo"class="w-40 h-40">
+      </a>
+    <nav class="flex row p-4">    
+        <!-- Lien vers la page "blog" -->
+        <div class="hover:bg-gray-500 hover:text-white rounded-full w-20 h-20 text-center flex">
+            <a href="blog.html" class="text-center flex">Blog</a>
+        </div>
+        </br>
+        <!-- Lien vers la page "quizz" -->
+        <div class="hover:bg-gray-500 hover:text-white rounded-full w-20 h-20 text-center flex">
+            <a href="quizz.php">Quizz</a>
+        </div>
+        
+        </br>
+        <!-- Lien vers la page "apropos" -->
+        <div class="hover:bg-gray-500 hover:text-white rounded-full w-20 h-20 text-center flex">
+            <a href="apropos.html">A propos</a>
+        </div>
+        
+    </nav>
+</header>
 <body class="bg-gray-100">
 
     <div class="container mx-auto p-8">
@@ -42,5 +62,9 @@
     </div>
 
 </body>
+<footer class="bg-green-600 p-4">
+    <p class="flex justify-center">@SIO2Groupe2</p>
+    <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel Azoulay, Hugo Moreaux</p>
+</footer>
 
 </html>
