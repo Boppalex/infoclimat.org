@@ -30,7 +30,7 @@
                     <a href="accueil.php" class="text-center flex items-center p-4 justify-center">Acceuil</a>
                 </div>
                 <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                    <a href="blog.html" class="text-center flex items-center p-6 justify-center">Blog</a>
+                    <a href="blog.php" class="text-center flex items-center p-6 justify-center">Blog</a>
                 </div>
 
                 <!-- Lien vers la page "quizz" -->
@@ -40,7 +40,7 @@
 
                 <!-- Lien vers la page "apropos" -->
                 <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex">
-                    <a href="apropos.html" class="text-center flex items-center p-1 justify-center">A propos</a>
+                    <a href="apropos.php" class="text-center flex items-center p-1 justify-center">A propos</a>
                 </div>
             </nav>
         </header>
