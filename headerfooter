@@ -6,9 +6,9 @@
         <header>
             <nav>    
                 <img=><!-- logo-->
-                <a href="">Accueil</a>
-                <a href="">Blog</a>
-                <a href="">A propos</a>
+                <a href="accueil.php">Accueil</a>
+                <a href="blog.php">Blog</a>
+                <a href="apropos.php">A propos</a>
             </nav>
         </header>
 
@@ -16,7 +16,7 @@
 
         <footer>
             <p>@SIO2Groupe2</p>
-            <p>By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel Azoulay, Hugo Moreaux</p>
+            <p>By Hugo Moreaux, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel Azoulay, Adrien Cirade</p>
         </footer>
     </body>
 </html>

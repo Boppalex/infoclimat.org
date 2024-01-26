@@ -19,7 +19,7 @@
         <!-- Correction de la balise <header> -->
         <header class="entete flex flex-col sm:flex-row justify-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24">
 
-            <a href="acceuil.html">
+            <a href="index.html">
                 <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
             </a>
             <nav class="flex flex-col sm:flex-row p-4 sm:p-8">
