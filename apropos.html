@@ -5,14 +5,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="headerfoorter.css">
     <title>À Propos</title>
-    <a href="index.html">
-        <img src="images/terre.jpg" alt="logo"class="w-40 h-40">
-      </a>
+    <style>
+        header {
+            background-color: #48bb78; /* Couleur verte du header */
+            height: 100px; /* Hauteur du header */
+            width: 100%;
+            position: relative; /* Position relative pour positionner le demi-cercle */
+            overflow: hidden; /* Masquer le contenu en dehors du header */
+            border-radius: 0 0 50% 50%;
+        }
+
+        /* Styles pour la navigation */
+        nav {
+            background-color: #48bb78; /* Couleur de fond de la navigation */
+            padding: 10px; /* Espacement interne */
+            color: white; /* Couleur du texte */
+            text-align: center; /* Centrage du texte */
+            position: relative;
+        }
+
+        nav a {
+            margin: 0 15px; /* Espacement entre les liens */
+            text-decoration: none; /* Supprimer la soulignement des liens */
+            color: white; /* Couleur du texte des liens */
+        }
+
+        .logo {
+            width: 50px; /* Ajuster la largeur du logo selon vos besoins */
+            margin-right: 15px;
+            margin-left: 50px;
+        }
+
+        footer {
+            background-color: #48bb78; /* Couleur verte du footer */
+            color: white; /* Couleur du texte du footer */
+            padding: 10px; /* Espacement interne du footer */
+            text-align: center; /* Centrage du texte du footer */
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
-
+<!-- Header en forme de demi-cercle -->
+<header>
+    <div class="half-circle"></div>
+    <nav>
+        <img src="Images/terre.png" alt="Logo" class="logo"> <!-- Ajout du logo dans la nav -->
+        <a href="accueil.html">Accueil</a>
+        <a href="blog.html">Blog</a>
+        <a href="apropos.html">À Propos</a>
+        <a href="quizz.php">Quizz</a>
+    </nav>
+</header>
     <div class="container mx-auto p-8">
         <h1 class="text-3xl font-bold mb-8">À Propos</h1>
 
@@ -40,7 +89,10 @@
             </div>
         </div>
     </div>
-
+    <footer>
+        <p>@SIO2Groupe2</p>
+        <p>By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel Azoulay, Hugo Moreaux</p>
+    </footer>
 </body>
 
 </html>
