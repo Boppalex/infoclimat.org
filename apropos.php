@@ -26,7 +26,7 @@
                 <!-- Lien vers la page "blog" -->
                 <div
                     class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                    <a href="acceuil.html" class="text-center flex items-center p-4 justify-center">Acceuil</a>
+                    <a href="accueil.php" class="text-center flex items-center p-4 justify-center">Acceuil</a>
                 </div>
                 <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
                     <a href="blog.html" class="text-center flex items-center p-6 justify-center">Blog</a>
