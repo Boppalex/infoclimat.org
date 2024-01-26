@@ -10,48 +10,50 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <title>À Propos</title>
+    <style>
+    .entete {
+        background-image: url('Images/wave.png');
+    }
+</style>
 </head>
-<div class="headertest grid grid-cols-1 grid-rows-1 top-0">
-        <div class="flex col-start-1 col-end-2 row-start-1 row-end-2 bg-green-600 xl:bg-gray-100">
-            <svg class="header-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-                <path fill="#059669" fill-opacity="1"
-                    d="M0,96L60,122.7C120,149,240,203,360,229.3C480,256,600,256,720,245.3C840,235,960,213,1080,186.7C1200,160,1320,128,1380,112L1440,96L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z">
-                </path>
-            </svg>
-        </div>
-        <div class="flex col-start-1 col-end-2 row-start-1 row-end-2 justify-center">
-            <header class="entete flex flex-col sm:flex-row justify-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24">
-                <a href="accueil.php">
-                    <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
-                </a>
 
-                <!-- Menu burger Bootstrap -->
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="accueil.php">Accueil</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="blog.php">Blog</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="quizz.php">Quizz</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="apropos.php">A propos</a>
-                            </li>
-                        </ul>
+<header class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500">
+    <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
+        <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
+    </a>
+
+    <!-- Menu burger Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
+                        <a href="accueil.php" class="text-center flex items-center justify-center text-black hover:text-white">Accueil</a>
                     </div>
-                </nav>
-            </header>
+                </li>
+                <li class="nav-item">
+                    <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
+                        <a href="blog.php" class="text-center flex items-center justify-center text-black hover:text-white">Blog</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
+                        <a href="quizz.php" class="text-center flex items-center justify-center text-black hover:text-white">Quizz</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex">
+                        <a href="apropos.php" class="text-center flex items-center justify-center text-black hover:text-white">À propos</a>
+                    </div>
+                </li>
+            </ul>
         </div>
-    </div>
-
+    </nav>
+</header>
 
 
 
