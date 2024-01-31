@@ -20,14 +20,14 @@
         <!-- Correction de la balise <header> -->
         <header class="entete flex flex-col sm:flex-row justify-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24">
 
-            <a href="accueil.php">
+            <a href="index.html">
                 <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
             </a>
             <nav class="flex flex-col sm:flex-row p-4 sm:p-8">
                 <!-- Lien vers la page "blog" -->
                 <div
                     class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                    <a href="accueil.php" class="text-center flex items-center p-4 justify-center">Acceuil</a>
+                    <a href="accueil.php" class="text-center flex items-center p-4 justify-center">Accueil</a>
                 </div>
                 <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
                     <a href="blog.php" class="text-center flex items-center p-6 justify-center">Blog</a>
