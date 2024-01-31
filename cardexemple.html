@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemple Tailwind CSS</title>
+    <!-- Utilisation du CDN pour Tailwind CSS (à des fins de démonstration) -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+</head>
+
+<body class="bg-gray-100">
+
+    
+    <div class="card1 border bg-white w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
+        <div class="Photo flex justify-center ">
+            <img src="Images/ImageClimat.jpg" alt="image4"
+                class="w-full h-44 rounded-t-3xl object-cover">
+        </div>
+
+        <div class="infocard pl-10 pt-4 pr-10">
+
+            <div class="flex flex-row ">
+                texte qui parel du climat et de la terre texte qui parel du climat et de la terre texte qui parel du climat et de la terre 
+            </div>
+        </div>
+
+        <div class="boutonvalidation p-2 justify-end flex">
+            <button class="bg-white text-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
+                <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
+            </button>
+        </div>
+    </div>
+
+    </br>
+
+    <div class="swiperslide">
+        <div class="swiperslide ml-auto p-8">
+            <!-- Slider main container -->
+            <div class="swiper h-72 sm:h-96 md:h-96 lg:h-96 l xl:h-96 w-full sm:w-2/4 md:w-2/4 lg:w-2/4 xl:w-2/4 rounded-2xl">
+                <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                    <!-- Slides -->
+                    <div class="swiper-slide relative">
+                        <div class="image1 relative">
+                            <a href="#">
+                                <img src="Images/ImageClimat.jpg" alt="image" class="h-72 sm:h-96 w-full object-cover">
+                                <div class="overlay absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                                    <p class="text-white font-bold">Description</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="swiper-slide relative">
+                        <div class="image2 relative">
+                            <a href="#">
+                                <img src="Images/ImageClimat2.jpg" alt="image" class="h-72 sm:h-96 w-full object-cover">
+                                <div class="overlay absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                                    <p class="text-white font-bold">Description</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide relative">
+                        <div class="image3 relative">
+                            <a href="#">
+                                <img src="Images/nuitinfo.png" alt="image" class="h-72 sm:h-96 w-full object-cover">
+                                <div class="overlay absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                                    <p class="text-white font-bold">Description</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="swiper-slide relative">
+                        <div class="image4 relative">
+                            <a href="#">
+                                <img src="Images/ImageClimat2.jpg" alt="image" class="h-72 sm:h-96 w-full object-cover">
+                                <div class="overlay absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                                    <p class="text-white font-bold">Description</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                </div>
+                <!-- If we need pagination 
+                <div class="swiper-pagination "></div>-->
+
+                <!-- If we need navigation buttons 
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>-->
+
+                <!-- If we need scrollbar -->
+                <div class="swiper-scrollbar"></div>
+            </div>
+        </div>
+        
+        <script>
+            const swiper1 = new Swiper('.swiper', {
+                // Optional parameters
+                loop: true,
+
+                // Autoplay
+                autoplay: {
+                delay: 5000, // Définir la durée en millisecondes (5 secondes dans cet exemple)
+                },
+
+                // If we need pagination
+                pagination: {
+                    el: '.swiper-pagination',
+                },
+
+                // Navigation arrows
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+
+                // And if we need scrollbar
+                scrollbar: {
+                    el: '.swiper-scrollbar',
+                },
+            });
+        </script>
+    </div>
+
+    <div class="bg-gray-200 flex items-center justify-center h-64 w-92 ">
+        <div class="swiper-container">
+            <div class="swiper-wrapper h-64 w-92">
+                <div class="swiper-slide bg-white p-4 rounded-md shadow-md">
+                    <img src="Images/ImageClimat.jpg" alt="Image 1" class="w-full h-full object-cover max-w-1/2">
+                </div>
+                <div class="swiper-slide bg-white p-4 rounded-md shadow-md">
+                    <img src="Images/ImageClimat2.jpg" alt="Image 2" class="w-full h-full object-cover max-w-1/2">
+                </div>
+                <div class="swiper-slide bg-white p-4 rounded-md shadow-md">
+                    <img src="Images/nuitinfo.png" alt="Image 3" class="w-full h-full object-cover max-w-1/2">
+                </div>
+                <div class="swiper-slide bg-white p-4 rounded-md shadow-md">
+                    <img src="Images/ImageClimat2.jpg" alt="Image 4" class="w-full h-full object-cover max-w-1/2">
+                </div>
+                <div class="swiper-slide bg-white p-4 rounded-md shadow-md">
+                    <img src="Images/ImageClimat.jpg" alt="Image 5" class="w-full h-full object-cover max-w-1/2">
+                </div>
+            </div>
+            <!-- Ajoutez les flèches de navigation si vous le souhaitez 
+            <div class="swiper-button-next text-white bg-blue-500 hover:bg-blue-600 rounded-full w-8 h-8 flex items-center justify-center absolute top-1/2 -translate-y-1/2 right-4 cursor-pointer"></div>
+            <div class="swiper-button-prev text-white bg-blue-500 hover:bg-blue-600 rounded-full w-8 h-8 flex items-center justify-center absolute top-1/2 -translate-y-1/2 left-4 cursor-pointer"></div>-->
+        </div>
+    
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+        <script>
+            var swiper = new Swiper('.swiper-container', {
+                slidesPerView: 2,
+                spaceBetween: 20,
+                loop: true, // Activer la boucle infinie
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                autoplay: {
+                    delay: 5000,
+                },
+            });
+        </script>
+    </div>
+
+</body>
+
+</html>
