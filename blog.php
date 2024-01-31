@@ -48,7 +48,7 @@
     </nav>
 </header>
 
-<body class="bg-gray-100 pt-8">
+<body class="bg-gray-100 ">
 
 
     <div class="text text-3xl font-bold mb-8 justify-center flex">
