@@ -17,7 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errorMessage = "Invalid username or password";
     }
 }
-
 // Fonction de validation des informations d'identification avec interrogation de la base de données
 function validateCredentials($username, $password) {
     // Remplacez ces informations par celles de votre base de données
@@ -34,15 +33,28 @@ function validateCredentials($username, $password) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Échapper les valeurs pour éviter les injections SQL (utilisez les déclarations préparées pour une sécurité optimale)
-    $escapedUsername = $conn->real_escape_string($username);
-    $escapedPassword = $conn->real_escape_string($password);
+    // Utilisation d'une requête préparée pour éviter les injections SQL
+    $query = "SELECT * FROM user WHERE username=? AND password=?";
+    
+    // Préparer la requête
+    $stmt = $conn->prepare($query);
+    
+    // Vérifier si la préparation a échoué
+    if (!$stmt) {
+        die("Error in preparing statement: " . $conn->error);
+    }
 
-    // Requête pour vérifier les informations d'identification dans la base de données
-    $query = "SELECT * FROM user WHERE username='$escapedUsername' AND password='$escapedPassword'";
-    $result = $conn->query($query);
+    // Lier les paramètres
+    $stmt->bind_param("ss", $username, $password);
+
+    // Exécuter la requête
+    $stmt->execute();
+
+    // Récupérer le résultat
+    $result = $stmt->get_result();
 
     // Fermer la connexion à la base de données
+    $stmt->close();
     $conn->close();
 
     // Vérifier si la requête a renvoyé une correspondance

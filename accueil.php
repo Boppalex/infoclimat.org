@@ -54,7 +54,7 @@
     </nav>
 </header>
 
-<body class="bg-gray-100 pt-8">
+<body class="bg-gray-100 ">
 
     <div class="text text-3xl font-bold  justify-center flex">
         <h1>Information climatique :</h1>
