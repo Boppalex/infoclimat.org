@@ -16,6 +16,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
+        
+        footer {
+            background-color: #055634;
+            color: white;
+        }
+
         .superposition-simple {
             position: relative;
             width: 100%;
@@ -309,7 +315,8 @@
     </div>
 
 </body>
-<footer class="bg-green-600 p-4  w-full">
+
+<footer class="footerpage  p-4  w-full">
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>
