@@ -23,7 +23,7 @@ function validateCredentials($username, $password) {
     $dbHost = "localhost";
     $dbUser = "root";
     $dbPassword = "";
-    $dbName = "basetest";
+    $dbName = "infoclimat";
 
     // Connexion à la base de données
     $conn = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
@@ -34,7 +34,7 @@ function validateCredentials($username, $password) {
     }
 
     // Utilisation d'une requête préparée pour éviter les injections SQL
-    $query = "SELECT * FROM user WHERE username=? AND password=?";
+    $query = "SELECT * FROM utilisateur WHERE nom=? AND motpasse=?";
     
     // Préparer la requête
     $stmt = $conn->prepare($query);
