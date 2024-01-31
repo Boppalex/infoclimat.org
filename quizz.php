@@ -51,6 +51,7 @@
 <body class="bg-gray-100">
     <h1>Welcome to the Quiz!</h1>
     <form action="quiz.php" method="post">
+        <li>Pourquoi le nucléaire est mieux que le charbon ?</li>
         <!-- Add your quiz questions and options here -->
         <input type="submit" value="Submit">
     </form>
