@@ -8,3 +8,12 @@ RewriteRule ^login$ login.php [L]
 
 # Rediriger le backend.php vers /admin
 RewriteRule ^admin$ backend.php [L]
+
+# Rediriger le backend.php vers /blog
+RewriteRule ^blog$ blog.php [L]
+
+# Rediriger le backend.php vers /nous
+RewriteRule ^blog$ apropos.php [L]
+
+# Rediriger le backend.php vers /quizz
+RewriteRule ^quizz$ quizz.php [L]

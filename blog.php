@@ -102,8 +102,27 @@
     </nav>
 </header>
 
-<body class="bg-gray-100 pt-8">
+<body class="bg-gray-100 ">
+<?php
+// Connexion à la base de données
+$mysqli = new mysqli("localhost", "root", "", "infoclimat");
 
+// Vérification de la connexion
+if ($mysqli->connect_error) {
+    die("La connexion à la base de données a échoué : " . $mysqli->connect_error);
+}
+
+// Requête pour récupérer les informations de la table infocarte
+$result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, image FROM infocarte");
+
+// Vérification s'il y a des résultats
+if ($result->num_rows > 0) {
+    ?>
+    <!DOCTYPE html>
+    <html lang="fr">
+
+            <!-- ... Votre en-tête existant ... -->
+        </header>
 
         <div class="text text-3xl font-bold mb-8 justify-center flex">
             <h1>Notre Blog :</h1>
@@ -138,8 +157,8 @@
                             </div>
 
                             <div class="boutonvalidation p-2 justify-end flex">
-                                <button class="bg-white text-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
-                                    <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
+                                <button class="bg-white  px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
+                                    <a href="#" class="text-black hover:text-black text-sm">En savoir plus</a>
                                 </button>
                             </div>
                         </div>
