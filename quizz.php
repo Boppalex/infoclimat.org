@@ -12,9 +12,84 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
 
+body {
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 20px;
+}
+
+.quiz-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.question {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.question-title {
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+
+.question-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.option {
+  margin: 10px 0;
+}
+
+input[type="radio"] {
+  margin-right: 5px;
+}
+
+button {
+  background-color: #055634;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.message {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+.correct {
+  color: green;
+  font-weight: bold;
+}
         footer {
             background-color: #055634;
             color: white;
+            margin-top: auto;
         }
 
         .superposition-simple {
@@ -103,11 +178,11 @@
     </nav>
 </header>
 
-
+<body class="bg-gray-100">
 
 <body>
 
-<div class="bg-gray-100  quiz-container">
+<div class="bg-gray-100 quiz-container">
   <div id="questions"></div>
   <div id="message" class="message"></div>
   <button onclick="checkAnswers()">Vérifier</button>
@@ -118,19 +193,23 @@
 <script>
   // Fonction pour effectuer une requête AJAX
   function makeAjaxRequest(url, method, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status === 200) {
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        if (xhr.responseText.trim() !== "") {  // Vérifiez si la réponse n'est pas vide
           callback(JSON.parse(xhr.responseText));
         } else {
-          console.error("Erreur de requête AJAX");
+          console.error("Réponse JSON vide.");
         }
+      } else {
+        console.error("Erreur de requête AJAX. Statut : " + xhr.status);
       }
-    };
-    xhr.open(method, url, true);
-    xhr.send();
-  }
+    }
+  };
+  xhr.open(method, url, true);
+  xhr.send();
+}
 
   let quizData = [];
   let selectedAnswers = [];
@@ -183,6 +262,8 @@
   });
 }
 
+let errorMessageDisplayed = false;
+
 function checkAnswers() {
   const questionsElement = document.getElementById("questions");
   const messageElement = document.getElementById("message");
@@ -190,6 +271,13 @@ function checkAnswers() {
   selectedAnswers = [];
   let hasErrors = false;
   let allRadiosUnchecked = true;
+
+  // Réinitialise le contenu du message à chaque vérification
+  messageElement.innerText = "";
+  errorMessageDisplayed = false;
+
+  // Supprimez tous les messages d'erreur précédents
+  questionsElement.querySelectorAll('.error').forEach(errorElement => errorElement.remove());
 
   questionsElement.querySelectorAll('.options').forEach((options, questionIndex) => {
     const radio = options.querySelector('input[type="radio"]:checked');
@@ -221,14 +309,17 @@ function checkAnswers() {
     }
   });
 
-  if (allRadiosUnchecked) {
+  if (allRadiosUnchecked && !errorMessageDisplayed) {
     messageElement.innerText = "Veuillez sélectionner au moins une réponse avant de vérifier.";
-  } else if (hasErrors) {
+    errorMessageDisplayed = true;
+  } else if (hasErrors && !errorMessageDisplayed) {
     messageElement.innerText = "Certains éléments sont incorrects. Veuillez vérifier les erreurs.";
     restartButton.style.display = "inline"; // Affichez le bouton "Recommencer"
-  } else {
+    errorMessageDisplayed = true;
+  } else if (!errorMessageDisplayed) {
     messageElement.innerText = "Les réponses sont correctes!";
     restartButton.style.display = "inline"; // Affichez le bouton "Recommencer"
+    errorMessageDisplayed = true;
   }
 }
 
@@ -269,8 +360,7 @@ function restartQuiz() {
 </script>
 </body>
 
-<footer class=" p-4 fixed bottom-0 w-full">
-
+<footer class=" p-4 w-full">
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>
