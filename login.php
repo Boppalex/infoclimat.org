@@ -1,4 +1,7 @@
 <?php
+define("check","OK");
+require_once "passerelle.php";
+
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# Rediriger l'accueil.php vers /home
+RewriteRule ^home$ accueil.php [L]
+
+# Rediriger le login.php vers /login
+RewriteRule ^login$ login.php [L]
+
+# Rediriger le backend.php vers /admin
+RewriteRule ^admin$ backend.php [L]
