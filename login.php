@@ -26,7 +26,11 @@ function validateCredentials($username, $password) {
     $dbHost = "localhost";
     $dbUser = "root";
     $dbPassword = "";
+
+
     $dbName = "infoclimat";
+
+
 
     // Connexion à la base de données
     $conn = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
@@ -35,6 +39,8 @@ function validateCredentials($username, $password) {
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
+
+
 
     // Utilisation d'une requête préparée pour éviter les injections SQL
     $query = "SELECT * FROM utilisateur WHERE nom=? AND motpasse=?";
@@ -46,7 +52,6 @@ function validateCredentials($username, $password) {
     if (!$stmt) {
         die("Error in preparing statement: " . $conn->error);
     }
-
     // Lier les paramètres
     $stmt->bind_param("ss", $username, $password);
 
@@ -58,6 +63,7 @@ function validateCredentials($username, $password) {
 
     // Fermer la connexion à la base de données
     $stmt->close();
+
     $conn->close();
 
     // Vérifier si la requête a renvoyé une correspondance

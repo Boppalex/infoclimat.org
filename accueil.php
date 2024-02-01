@@ -15,6 +15,59 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <style>
+        
+        footer {
+            background-color: #055634;
+            color: white;
+        }
+
+        .superposition-simple {
+            position: relative;
+            width: 100%;
+        }
+
+        .superposition-simple .image-originale {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .superposition-simple .texte-original {
+            color: #fff;
+            font-size: 20px;
+            line-height: 1.5em;
+            text-shadow: 2px 2px 2px #000;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+        }
+
+        .superposition-simple .texte-hover {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+            transition: .5s ease;
+        }
+
+        .superposition-simple:hover .texte-normal {
+            opacity: 0;
+        }
+
+        .superposition-simple:hover .texte-hover {
+            opacity: 1;
+        }
+
+        .superposition-simple .texte-normal {
+            transition: .5s ease;
+        }
+    </style>
 </head>
 <header class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500" style="background-image: url('Images/wave.png');">
     <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
@@ -30,23 +83,24 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <a href="accueil.php" class="text-center flex items-center justify-center text-black hover:text-white">Accueil</a>
+
+                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
+                        <div class="superposition-simple  "><a href="accueil.php"><div class="texte-normal "><div class="texte-original ">Accueil</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/feuille.png" /><div class="texte-original">Accueil</div></div></a></div>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <a href="blog.php" class="text-center flex items-center justify-center text-black hover:text-white">Blog</a>
+                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
+                        <div class="superposition-simple "><a href="blog.php"><div class="texte-normal "><div class="texte-original">Blog</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/nuage.png" /><div class="texte-original">Blog</div></div></a></div>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <a href="quizz.php" class="text-center flex items-center justify-center text-black hover:text-white">Quizz</a>
+                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
+                        <div class="superposition-simple "><a href="quizz.php"><div class="texte-normal "><div class="texte-original">Quizz</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/soleil.png" /><div class="texte-original">Quizz</div></div></a></div>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex">
-                        <a href="apropos.php" class="text-center flex items-center justify-center text-black hover:text-white">À propos</a>
+                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
+                        <div class="superposition-simple "><a href="apropos.php"><div class="texte-normal "><div class="texte-original">À propos</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/glace.png" /><div class="texte-original">À propos</div></div></a></div>
                     </div>
                 </li>
             </ul>
@@ -263,7 +317,8 @@
     </div>
 
 </body>
-<footer class="bg-green-600 p-4  w-full">
+
+<footer class="footerpage  p-4  w-full">
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>
