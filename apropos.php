@@ -66,12 +66,12 @@
 
             <!-- Deuxième block -->
             <div class="bg-white p-4 rounded-lg shadow-md">
-                <img src="Images/ImageClimat.jpg" alt="Image 1" class="w-full h-50 object-cover mb-4 rounded-lg">
+                <img src="Images/ImageClimat.jpg" alt="Image 1" class="w-full h-100 object-cover mb-4 rounded-lg">
             </div>
 
             <!-- Troisième block -->
             <div class="bg-white p-4 rounded-lg shadow-md">
-                <img src="Images/nuitinfo.png" alt="Image 2" class="w-full h-50 object-cover mb-4 rounded-lg">
+                <img src="Images/nuitinfo.png" alt="Image 2" class="w-full h-100 object-cover mb-4 rounded-lg">
             </div>
 
             <!-- Quatrième block -->

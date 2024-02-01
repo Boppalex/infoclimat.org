@@ -48,7 +48,7 @@
     </nav>
 </header>
 
-<body class="bg-gray-100 pt-8">
+<body class="bg-gray-100">
 <?php
 // Connexion à la base de données
 $mysqli = new mysqli("localhost", "root", "rootroot", "infoclimat");
@@ -58,8 +58,25 @@ if ($mysqli->connect_error) {
     die("La connexion à la base de données a échoué : " . $mysqli->connect_error);
 }
 
-// Requête pour récupérer les informations de la table infocarte
-$result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, image FROM infocarte");
+// Initialiser la variable de catégorie
+$categorie = '';
+
+// Vérifier si le formulaire a été soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Récupérer la catégorie sélectionnée
+    $categorie = $_POST['categorie'];
+}
+
+// Requête pour récupérer les informations de la table infocarte avec filtrage par catégorie
+$query = "SELECT id, titre, description, article, categorie, statut, image FROM infocarte";
+
+// Ajouter le filtre de catégorie si une catégorie est sélectionnée
+if (!empty($categorie)) {
+    $query .= " WHERE categorie = $categorie";
+}
+
+// Exécuter la requête
+$result = $mysqli->query($query);
 
 // Vérification s'il y a des résultats
 if ($result->num_rows > 0) {
@@ -67,12 +84,28 @@ if ($result->num_rows > 0) {
     <!DOCTYPE html>
     <html lang="fr">
 
-            <!-- ... Votre en-tête existant ... -->
-        </header>
+    <body class="bg-gray-100 pt-8">
+        <!-- ... (La section body reste inchangée) ... -->
 
         <div class="text text-3xl font-bold mb-8 justify-center flex">
             <h1>Notre Blog :</h1>
         </div>
+
+        <!-- Ajout du formulaire de filtrage par catégorie -->
+        <form method="post" class="mb-4 justify-center flex">
+            <label for="categorie" class="mr-2">Filtrer par catégorie :</label>
+            <select name="categorie" id="categorie" class="border rounded p-1">
+                <option value="">Toutes les catégories</option>
+                <option value="0" <?php echo ($categorie === '0') ? 'selected' : ''; ?>>0</option>
+                <option value="1" <?php echo ($categorie === '1') ? 'selected' : ''; ?>>1</option>
+                <option value="5" <?php echo ($categorie === '5') ? 'selected' : ''; ?>>5</option>
+                <!-- Ajoutez d'autres options selon vos catégories -->
+            </select>
+            <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded ml-2">Filtrer</button>
+        </form>
+
+            <!-- ... Votre en-tête existant ... -->
+        </header>
 
         <div class="blog flex justify-center pb-12">
             <div class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:grid-rows-2  gap-8">
@@ -84,15 +117,17 @@ if ($result->num_rows > 0) {
                         <div class="card1 border bg-white w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
                             <div class="Photo flex justify-center">
                                 <?php
-                                // Encodage de l'image en base64
-                                $imageData = base64_encode($row['image']);
-
-                                // Type de contenu de l'image (assurez-vous que cela correspond au type d'image dans votre base de données)
-                                $imageType = "image/jpeg"; // Exemple pour le format JPEG, ajustez selon votre besoin
-
-                                // Affichage de l'image
-                                echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="image' . $row['id'] . '" class="w-full h-44 rounded-t-3xl object-cover">';
-                                ?>
+                                    if (empty($row['image'])) {
+                                        // Afficher l'image par défaut si la colonne "image" est vide
+                                        echo '<img src="Images/ImageClimat.jpg" alt="Image par défaut" class="w-full h-44 rounded-t-3xl object-cover">';
+                                    } else {
+                                        // Encodage de l'image en base64 si la colonne "image" n'est pas vide
+                                        $imageData = base64_encode($row['image']);
+                                        $imageType = "image/jpeg"; // Assurez-vous que le type correspond à votre base de données
+                                        // Afficher l'image depuis la base de données
+                                        echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="image' . $row['id'] . '" class="w-full h-44 rounded-t-3xl object-cover">';
+                                    }
+                                    ?>
                             </div>
 
                             <div class="infocard pl-10 pt-4 pr-10">
@@ -102,7 +137,7 @@ if ($result->num_rows > 0) {
                             </div>
 
                             <div class="boutonvalidation p-2 justify-end flex">
-                                <button class="bg-white text-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
+                                <button class="px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
                                     <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
                                 </button>
                             </div>

@@ -206,7 +206,7 @@
 
                     <div class="boutonvalidation p-2 justify-end flex">
                         <button
-                            class="bg-white text-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
+                            class="px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
                             <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
                         </button>
                     </div>
@@ -229,7 +229,7 @@
 
                     <div class="boutonvalidation p-2 justify-end flex">
                         <button
-                            class="bg-white text-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
+                            class="px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
                             <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
                         </button>
                     </div>
@@ -252,7 +252,7 @@
 
                     <div class="boutonvalidation p-2 justify-end flex">
                         <button
-                            class="bg-white text-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
+                            class="px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
                             <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
                         </button>
                     </div>
