@@ -253,8 +253,8 @@
                     <div class="infocard pl-10 pt-4 pr-10">
 
                         <div class="flex flex-row ">
-                            texte qui parel du climat et de la terre texte qui parel du climat et de la terre texte qui
-                            parel du climat et de la terre
+                            texte qui parle du climat et de la terre texte qui parle du climat et de la terre texte qui
+                            parle du climat et de la terre
                         </div>
                     </div>
 
@@ -276,8 +276,8 @@
                     <div class="infocard pl-10 pt-4 pr-10">
 
                         <div class="flex flex-row ">
-                            texte qui parel du climat et de la terre texte qui parel du climat et de la terre texte qui
-                            parel du climat et de la terre
+                            texte qui parle du climat et de la terre texte qui parle du climat et de la terre texte qui
+                            parle du climat et de la terre
                         </div>
                     </div>
 
@@ -299,8 +299,8 @@
                     <div class="infocard pl-10 pt-4 pr-10">
 
                         <div class="flex flex-row ">
-                            texte qui parel du climat et de la terre texte qui parel du climat et de la terre texte qui
-                            parel du climat et de la terre
+                            texte qui parle du climat et de la terre texte qui parle du climat et de la terre texte qui
+                            parle du climat et de la terre
                         </div>
                     </div>
 
