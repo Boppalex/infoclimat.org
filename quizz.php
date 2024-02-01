@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
+    <title>Quiz</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -9,10 +9,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
     <style>
+
+        footer {
+            background-color: #055634;
+            color: white;
+        }
+
         .superposition-simple {
             position: relative;
             width: 100%;
@@ -59,7 +62,6 @@
         }
     </style>
 </head>
-
 <header class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500" style="background-image: url('Images/wave.png');">
     <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
         <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
@@ -98,11 +100,16 @@
     </nav>
 </header>
 
-<body>
-    
-
-
-
+<body class="bg-gray-100">
+    <h1>Welcome to the Quiz!</h1>
+    <form action="quiz.php" method="post">
+        <!-- Add your quiz questions and options here -->
+        <input type="submit" value="Submit">
+    </form>
 </body>
-
+<footer class=" p-4 fixed bottom-0 w-full">
+    <p class="flex justify-center">@SIO2Groupe2</p>
+    <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
+        Azoulay, Hugo Moreaux</p>
+</footer>
 </html>
