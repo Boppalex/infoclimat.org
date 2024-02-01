@@ -117,8 +117,8 @@ $categorie = '';
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Récupérer la catégorie sélectionnée
-    $categorie = $_POST['categorie'];
+    // Récupérer la catégorie sélectionnée (si elle existe)
+$categorie = isset($_POST['categorie']) ? $_POST['categorie'] : '';
 }
 
 // Requête pour récupérer les informations de la table infocarte avec filtrage par catégorie
@@ -126,7 +126,8 @@ $query = "SELECT id, titre, description, article, categorie, statut, image FROM 
 
 // Ajouter le filtre de catégorie si une catégorie est sélectionnée
 if (!empty($categorie)) {
-    $query .= " WHERE categorie = $categorie";
+    // Utilisez la catégorie dans la clause WHERE de la requête
+    $query .= " WHERE categorie = '" . $mysqli->real_escape_string($categorie) . "'";
 }
 
 // Exécuter la requête
@@ -139,32 +140,36 @@ if ($result->num_rows > 0) {
     <html lang="fr">
 
     <body class="bg-gray-100 pt-8">
-        <!-- ... (La section body reste inchangée) ... -->
+        
 
         <div class="text text-3xl font-bold mb-8 justify-center flex">
             <h1>Notre Blog :</h1>
         </div>
 
-        <!-- Ajout du formulaire de filtrage par catégorie -->
-        <form method="post" class="mb-4 justify-center flex">
-            <label for="categorie" class="mr-2">Filtrer par catégorie :</label>
-            <select name="categorie" id="categorie" class="border rounded p-1">
-                <option value="">Toutes les catégories</option>
-                <option value="0" <?php echo ($categorie === '0') ? 'selected' : ''; ?>>0</option>
-                <option value="1" <?php echo ($categorie === '1') ? 'selected' : ''; ?>>1</option>
-                <option value="5" <?php echo ($categorie === '5') ? 'selected' : ''; ?>>5</option>
-                <!-- Ajoutez d'autres options selon vos catégories -->
-            </select>
-            <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded ml-2">Filtrer</button>
-        </form>
+            <form method="post" class="mb-4 justify-center flex">
+                <label for="categorie">Filtrer par catégorie :</label>
+                <select name="categorie" id="categorie" class="border rounded p-1">
+                    <option value="">Toutes les catégories</option>
+                    <?php
+                    
+                    $categoriesQuery = "SELECT DISTINCT categorie FROM infocarte";
+                    $categoriesResult = $mysqli->query($categoriesQuery);
 
-            <!-- ... Votre en-tête existant ... -->
+                    
+                    while ($categorieRow = $categoriesResult->fetch_assoc()) {
+                        echo '<option value="' . $categorieRow['categorie'] . '">' . $categorieRow['categorie'] . '</option>';
+                    }
+                    ?>
+                </select>
+                <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded ml-2">Filtrer</button>
+            </form>
+
         </header>
 
         <div class="blog flex justify-center pb-12">
             <div class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:grid-rows-2  gap-8">
                 <?php
-                // Boucle à travers les résultats
+                
                 while ($row = $result->fetch_assoc()) {
                     ?>
                     <div class="flex flex-col sm:flex-row col-span-1 row-span-1 sm:hover:shadow-lg rounded-3xl">
@@ -213,7 +218,7 @@ $mysqli->close();
 ?>
 
 </body>
-<footer class="p-4  w-full">
+<footer class=" p-4  w-full">
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>
