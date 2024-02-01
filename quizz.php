@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -76,6 +77,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
+
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
                         <div class="superposition-simple  "><a href="accueil.php"><div class="texte-normal "><div class="texte-original ">Accueil</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/feuille.png" /><div class="texte-original">Accueil</div></div></a></div>
                     </div>
@@ -93,6 +95,7 @@
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
                         <div class="superposition-simple "><a href="apropos.php"><div class="texte-normal "><div class="texte-original">À propos</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/glace.png" /><div class="texte-original">À propos</div></div></a></div>
+
                     </div>
                 </li>
             </ul>
@@ -100,14 +103,174 @@
     </nav>
 </header>
 
-<body class="bg-gray-100">
-    <h1>Welcome to the Quiz!</h1>
-    <form action="quiz.php" method="post">
-        <!-- Add your quiz questions and options here -->
-        <input type="submit" value="Submit">
-    </form>
+
+
+<body>
+
+<div class="bg-gray-100  quiz-container">
+  <div id="questions"></div>
+  <div id="message" class="message"></div>
+  <button onclick="checkAnswers()">Vérifier</button>
+</br>
+  <button id="restartButton" style="display: none;" onclick="restartQuiz()">Recommencer</button>
+</div>
+
+<script>
+  // Fonction pour effectuer une requête AJAX
+  function makeAjaxRequest(url, method, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          callback(JSON.parse(xhr.responseText));
+        } else {
+          console.error("Erreur de requête AJAX");
+        }
+      }
+    };
+    xhr.open(method, url, true);
+    xhr.send();
+  }
+
+  let quizData = [];
+  let selectedAnswers = [];
+
+  function loadQuestions() {
+  const questionsElement = document.getElementById("questions");
+  questionsElement.innerHTML = "";
+
+  quizData.forEach((quiz, index) => {
+    const questionElement = document.createElement("div");
+    questionElement.classList.add("question");
+
+    // Ajoutez le titre de la question
+    const titleElement = document.createElement("div");
+    titleElement.classList.add("question-title");
+    titleElement.innerText = quiz.titre;
+    questionElement.appendChild(titleElement);
+
+    // Ajoutez la description de la question
+    const descriptionElement = document.createElement("div");
+    descriptionElement.classList.add("question-description");
+    descriptionElement.innerText = quiz.description;
+    questionElement.appendChild(descriptionElement);
+
+    const optionsElement = document.createElement("div");
+    optionsElement.classList.add("options");
+
+    const groupName = "q" + index + "_reponses"; // Utilisez un seul nom de groupe par question
+
+    quiz.reponses.forEach((reponse, reponseIndex) => {
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.value = reponse.texte;
+      radio.id = "q" + index + "_reponse" + reponseIndex;
+      radio.name = groupName; // Ajoutez le nom du groupe
+
+      const label = document.createElement("label");
+      label.innerText = reponse.texte;
+      label.setAttribute("for", "q" + index + "_reponse" + reponseIndex);
+
+      const optionElement = document.createElement("div");
+      optionElement.classList.add("option");
+      optionElement.appendChild(radio);
+      optionElement.appendChild(label);
+      optionsElement.appendChild(optionElement);
+    });
+
+    questionElement.appendChild(optionsElement);
+    questionsElement.appendChild(questionElement);
+  });
+}
+
+function checkAnswers() {
+  const questionsElement = document.getElementById("questions");
+  const messageElement = document.getElementById("message");
+  const restartButton = document.getElementById("restartButton");
+  selectedAnswers = [];
+  let hasErrors = false;
+  let allRadiosUnchecked = true;
+
+  questionsElement.querySelectorAll('.options').forEach((options, questionIndex) => {
+    const radio = options.querySelector('input[type="radio"]:checked');
+
+    if (radio) {
+      allRadiosUnchecked = false;
+
+      const userAnswer = radio.value;
+      selectedAnswers.push({ questionIndex, userAnswer });
+
+      const correctAnswer = quizData[questionIndex].reponses.find(r => r.estcorrect === "1");
+
+      if (correctAnswer) {
+        const isCorrect = userAnswer === correctAnswer.texte;
+
+        if (!isCorrect) {
+          hasErrors = true;
+          const questionElement = options.previousElementSibling;
+          const errorText = document.createElement("div");
+          errorText.classList.add("error");
+          errorText.innerText = "Erreur dans la réponse. La bonne réponse était : " + correctAnswer.texte;
+          questionElement.appendChild(errorText);
+        }
+
+        options.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
+      } else {
+        console.error("Réponse correcte non trouvée pour la question " + questionIndex);
+      }
+    }
+  });
+
+  if (allRadiosUnchecked) {
+    messageElement.innerText = "Veuillez sélectionner au moins une réponse avant de vérifier.";
+  } else if (hasErrors) {
+    messageElement.innerText = "Certains éléments sont incorrects. Veuillez vérifier les erreurs.";
+    restartButton.style.display = "inline"; // Affichez le bouton "Recommencer"
+  } else {
+    messageElement.innerText = "Les réponses sont correctes!";
+    restartButton.style.display = "inline"; // Affichez le bouton "Recommencer"
+  }
+}
+
+function restartQuiz() {
+  const questionsElement = document.getElementById("questions");
+  const messageElement = document.getElementById("message");
+  const restartButton = document.getElementById("restartButton");
+
+  // Supprimez tous les messages d'erreur
+  questionsElement.querySelectorAll('.error').forEach(errorElement => errorElement.remove());
+
+  // Réinitialisez le message d'erreur/succès
+  messageElement.innerText = "";
+
+  // Réactivez tous les boutons radio
+  questionsElement.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = false);
+
+  // Décochez tous les boutons radio
+  questionsElement.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+
+  // Cachez le bouton "Recommencer"
+  restartButton.style.display = "none";
+}
+
+  function arraysEqual(arr1, arr2) {
+    if (arr1.length !== arr2.length) return false;
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) return false;
+    }
+    return true;
+  }
+
+  // Charger les questions à partir de la base de données
+  makeAjaxRequest('recuperation_question.php', 'GET', function (data) {
+    quizData = data;
+    loadQuestions();
+  });
+</script>
 </body>
+
 <footer class=" p-4 fixed bottom-0 w-full">
+
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>

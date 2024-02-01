@@ -17,13 +17,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errorMessage = "Invalid username or password";
     }
 }
+
 // Fonction de validation des informations d'identification avec interrogation de la base de données
 function validateCredentials($username, $password) {
     // Remplacez ces informations par celles de votre base de données
     $dbHost = "localhost";
     $dbUser = "root";
     $dbPassword = "";
+
     $dbName = "infoclimat";
+
 
     // Connexion à la base de données
     $conn = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
@@ -32,6 +35,7 @@ function validateCredentials($username, $password) {
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
+
 
     // Utilisation d'une requête préparée pour éviter les injections SQL
     $query = "SELECT * FROM utilisateur WHERE nom=? AND motpasse=?";
@@ -55,12 +59,15 @@ function validateCredentials($username, $password) {
 
     // Fermer la connexion à la base de données
     $stmt->close();
+
+   
     $conn->close();
 
     // Vérifier si la requête a renvoyé une correspondance
     return ($result->num_rows > 0);
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,5 +93,6 @@ function validateCredentials($username, $password) {
             <button type="submit" class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">Login</button>
         </form>
     </div>
+
 </body>
 </html>
