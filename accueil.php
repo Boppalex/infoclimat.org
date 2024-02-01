@@ -165,12 +165,12 @@
 
         <body class="bg-gray-100 ">
 
-            <div class="text text-3xl font-bold  justify-center flex">
-                <h1>Information climatique :</h1>
-            </div>
+
             <div class="container bg-gray-100  gap-4 md:p-12">
-                <div
-                    class="swiper-container h-86 flex overflow-hidden ">
+                <div class="text text-3xl font-bold  flex mb-8">
+                    <h1>Information climatique :</h1>
+                </div>
+                <div class="swiper-container h-86 flex overflow-hidden ">
 
                     <div class="swiper-wrapper">
                         <?php
@@ -266,9 +266,9 @@
         echo "Aucun résultat trouvé dans la base de données.";
     }
 
-    
 
-    
+
+
 
     // Requête pour récupérer les trois cartes les plus récentes de la table infocarte
     $result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, image FROM infocarte ORDER BY datecreation DESC LIMIT 3");
@@ -283,12 +283,13 @@
         <!-- ... Votre en-tête existant ... -->
         </header>
 
-        <div class="text text-3xl font-bold mb-8 justify-center flex">
-            <h1>Dernières Actus :</h1>
-        </div>
+
 
 
         <div class="blog container pb-12">
+            <div class="text text-3xl font-bold mb-8  flex">
+                <h1>Dernières Actus :</h1>
+            </div>
             <div class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3   gap-8">
                 <?php
                 // Boucle à travers les résultats

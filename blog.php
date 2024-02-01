@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
     <style>
-
         footer {
             background-color: #055634;
             color: white;
@@ -64,7 +63,9 @@
     </style>
 
 </head>
-<header class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500" style="background-image: url('Images/wave.png');">
+<header
+    class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500"
+    style="background-image: url('Images/wave.png');">
     <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
         <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
     </a>
@@ -79,22 +80,54 @@
             <ul class="navbar-nav">
                 <li class="nav-item active">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple  "><a href="accueil.php"><div class="texte-normal "><div class="texte-original ">Accueil</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/feuille.png" /><div class="texte-original">Accueil</div></div></a></div>
+                        <div class="superposition-simple  "><a href="accueil.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original ">Accueil</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/feuille.png" />
+                                    <div class="texte-original">Accueil</div>
+                                </div>
+                            </a></div>
                     </div>
                 </li>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple "><a href="blog.php"><div class="texte-normal "><div class="texte-original">Blog</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/nuage.png" /><div class="texte-original">Blog</div></div></a></div>
+                        <div class="superposition-simple "><a href="blog.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original">Blog</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/nuage.png" />
+                                    <div class="texte-original">Blog</div>
+                                </div>
+                            </a></div>
                     </div>
                 </li>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple "><a href="quizz.php"><div class="texte-normal "><div class="texte-original">Quizz</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/soleil.png" /><div class="texte-original">Quizz</div></div></a></div>
+                        <div class="superposition-simple "><a href="quizz.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original">Quizz</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/soleil.png" />
+                                    <div class="texte-original">Quizz</div>
+                                </div>
+                            </a></div>
                     </div>
                 </li>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
-                        <div class="superposition-simple "><a href="apropos.php"><div class="texte-normal "><div class="texte-original">À propos</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/glace.png" /><div class="texte-original">À propos</div></div></a></div>
+                        <div class="superposition-simple "><a href="apropos.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original">À propos</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/glace.png" />
+                                    <div class="texte-original">À propos</div>
+                                </div>
+                            </a></div>
                     </div>
                 </li>
             </ul>
@@ -103,34 +136,36 @@
 </header>
 
 <body class="bg-gray-100 ">
-<?php
-// Connexion à la base de données
-$mysqli = new mysqli("localhost", "root", "", "infoclimat");
+    <?php
+    // Connexion à la base de données
+    $mysqli = new mysqli("localhost", "root", "", "infoclimat");
 
-// Vérification de la connexion
-if ($mysqli->connect_error) {
-    die("La connexion à la base de données a échoué : " . $mysqli->connect_error);
-}
+    // Vérification de la connexion
+    if ($mysqli->connect_error) {
+        die("La connexion à la base de données a échoué : " . $mysqli->connect_error);
+    }
 
-// Requête pour récupérer les informations de la table infocarte
-$result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, image FROM infocarte");
+    // Requête pour récupérer les informations de la table infocarte
+    $result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, image FROM infocarte");
 
-// Vérification s'il y a des résultats
-if ($result->num_rows > 0) {
-    ?>
-    <!DOCTYPE html>
-    <html lang="fr">
+    // Vérification s'il y a des résultats
+    if ($result->num_rows > 0) {
+        ?>
+        <!DOCTYPE html>
+        <html lang="fr">
 
-            <!-- ... Votre en-tête existant ... -->
+        <!-- ... Votre en-tête existant ... -->
         </header>
 
-        <div class="text text-3xl font-bold mb-8 justify-center flex">
-            <h1>Notre Blog :</h1>
-        </div>
 
 
-        <div class="blog flex justify-center pb-12">
-            <div class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:grid-rows-2  gap-8">
+
+        <div class="blog container pb-12">
+            <div class="text text-3xl font-bold mb-8 ">
+                <h1>Notre Blog :</h1>
+            </div>
+            <div
+                class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:grid-rows-2  gap-8">
                 <?php
                 // Boucle à travers les résultats
                 while ($row = $result->fetch_assoc()) {
@@ -144,7 +179,7 @@ if ($result->num_rows > 0) {
 
                                 // Type de contenu de l'image (assurez-vous que cela correspond au type d'image dans votre base de données)
                                 $imageType = "image/jpeg"; // Exemple pour le format JPEG, ajustez selon votre besoin
-
+                        
                                 // Affichage de l'image
                                 echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="image' . $row['id'] . '" class="w-full h-44 rounded-t-3xl object-cover">';
                                 ?>
@@ -157,26 +192,27 @@ if ($result->num_rows > 0) {
                             </div>
 
                             <div class="boutonvalidation p-2 justify-end flex">
-                                <button class="bg-white  px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
+                                <button
+                                    class="bg-white  px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
                                     <a href="#" class="text-black hover:text-black text-sm">En savoir plus</a>
                                 </button>
                             </div>
                         </div>
                     </div>
-                <?php
+                    <?php
                 }
                 ?>
             </div>
         </div>
     </body>
     <?php
-} else {
-    echo "Aucun résultat trouvé dans la base de données.";
-}
+    } else {
+        echo "Aucun résultat trouvé dans la base de données.";
+    }
 
-// Fermer la connexion à la base de données
-$mysqli->close();
-?>
+    // Fermer la connexion à la base de données
+    $mysqli->close();
+    ?>
 
 </body>
 <footer class=" p-4  w-full">
