@@ -119,7 +119,7 @@ button:hover::before {
         </p>
         <p>
             <label for="description">Description</label>
-            <input type="text" name="description" id="description" value="<?= $result['description'] ?>">
+            <textarea name="description" id="description" cols="30" rows="10"><?= $result['description'] ?></textarea>
         </p>
         <p>
             <label for="article">Article</label>
