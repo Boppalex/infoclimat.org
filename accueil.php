@@ -17,11 +17,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
     <style>
-        footer {
-            background-color: #055634;
-            color: white;
-        }
-
         .superposition-simple {
             position: relative;
             width: 100%;
@@ -66,11 +61,81 @@
         .superposition-simple .texte-normal {
             transition: .5s ease;
         }
+
+        body {
+            margin: 0;
+            background-color: #f3f4f6;
+        }
+
+        footer {
+            background-color: #055634;
+            color: white;
+
+        }
+
+        .raindrop {
+            background-image: url('Images/goutte.png');
+            /* Chemin vers votre image */
+            background-size: cover;
+            /* Ajustez selon vos besoins */
+            background-repeat: no-repeat;
+            position: absolute;
+            width: 20px;
+            /* Ajustez la largeur selon vos besoins */
+            height: 20px;
+            /* Ajustez la hauteur selon vos besoins */
+            opacity: 0.8;
+            transition: transform 0.5s linear;
+        }
+
+        header {
+            background-image: url('Images/wave.png');
+        }
+
+        body.rainy header {
+
+            background-image: url('Images/wavecloud.png');
+        }
+
+        /* Style appliqué uniquement lorsque la classe 'rainy' est présente sur le body */
+        body.rainy {
+            background-color: #708090;
+            /* Fond gris clair */
+        }
+
+        div.testclass {
+            background-color: #fff;
+            /* Fond gris clair */
+        }
+
+        body.rainy div.testclass {
+            background-color: #c3c3c3;
+            /* Fond gris clair */
+        }
+
+        div.card1 {
+            background-color: #fff;
+            /* Fond gris clair */
+        }
+
+        body.rainy div.card1 {
+            background-color: #c3c3c3;
+            /* Fond gris clair */
+        }
+
+
+
+        body.rainy footer {
+            background-color: #708090;
+            overflow: hidden;
+            /* Fond gris clair */
+
+        }
     </style>
+
 </head>
 <header
-    class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500"
-    style="background-image: url('Images/wave.png');">
+    class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500">
     <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
         <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
     </a>
@@ -142,6 +207,68 @@
 </header>
 
 <body class="bg-gray-100 ">
+    <script>
+        let easterEggActive = false;
+        let ctrlPressed = false;
+        let originalBackgroundColor = document.body.style.backgroundColor;
+
+        // Fonction pour générer une goutte de pluie
+        function createRaindrop() {
+            const raindrop = document.createElement('div');
+            raindrop.className = 'raindrop';
+            raindrop.style.top = '0';
+            raindrop.style.left = Math.random() * window.innerWidth + 'px';
+            document.body.appendChild(raindrop);
+
+            // Utilisation d'une fonction de rappel pour réinitialiser la position après la transition
+            setTimeout(() => {
+                raindrop.style.transform = 'translateY(' + (document.body.offsetHeight - 0) + 'px)';
+            }, 0);
+
+
+            // Détection quand la goutte atteint le bas de la page et la supprimer
+            setTimeout(() => {
+                document.body.removeChild(raindrop);
+            }, 2000);
+        }
+
+        // Générer plusieurs gouttes de pluie en continu
+        setInterval(() => {
+            if (easterEggActive) {
+                for (let i = 0; i < 1; i++) { // Ajoutez 5 gouttes à la fois
+                    createRaindrop();
+                }
+            }
+        }, 50); // Ajoutez une nouvelle série de gouttes toutes les 100 millisecondes
+
+        // Écouteur d'événement pour détecter la pression de la touche Ctrl
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Control') {
+                ctrlPressed = true;
+            } else if (ctrlPressed && event.key === '1') {
+                easterEggActive = !easterEggActive;
+                document.body.classList.toggle('rainy', easterEggActive);
+            }
+        });
+
+        // Écouteur d'événement pour détecter le relâchement de la touche Ctrl
+        document.addEventListener('keyup', function (event) {
+            if (event.key === 'Control') {
+                ctrlPressed = false;
+            }
+        });
+
+        // Écouteur d'événement pour détecter le scroll
+        window.addEventListener('scroll', function () {
+            // Si l'utilisateur a atteint la fin de la page, supprimez toutes les gouttes de pluie
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                const raindrops = document.querySelectorAll('.raindrop');
+                raindrops.forEach((raindrop) => {
+                    document.body.removeChild(raindrop);
+                });
+            }
+        });
+    </script>
 
     <?php
     // Connexion à la base de données
@@ -166,7 +293,7 @@
         <body class="bg-gray-100 ">
 
 
-            <div class="container bg-gray-100  gap-4 md:p-12">
+            <div class="imageswip container  gap-4 md:p-12">
                 <div class="text text-3xl font-bold  flex mb-8">
                     <h1>Information climatique :</h1>
                 </div>
@@ -177,7 +304,7 @@
                         // Boucle à travers les résultats
                         while ($row = $result->fetch_assoc()) {
                             ?>
-                            <div class="swiper-slide relative bg-white border-2 rounded-2xl p-4  shadow-lg">
+                            <div class="testclass rainy swiper-slide relative border-2 bg-gray-100 rounded-2xl p-4  shadow-lg">
                                 <div class="image1 relative h-64">
                                     <a href="#">
                                         <?php
@@ -296,7 +423,7 @@
                 while ($row = $result->fetch_assoc()) {
                     ?>
                     <div class="flex flex-col sm:flex-row col-span-1 row-span-1 sm:hover:shadow-lg rounded-3xl">
-                        <div class="card1 border bg-white w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
+                        <div class=" rainy card1  border  w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
                             <div class="Photo flex justify-center">
                                 <?php
                                 // Encodage de l'image en base64
@@ -343,7 +470,7 @@
 
 </body>
 
-<footer class="footerpage  p-4  w-full">
+<footer class=" rainy footerpage  p-4  w-full">
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>
