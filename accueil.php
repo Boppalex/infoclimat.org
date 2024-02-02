@@ -74,15 +74,15 @@
         }
 
         .raindrop {
-            background-image: url('Images/goutte.png');
+            background-image: url('Images/mia.png');
             /* Chemin vers votre image */
             background-size: cover;
             /* Ajustez selon vos besoins */
             background-repeat: no-repeat;
             position: absolute;
-            width: 20px;
+            width: 100px;
             /* Ajustez la largeur selon vos besoins */
-            height: 20px;
+            height: 100px;
             /* Ajustez la hauteur selon vos besoins */
             opacity: 0.8;
             transition: transform 0.5s linear;
