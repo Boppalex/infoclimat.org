@@ -308,12 +308,17 @@
                                 <div class="image1 relative h-64">
                                     <a href="#">
                                         <?php
-                                        // Encodage de l'image en base64
-                                        $imageData = base64_encode($row['image']);
-                                        $imageType = "image/jpeg"; // Ajustez selon le type d'image dans votre base de données
+                                        if (empty($row['image'])) {
+                                            // Afficher l'image par défaut si la colonne "image" est vide
+                                            echo '<img src="Images/ImageClimat2.jpg" alt="Image par défaut" class="w-full h-full rounded-2xl object-cover">';
+                                        } else {
+                                            // Encodage de l'image en base64
+                                            $imageData = base64_encode($row['image']);
+                                            $imageType = "image/jpeg"; // Ajustez selon le type d'image dans votre base de données
                                 
-                                        // Affichage de l'image
-                                        echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="Image ' . $row['id'] . '" class="w-full h-full object-cover rounded-2xl">';
+                                            // Affichage de l'image
+                                            echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="Image ' . $row['id'] . '" class="w-full h-full object-cover rounded-2xl">';
+                                        }
                                         ?>
 
                                         <div
@@ -426,14 +431,19 @@
                         <div class=" rainy card1  border  w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
                             <div class="Photo flex justify-center">
                                 <?php
-                                // Encodage de l'image en base64
-                                $imageData = base64_encode($row['image']);
+                                if (empty($row['image'])) {
+                                    // Afficher l'image par défaut si la colonne "image" est vide
+                                    echo '<img src="Images/ImageClimat2.jpg" alt="Image par défaut" class="w-full h-44 rounded-t-3xl object-cover">';
+                                } else {
+                                    // Encodage de l'image en base64
+                                    $imageData = base64_encode($row['image']);
 
-                                // Type de contenu de l'image (assurez-vous que cela correspond au type d'image dans votre base de données)
-                                $imageType = "image/jpeg"; // Exemple pour le format JPEG, ajustez selon votre besoin
+                                    // Type de contenu de l'image (assurez-vous que cela correspond au type d'image dans votre base de données)
+                                    $imageType = "image/jpeg"; // Exemple pour le format JPEG, ajustez selon votre besoin
                         
-                                // Affichage de l'image
-                                echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="image' . $row['id'] . '" class="w-full h-44 rounded-t-3xl object-cover">';
+                                    // Affichage de l'image
+                                    echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="image' . $row['id'] . '" class="w-full h-44 rounded-t-3xl object-cover">';
+                                }
                                 ?>
                             </div>
 

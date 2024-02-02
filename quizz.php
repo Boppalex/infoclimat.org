@@ -13,10 +13,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <style>
     body {
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
       text-align: center;
-      
     }
 
     .quiz-container {
@@ -210,182 +207,188 @@
 </header>
 
 <body class="bg-gray-100 ">
-  <div class="bg-gray-100 quiz-container ">
-    <div id="questions"></div>
-    <div id="message" class="message"></div>
-    <button onclick="checkAnswers()">Vérifier</button>
-    </br>
-    <button id="restartButton" style="display: none;" onclick="restartQuiz()">Recommencer</button>
-  </div>
+  <div class="contenu container">
+    <div class="text text-3xl font-bold  flex mb-8">
+      <h1>Quiz :</h1>
+    </div>
+    <div class="bg-gray-100 quiz-container ">
+      <div id="questions"></div>
+      <div id="message" class="message"></div>
+      <button onclick="checkAnswers()">Vérifier</button>
+      </br>
+      <button id="restartButton" style="display: none;" onclick="restartQuiz()">Recommencer</button>
+    </div>
 
-  <script>
-    // Fonction pour effectuer une requête AJAX
-    function makeAjaxRequest(url, method, callback) {
-      const xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status === 200) {
-            if (xhr.responseText.trim() !== "") {  // Vérifiez si la réponse n'est pas vide
-              callback(JSON.parse(xhr.responseText));
+    <script>
+      // Fonction pour effectuer une requête AJAX
+      function makeAjaxRequest(url, method, callback) {
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+              if (xhr.responseText.trim() !== "") {  // Vérifiez si la réponse n'est pas vide
+                callback(JSON.parse(xhr.responseText));
+              } else {
+                console.error("Réponse JSON vide.");
+              }
             } else {
-              console.error("Réponse JSON vide.");
+              console.error("Erreur de requête AJAX. Statut : " + xhr.status);
             }
-          } else {
-            console.error("Erreur de requête AJAX. Statut : " + xhr.status);
           }
-        }
-      };
-      xhr.open(method, url, true);
-      xhr.send();
-    }
+        };
+        xhr.open(method, url, true);
+        xhr.send();
+      }
 
-    let quizData = [];
-    let selectedAnswers = [];
+      let quizData = [];
+      let selectedAnswers = [];
 
-    function loadQuestions() {
-      const questionsElement = document.getElementById("questions");
-      questionsElement.innerHTML = "";
+      function loadQuestions() {
+        const questionsElement = document.getElementById("questions");
+        questionsElement.innerHTML = "";
 
-      quizData.forEach((quiz, index) => {
-        const questionElement = document.createElement("div");
-        questionElement.classList.add("question");
+        quizData.forEach((quiz, index) => {
+          const questionElement = document.createElement("div");
+          questionElement.classList.add("question");
 
-        // Ajoutez le titre de la question
-        const titleElement = document.createElement("div");
-        titleElement.classList.add("question-title");
-        titleElement.innerText = quiz.titre;
-        questionElement.appendChild(titleElement);
+          // Ajoutez le titre de la question
+          const titleElement = document.createElement("div");
+          titleElement.classList.add("question-title");
+          titleElement.innerText = quiz.titre;
+          questionElement.appendChild(titleElement);
 
-        // Ajoutez la description de la question
-        const descriptionElement = document.createElement("div");
-        descriptionElement.classList.add("question-description");
-        descriptionElement.innerText = quiz.description;
-        questionElement.appendChild(descriptionElement);
+          // Ajoutez la description de la question
+          const descriptionElement = document.createElement("div");
+          descriptionElement.classList.add("question-description");
+          descriptionElement.innerText = quiz.description;
+          questionElement.appendChild(descriptionElement);
 
-        const optionsElement = document.createElement("div");
-        optionsElement.classList.add("options");
+          const optionsElement = document.createElement("div");
+          optionsElement.classList.add("options");
 
-        const groupName = "q" + index + "_reponses"; // Utilisez un seul nom de groupe par question
+          const groupName = "q" + index + "_reponses"; // Utilisez un seul nom de groupe par question
 
-        quiz.reponses.forEach((reponse, reponseIndex) => {
-          const radio = document.createElement("input");
-          radio.type = "radio";
-          radio.value = reponse.texte;
-          radio.id = "q" + index + "_reponse" + reponseIndex;
-          radio.name = groupName; // Ajoutez le nom du groupe
+          quiz.reponses.forEach((reponse, reponseIndex) => {
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.value = reponse.texte;
+            radio.id = "q" + index + "_reponse" + reponseIndex;
+            radio.name = groupName; // Ajoutez le nom du groupe
 
-          const label = document.createElement("label");
-          label.innerText = reponse.texte;
-          label.setAttribute("for", "q" + index + "_reponse" + reponseIndex);
+            const label = document.createElement("label");
+            label.innerText = reponse.texte;
+            label.setAttribute("for", "q" + index + "_reponse" + reponseIndex);
 
-          const optionElement = document.createElement("div");
-          optionElement.classList.add("option");
-          optionElement.appendChild(radio);
-          optionElement.appendChild(label);
-          optionsElement.appendChild(optionElement);
+            const optionElement = document.createElement("div");
+            optionElement.classList.add("option");
+            optionElement.appendChild(radio);
+            optionElement.appendChild(label);
+            optionsElement.appendChild(optionElement);
+          });
+
+          questionElement.appendChild(optionsElement);
+          questionsElement.appendChild(questionElement);
+        });
+      }
+
+      let errorMessageDisplayed = false;
+
+      function checkAnswers() {
+        const questionsElement = document.getElementById("questions");
+        const messageElement = document.getElementById("message");
+        const restartButton = document.getElementById("restartButton");
+        selectedAnswers = [];
+        let hasErrors = false;
+        let allRadiosUnchecked = true;
+
+        // Réinitialise le contenu du message à chaque vérification
+        messageElement.innerText = "";
+        errorMessageDisplayed = false;
+
+        // Supprimez tous les messages d'erreur précédents
+        questionsElement.querySelectorAll('.error').forEach(errorElement => errorElement.remove());
+
+        questionsElement.querySelectorAll('.options').forEach((options, questionIndex) => {
+          const radio = options.querySelector('input[type="radio"]:checked');
+
+          if (radio) {
+            allRadiosUnchecked = false;
+
+            const userAnswer = radio.value;
+            selectedAnswers.push({ questionIndex, userAnswer });
+
+            const correctAnswer = quizData[questionIndex].reponses.find(r => r.estcorrect === "1");
+
+            if (correctAnswer) {
+              const isCorrect = userAnswer === correctAnswer.texte;
+
+              if (!isCorrect) {
+                hasErrors = true;
+                const questionElement = options.previousElementSibling;
+                const errorText = document.createElement("div");
+                errorText.classList.add("error");
+                errorText.innerText = "Erreur dans la réponse. La bonne réponse était : " + correctAnswer.texte;
+                questionElement.appendChild(errorText);
+              }
+
+              options.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
+            } else {
+              console.error("Réponse correcte non trouvée pour la question " + questionIndex);
+            }
+          }
         });
 
-        questionElement.appendChild(optionsElement);
-        questionsElement.appendChild(questionElement);
-      });
-    }
-
-    let errorMessageDisplayed = false;
-
-    function checkAnswers() {
-      const questionsElement = document.getElementById("questions");
-      const messageElement = document.getElementById("message");
-      const restartButton = document.getElementById("restartButton");
-      selectedAnswers = [];
-      let hasErrors = false;
-      let allRadiosUnchecked = true;
-
-      // Réinitialise le contenu du message à chaque vérification
-      messageElement.innerText = "";
-      errorMessageDisplayed = false;
-
-      // Supprimez tous les messages d'erreur précédents
-      questionsElement.querySelectorAll('.error').forEach(errorElement => errorElement.remove());
-
-      questionsElement.querySelectorAll('.options').forEach((options, questionIndex) => {
-        const radio = options.querySelector('input[type="radio"]:checked');
-
-        if (radio) {
-          allRadiosUnchecked = false;
-
-          const userAnswer = radio.value;
-          selectedAnswers.push({ questionIndex, userAnswer });
-
-          const correctAnswer = quizData[questionIndex].reponses.find(r => r.estcorrect === "1");
-
-          if (correctAnswer) {
-            const isCorrect = userAnswer === correctAnswer.texte;
-
-            if (!isCorrect) {
-              hasErrors = true;
-              const questionElement = options.previousElementSibling;
-              const errorText = document.createElement("div");
-              errorText.classList.add("error");
-              errorText.innerText = "Erreur dans la réponse. La bonne réponse était : " + correctAnswer.texte;
-              questionElement.appendChild(errorText);
-            }
-
-            options.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
-          } else {
-            console.error("Réponse correcte non trouvée pour la question " + questionIndex);
-          }
+        if (allRadiosUnchecked && !errorMessageDisplayed) {
+          messageElement.innerText = "Veuillez sélectionner au moins une réponse avant de vérifier.";
+          errorMessageDisplayed = true;
+        } else if (hasErrors && !errorMessageDisplayed) {
+          messageElement.innerText = "Certains éléments sont incorrects. Veuillez vérifier les erreurs.";
+          restartButton.style.display = "inline"; // Affichez le bouton "Recommencer"
+          errorMessageDisplayed = true;
+        } else if (!errorMessageDisplayed) {
+          messageElement.innerText = "Les réponses sont correctes!";
+          restartButton.style.display = "inline"; // Affichez le bouton "Recommencer"
+          errorMessageDisplayed = true;
         }
+      }
+
+      function restartQuiz() {
+        const questionsElement = document.getElementById("questions");
+        const messageElement = document.getElementById("message");
+        const restartButton = document.getElementById("restartButton");
+
+        // Supprimez tous les messages d'erreur
+        questionsElement.querySelectorAll('.error').forEach(errorElement => errorElement.remove());
+
+        // Réinitialisez le message d'erreur/succès
+        messageElement.innerText = "";
+
+        // Réactivez tous les boutons radio
+        questionsElement.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = false);
+
+        // Décochez tous les boutons radio
+        questionsElement.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+
+        // Cachez le bouton "Recommencer"
+        restartButton.style.display = "none";
+      }
+
+      function arraysEqual(arr1, arr2) {
+        if (arr1.length !== arr2.length) return false;
+        for (let i = 0; i < arr1.length; i++) {
+          if (arr1[i] !== arr2[i]) return false;
+        }
+        return true;
+      }
+
+      // Charger les questions à partir de la base de données
+      makeAjaxRequest('recuperation_question.php', 'GET', function (data) {
+        quizData = data;
+        loadQuestions();
       });
+    </script>
+  </div>
 
-      if (allRadiosUnchecked && !errorMessageDisplayed) {
-        messageElement.innerText = "Veuillez sélectionner au moins une réponse avant de vérifier.";
-        errorMessageDisplayed = true;
-      } else if (hasErrors && !errorMessageDisplayed) {
-        messageElement.innerText = "Certains éléments sont incorrects. Veuillez vérifier les erreurs.";
-        restartButton.style.display = "inline"; // Affichez le bouton "Recommencer"
-        errorMessageDisplayed = true;
-      } else if (!errorMessageDisplayed) {
-        messageElement.innerText = "Les réponses sont correctes!";
-        restartButton.style.display = "inline"; // Affichez le bouton "Recommencer"
-        errorMessageDisplayed = true;
-      }
-    }
-
-    function restartQuiz() {
-      const questionsElement = document.getElementById("questions");
-      const messageElement = document.getElementById("message");
-      const restartButton = document.getElementById("restartButton");
-
-      // Supprimez tous les messages d'erreur
-      questionsElement.querySelectorAll('.error').forEach(errorElement => errorElement.remove());
-
-      // Réinitialisez le message d'erreur/succès
-      messageElement.innerText = "";
-
-      // Réactivez tous les boutons radio
-      questionsElement.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = false);
-
-      // Décochez tous les boutons radio
-      questionsElement.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
-
-      // Cachez le bouton "Recommencer"
-      restartButton.style.display = "none";
-    }
-
-    function arraysEqual(arr1, arr2) {
-      if (arr1.length !== arr2.length) return false;
-      for (let i = 0; i < arr1.length; i++) {
-        if (arr1[i] !== arr2[i]) return false;
-      }
-      return true;
-    }
-
-    // Charger les questions à partir de la base de données
-    makeAjaxRequest('recuperation_question.php', 'GET', function (data) {
-      quizData = data;
-      loadQuestions();
-    });
-  </script>
 </body>
 
 <footer class="p-4 w-full fixed bottom-0">
