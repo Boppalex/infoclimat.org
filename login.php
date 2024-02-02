@@ -1,4 +1,7 @@
 <?php
+define("check","OK");
+require_once "passerelle.php";
+
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -17,7 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errorMessage = "Invalid username or password";
     }
 }
-
 // Fonction de validation des informations d'identification avec interrogation de la base de données
 function validateCredentials($username, $password) {
     // Remplacez ces informations par celles de votre base de données
@@ -25,7 +27,9 @@ function validateCredentials($username, $password) {
     $dbUser = "root";
     $dbPassword = "";
 
+
     $dbName = "infoclimat";
+
 
 
     // Connexion à la base de données
@@ -35,6 +39,7 @@ function validateCredentials($username, $password) {
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
+
 
 
     // Utilisation d'une requête préparée pour éviter les injections SQL
@@ -47,7 +52,6 @@ function validateCredentials($username, $password) {
     if (!$stmt) {
         die("Error in preparing statement: " . $conn->error);
     }
-
     // Lier les paramètres
     $stmt->bind_param("ss", $username, $password);
 
@@ -60,14 +64,12 @@ function validateCredentials($username, $password) {
     // Fermer la connexion à la base de données
     $stmt->close();
 
-   
     $conn->close();
 
     // Vérifier si la requête a renvoyé une correspondance
     return ($result->num_rows > 0);
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,6 +95,5 @@ function validateCredentials($username, $password) {
             <button type="submit" class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">Login</button>
         </form>
     </div>
-
 </body>
 </html>

@@ -102,11 +102,10 @@
     </nav>
 </header>
 
-
 <body class="bg-gray-100">
 <?php
 // Connexion à la base de données
-$mysqli = new mysqli("localhost", "root", "", "infoclimat");
+$mysqli = new mysqli("localhost", "root", "rootroot", "infoclimat");
 
 // Vérification de la connexion
 if ($mysqli->connect_error) {
