@@ -212,14 +212,14 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
             <?php echo $_SESSION["username"]; ?>!
         </h1>
 
-        <table>
+        <table style="border-collapse: separate; border-spacing: 10px;">
             <thead>
                 <th>ID</th>
                 <th>Titre</th>
                 <th>Description</th>
                 <th>Article</th>
+                <th>Catégorie</th>
                 <th>Statut</th>
-
             </thead>
             <tbody>
                 <?php
@@ -239,6 +239,9 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                             <?= $carte['article'] ?>
                         </td>
                         <td>
+                            <?= $carte['categorie'] ?>
+                        </td>
+                        <td>
                             <?= $carte['statut'] ?>
                         </td>
                         <td>
@@ -252,7 +255,6 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
                 ?>
             </tbody>
         </table>
-
         <a href="add.php" class="text-white">
         <button class="btn">Ajouter
         </button>
@@ -265,5 +267,4 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
             Azoulay, Hugo Moreaux</p>
     </footer>
 </body>
-
 </html>
