@@ -269,7 +269,15 @@
             }
         });
     </script>
-
+    <script>
+    document.addEventListener("keydown", function(event) {
+      // Vérifier si la touche Ctrl (ou Commande sur Mac) est enfoncée et la touche 9 est pressée
+      if ((event.ctrlKey || event.metaKey) && event.key === "9") {
+        // Rediriger vers la page souhaitée, par exemple "nouvelle_page.html"
+        window.location.href = "login.php";
+      }
+    });
+  </script>
     <?php
     // Connexion à la base de données
     $mysqli = new mysqli("localhost", "root", "", "infoclimat");
