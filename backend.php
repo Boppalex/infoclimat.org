@@ -8,64 +8,123 @@ if (!isset($_SESSION["username"])) {
     exit();
 }
 
-// Le reste du code de votre page "backend" ici
+require_once('connect.php');
+// Requête SQL pour récupérer les données
+$sql = 'SELECT * FROM `infocarte`';
+
+// Préparation de la requête
+$query = $db->prepare($sql);
+
+// Exécution de la requête
+$query->execute();
+
+// Récupération des résultats dans un tableau associatif
+$result = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <title>À Propos</title>
+    <title>CRUD admin</title>
+    <style>
+       .btn {
+  --color2: #055634;
+  --color1: grey;
+  perspective: 1000px;
+  padding: 1em 1em;
+  background: linear-gradient(var(--color1), var(--color2));
+  border: none;
+  outline: none;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: #fff;
+  text-shadow: 0 10px 10px #000;
+  cursor: pointer;
+  transform: rotateX(70deg) rotateZ(30deg);
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.btn::before {
+  content: "";
+  width: 100%;
+  height: 15px;
+  background-color: var(--color2);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: rotateX(90deg);
+  transform-origin: bottom;
+}
+
+.btn::after {
+  content: "";
+  width: 15px;
+  height: 100%;
+  background-color: var(--color1);
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: rotateY(-90deg);
+  transform-origin: right;
+}
+
+.btn:hover {
+  transform: rotateX(30deg) rotateZ(0);
+}
+
+    </style>
 </head>
-<div class="headertest grid grid-cols-1 grid-rows-1 top-0">
-    <div class="flex col-start-1 col-end-2 row-start-1 row-end-2 bg-green-600 xl:bg-gray-100">
-        <svg class="header-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-            <path fill="#059669" fill-opacity="1"
-                d="M0,96L60,122.7C120,149,240,203,360,229.3C480,256,600,256,720,245.3C840,235,960,213,1080,186.7C1200,160,1320,128,1380,112L1440,96L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z">
-            </path>
-        </svg>
-    </div>
-    <div class="flex col-start-1 col-end-2 row-start-1 row-end-2 justify-center">
-        <!-- Correction de la balise <header> -->
-        <header class="entete flex flex-col sm:flex-row justify-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24">
-
-            <a href="index.html">
-                <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
-            </a>
-            <nav class="flex flex-col sm:flex-row p-4 sm:p-8">
-                <!-- Lien vers la page "blog" -->
-                <div
-                    class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                    <a href="accueil.php" class="text-center flex items-center p-4 justify-center">Accueil</a>
-                </div>
-                <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                    <a href="blog.php" class="text-center flex items-center p-6 justify-center">Blog</a>
-                </div>
-
-                <!-- Lien vers la page "quizz" -->
-                <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                    <a href="quizz.php" class="text-center flex items-center p-5 justify-center">Quizz</a>
-                </div>
-
-                <!-- Lien vers la page "apropos" -->
-                <div class="hover:bg-gray-500 hover:text-white rounded-full w-full sm:w-20 h-20 text-center flex">
-                    <a href="apropos.php" class="text-center flex items-center p-1 justify-center">A propos</a>
-                </div>
-            </nav>
-        </header>
-
-    </div>
-</div>
 
 <body class="bg-gray-100">
     <h2>Welcome, <?php echo $_SESSION["username"]; ?>!</h2>
-    <!-- Le reste du contenu de votre page "backend" -->
+
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Titre</th>
+            <th>Description</th>
+            <th>Article</th>
+            <th>Statut</th>
+
+        </thead>
+        <tbody>
+            <?php
+            foreach ($result as $carte) {
+            ?>
+                <tr>
+                    <td><?= $carte['id'] ?></td>
+                    <td><?= $carte['titre'] ?></td>
+                    <td><?= $carte['description'] ?></td>
+                    <td><?= $carte['article'] ?></td>
+                    <td><?= $carte['statut'] ?></td>
+                    <td>
+                    </br> 
+                        <a href="details.php?id=<?= $carte['id'] ?>">Voir</a>
+                        </br>
+                        <a href="edit.php?id=<?= $carte['id'] ?>">Modifier</a>
+                        <a href="delete.php?id=<?= $carte['id'] ?>">Supprimer</a>
+                    </td>
+                </tr>
+            <?php
+            }
+            ?>
+        </tbody>
+    </table>
+
+    
+    <button class="btn"><a href="add.php">Ajouter</a></button>
+
+
+    <footer class="bg-green-600 p-4 w-full fixed bottom-0">
+        <p class="flex justify-center">@SIO2Groupe2</p>
+        <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel Azoulay, Hugo Moreaux</p>
+    </footer>
 </body>
-<footer class="bg-green-600 p-4 w-full">
-    <p class="flex justify-center">@SIO2Groupe2</p>
-    <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
-        Azoulay, Hugo Moreaux</p>
-</footer>
+
 </html>

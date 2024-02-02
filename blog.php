@@ -9,8 +9,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <style>
 
+    <style>
         footer {
             background-color: #055634;
             color: white;
@@ -60,9 +60,16 @@
         .superposition-simple .texte-normal {
             transition: .5s ease;
         }
+
+        .btncat {
+            background-color: #055634;
+        }
     </style>
+
 </head>
-<header class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500" style="background-image: url('Images/wave.png');">
+<header
+    class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500"
+    style="background-image: url('Images/wave.png');">
     <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
         <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
     </a>
@@ -77,22 +84,54 @@
             <ul class="navbar-nav">
                 <li class="nav-item active">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple  "><a href="accueil.php"><div class="texte-normal "><div class="texte-original ">Accueil</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/feuille.png" /><div class="texte-original">Accueil</div></div></a></div>
+                        <div class="superposition-simple  "><a href="accueil.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original ">Accueil</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/feuille.png" />
+                                    <div class="texte-original">Accueil</div>
+                                </div>
+                            </a></div>
                     </div>
                 </li>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple "><a href="blog.php"><div class="texte-normal "><div class="texte-original">Blog</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/nuage.png" /><div class="texte-original">Blog</div></div></a></div>
+                        <div class="superposition-simple "><a href="blog.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original">Blog</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/nuage.png" />
+                                    <div class="texte-original">Blog</div>
+                                </div>
+                            </a></div>
                     </div>
                 </li>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple "><a href="quizz.php"><div class="texte-normal "><div class="texte-original">Quizz</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/soleil.png" /><div class="texte-original">Quizz</div></div></a></div>
+                        <div class="superposition-simple "><a href="quizz.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original">Quizz</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/soleil.png" />
+                                    <div class="texte-original">Quizz</div>
+                                </div>
+                            </a></div>
                     </div>
                 </li>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
-                        <div class="superposition-simple "><a href="apropos.php"><div class="texte-normal "><div class="texte-original">À propos</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/glace.png" /><div class="texte-original">À propos</div></div></a></div>
+                        <div class="superposition-simple "><a href="apropos.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original">À propos</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/glace.png" />
+                                    <div class="texte-original">À propos</div>
+                                </div>
+                            </a></div>
                     </div>
                 </li>
             </ul>
@@ -100,148 +139,124 @@
     </nav>
 </header>
 
-<body class="bg-gray-100 ">
-
-
-    <div class="text text-3xl font-bold mb-8 justify-center flex">
-        <h1>Notre Blog :</h1>
-    </div>
-    <div class="blog flex justify-center pb-12">
+<body class="bg-gray-100">
+    <div>
         
-        <div class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:grid-rows-2  gap-8">
-            <div class="flex flex-col sm:flex-row col-span-1 row-span-1 sm:hover:shadow-lg rounded-3xl">
-                <div class="card1 border bg-white w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
-                    <div class="Photo flex justify-center ">
-                        <img src="Images/ImageClimat.jpg" alt="image4"
-                            class="w-full h-44 rounded-t-3xl object-cover">
-                    </div>
-            
-                    <div class="infocard pl-10 pt-4 pr-10">
-            
-                        <div class="flex flex-row ">
-                            texte qui parel du climat et de la terre texte qui parel du climat et de la terre texte qui parel du climat et de la terre 
-                        </div>
-                    </div>
-            
-                    <div class="boutonvalidation p-2 justify-end flex">
-                        <button class="bg-white text-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
-                            <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row col-span-1 row-span-1 sm:hover:shadow-lg rounded-3xl">
-                <div class="card1 border bg-white w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
-                    <div class="Photo flex justify-center ">
-                        <img src="Images/ImageClimat.jpg" alt="image4"
-                            class="w-full h-44 rounded-t-3xl object-cover">
-                    </div>
-            
-                    <div class="infocard pl-10 pt-4 pr-10">
-            
-                        <div class="flex flex-row ">
-                            texte qui parel du climat et de la terre texte qui parel du climat et de la terre texte qui parel du climat et de la terre 
-                        </div>
-                    </div>
-            
-                    <div class="boutonvalidation p-2 justify-end flex">
-                        <button class="bg-white text-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
-                            <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row col-span-1 row-span-1 sm:hover:shadow-lg rounded-3xl">
-                <div class="card1 border bg-white w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
-                    <div class="Photo flex justify-center ">
-                        <img src="Images/ImageClimat.jpg" alt="image4"
-                            class="w-full h-44 rounded-t-3xl object-cover">
-                    </div>
-            
-                    <div class="infocard pl-10 pt-4 pr-10">
-            
-                        <div class="flex flex-row ">
-                            texte qui parel du climat et de la terre texte qui parel du climat et de la terre texte qui parel du climat et de la terre 
-                        </div>
-                    </div>
-            
-                    <div class="boutonvalidation p-2 justify-end flex">
-                        <button class="bg-white text-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
-                            <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row col-span-1 row-span-1 sm:hover:shadow-lg rounded-3xl">
-                <div class="card1 border bg-white w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
-                    <div class="Photo flex justify-center ">
-                        <img src="Images/ImageClimat.jpg" alt="image4"
-                            class="w-full h-44 rounded-t-3xl object-cover">
-                    </div>
-            
-                    <div class="infocard pl-10 pt-4 pr-10">
-            
-                        <div class="flex flex-row ">
-                            texte qui parel du climat et de la terre texte qui parel du climat et de la terre texte qui parel du climat et de la terre 
-                        </div>
-                    </div>
-            
-                    <div class="boutonvalidation p-2 justify-end flex">
-                        <button class="bg-white text-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
-                            <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row col-span-1 row-span-1 sm:hover:shadow-lg rounded-3xl">
-                <div class="card1 border bg-white w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
-                    <div class="Photo flex justify-center ">
-                        <img src="Images/ImageClimat.jpg" alt="image4"
-                            class="w-full h-44 rounded-t-3xl object-cover">
-                    </div>
-            
-                    <div class="infocard pl-10 pt-4 pr-10">
-            
-                        <div class="flex flex-row ">
-                            texte qui parel du climat et de la terre texte qui parel du climat et de la terre texte qui parel du climat et de la terre 
-                        </div>
-                    </div>
-            
-                    <div class="boutonvalidation p-2 justify-end flex">
-                        <button class="bg-white text-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
-                            <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row col-span-1 row-span-1 sm:hover:shadow-lg rounded-3xl">
-                <div class="card1 border bg-white w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
-                    <div class="Photo flex justify-center ">
-                        <img src="Images/ImageClimat.jpg" alt="image4"
-                            class="w-full h-44 rounded-t-3xl object-cover">
-                    </div>
-            
-                    <div class="infocard pl-10 pt-4 pr-10">
-            
-                        <div class="flex flex-row ">
-                            texte qui parel du climat et de la terre texte qui parel du climat et de la terre texte qui parel du climat et de la terre 
-                        </div>
-                    </div>
-            
-                    <div class="boutonvalidation p-2 justify-end flex">
-                        <button class="bg-white text-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
-                            <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+    <?php
+    // Connexion à la base de données
+    $mysqli = new mysqli("localhost", "root", "", "infoclimat");
+
+    // Vérification de la connexion
+    if ($mysqli->connect_error) {
+        die("La connexion à la base de données a échoué : " . $mysqli->connect_error);
+    }
+
+    // Initialiser la variable de catégorie
+    $categorie = '';
+
+    // Vérifier si le formulaire a été soumis
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Récupérer la catégorie sélectionnée (si elle existe)
+        $categorie = isset($_POST['categorie']) ? $_POST['categorie'] : '';
+    }
+
+    // Requête pour récupérer les informations de la table infocarte avec filtrage par catégorie
+    $query = "SELECT id, titre, description, article, categorie, statut, image FROM infocarte";
+
+    // Ajouter le filtre de catégorie si une catégorie est sélectionnée
+    if (!empty($categorie)) {
+        // Utilisez la catégorie dans la clause WHERE de la requête
+        $query .= " WHERE categorie = '" . $mysqli->real_escape_string($categorie) . "'";
+    }
+
+    // Exécuter la requête
+    $result = $mysqli->query($query);
+
+    // Vérification s'il y a des résultats
+    if ($result->num_rows > 0) {
+        ?>
+        <!DOCTYPE html>
+        <html lang="fr">
+
+        <body class="bg-gray-100 pt-8">
+
+            <div class="blog container pb-12 pt-12">
+                <div class="text text-3xl font-bold mb-8 ">
+                    <h1>Notre Blog :</h1>
+                </div>
+
+                <form method="post" class="mb-4 justify-center flex">
+                    <label for="categorie">Filtrer par catégorie :</label>
+                    <select name="categorie" id="categorie" class="border rounded p-1">
+                        <option value="">Toutes les catégories</option>
+                        
+                        <?php
+
+                        $categoriesQuery = "SELECT DISTINCT categorie FROM infocarte";
+                        $categoriesResult = $mysqli->query($categoriesQuery);
+
+
+                        while ($categorieRow = $categoriesResult->fetch_assoc()) {
+                            echo '<option value="' . $categorieRow['categorie'] . '">' . $categorieRow['categorie'] . '</option>';
+                        }
+                        ?>
+                    </select>
+                    <button type="submit" class="btncat text-white px-2 py-1 rounded ml-2">Filtrer</button>
+                </form>
+
+                <div
+                    class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:grid-rows-2  gap-8">
+                    <?php
+
+                    while ($row = $result->fetch_assoc()) {
+                        ?>
+                        <div class="flex flex-col sm:flex-row col-span-1 row-span-1 sm:hover:shadow-lg rounded-3xl">
+                            <div class="card1 border bg-white w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
+                                <div class="Photo flex justify-center">
+                                    <?php
+                                    if (empty($row['image'])) {
+                                        // Afficher l'image par défaut si la colonne "image" est vide
+                                        echo '<img src="Images/ImageClimat.jpg" alt="Image par défaut" class="w-full h-44 rounded-t-3xl object-cover">';
+                                    } else {
+                                        // Encodage de l'image en base64 si la colonne "image" n'est pas vide
+                                        $imageData = base64_encode($row['image']);
+                                        $imageType = "image/jpeg"; // Assurez-vous que le type correspond à votre base de données
+                                        // Afficher l'image depuis la base de données
+                                        echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="image' . $row['id'] . '" class="w-full h-44 rounded-t-3xl object-cover">';
+                                    }
+                                    ?>
+                                </div>
+
+                                <div class="infocard pl-10 pt-4 pr-10">
+                                    <div class="flex flex-row">
+                                        <?php echo $row['description']; ?>
+                                    </div>
+                                </div>
+
+                                <div class="boutonvalidation p-2 justify-end flex">
+                                    <button
+                                        class="px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
+                                        <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                </div>
+            </div>
+        </body>
+        <?php
+    } else {
+        echo "Aucun résultat trouvé dans la base de données.";
+    }
+
+    // Fermer la connexion à la base de données
+    $mysqli->close();
+    ?>
+
 </body>
 <footer class=" p-4  w-full">
     <p class="flex justify-center">@SIO2Groupe2</p>
