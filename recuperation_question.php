@@ -6,6 +6,7 @@ $dbname = "infoclimat";
 
 // Créer une connexion
 $conn = new mysqli($servername, $username, $password, $dbname);
+$conn->set_charset("utf8");
 
 // Vérifier la connexion
 if ($conn->connect_error) {
