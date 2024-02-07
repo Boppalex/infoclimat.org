@@ -54,10 +54,11 @@ if ($logged_in) {
     <style>
         html,
         body {
+
             padding: 0;
             margin: 0;
             position: relative;
-            transition: background 1s ease;
+            transition: background 4s ease;
             /* Transition pour le changement de fond */
         }
 
@@ -171,9 +172,10 @@ if ($logged_in) {
         }
 
         body.rainy footer {
+
             background-color: #333;
             overflow: hidden;
-            transition: background 1s ease;
+            transition: background 4s ease;
             /* Fond gris clair */
 
         }
@@ -297,7 +299,7 @@ if ($logged_in) {
         };
 
         window.addEventListener('keydown', function (event) {
-            if (event.key === '1' && event.ctrlKey) {
+            if (event.key === 'q' && event.ctrlKey) {
                 snow.toggleSnow();
             }
         });
@@ -357,6 +359,22 @@ if ($logged_in) {
                             </a></div>
                     </div>
                 </li>
+                <?php if ($logged_in && $is_admin != 1): ?>
+
+                    <li class="nav-item">
+                        <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
+                            <div class="superposition-simple "><a href="backuser.php">
+                                    <div class="texte-normal ">
+                                        <div class="texte-original">Carte</div>
+                                    </div>
+                                    <div class="texte-hover "><img decoding="async" class="image-originale "
+                                            src="Images/feuillemorte.png" />
+                                        <div class="texte-original">Carte</div>
+                                    </div>
+                                </a></div>
+                        </div>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
                         <div class="superposition-simple "><a href="apropos.php">
@@ -371,16 +389,16 @@ if ($logged_in) {
                     </div>
                 </li>
                 <?php if ($logged_in && $is_admin === 1): ?>
-                    
+
                     <li class="nav-item">
                         <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
                             <div class="superposition-simple "><a href="backend.php">
                                     <div class="texte-normal ">
-                                        <div class="texte-original">Backend</div>
+                                        <div class="texte-original">Back</div>
                                     </div>
                                     <div class="texte-hover "><img decoding="async" class="image-originale "
                                             src="Images/feuillemorte.png" />
-                                        <div class="texte-original">Backend</div>
+                                        <div class="texte-original">Back</div>
                                     </div>
                                 </a></div>
                         </div>
