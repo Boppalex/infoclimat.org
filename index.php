@@ -329,6 +329,10 @@
             </ul>
         </div>
     </nav>
+
+    <a href="login.php" class="mb-2 sm:mb-0 sm:mr-2">
+        <img src="Images/logo.png" alt="logo" class="w-12 h-12 hover:bg-white rounded-full">
+    </a>
 </header>
 
 <body class="bg-gray-100 ">
