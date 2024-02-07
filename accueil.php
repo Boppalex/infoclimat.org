@@ -86,7 +86,6 @@
 
         }
 
-
         header {
             background-image: url('Images/wave.png');
         }
@@ -322,7 +321,6 @@
 </header>
 
 <body class="bg-gray-100 ">
-
 
     <?php
     // Connexion à la base de données
