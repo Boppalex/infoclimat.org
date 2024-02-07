@@ -214,7 +214,9 @@
     <div class="bg-gray-100 quiz-container ">
       <div id="questions"></div>
       <div id="message" class="message"></div>
+      </br>
       <button onclick="checkAnswers()">Vérifier</button>
+      </br>
       </br>
       <button id="restartButton" style="display: none;" onclick="restartQuiz()">Recommencer</button>
     </div>
@@ -400,8 +402,8 @@ function restartQuiz() {
   </div>
 
 </body>
-
-<footer class="p-4 w-full fixed bottom-0">
+    </br>
+<footer class="p-4 w-full ">
   <p class="flex justify-center">@SIO2Groupe2</p>
   <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
     Azoulay, Hugo Moreaux</p>
