@@ -16,14 +16,14 @@
       text-align: center;
     }
 
-    .quiz-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background-color: #f9f9f9;
-    }
+.quiz-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
 
     .question {
       font-size: 20px;
@@ -293,85 +293,95 @@
 
       let errorMessageDisplayed = false;
 
-      function checkAnswers() {
-        const questionsElement = document.getElementById("questions");
-        const messageElement = document.getElementById("message");
-        const restartButton = document.getElementById("restartButton");
-        selectedAnswers = [];
-        let hasErrors = false;
-        let allRadiosUnchecked = true;
+function checkAnswers() {
+    const questionsElement = document.getElementById("questions");
+    const messageElement = document.getElementById("message");
+    const restartButton = document.getElementById("restartButton");
+    selectedAnswers = [];
+    let errorCount = 0; // Ajoutez une variable pour compter le nombre d'erreurs
 
-        // Réinitialise le contenu du message à chaque vérification
-        messageElement.innerText = "";
-        errorMessageDisplayed = false;
+    // Vérifie si au moins une question n'a pas de réponse sélectionnée
+    let allQuestionsAnswered = true;
 
-        // Supprimez tous les messages d'erreur précédents
-        questionsElement.querySelectorAll('.error').forEach(errorElement => errorElement.remove());
+    // Réinitialise le contenu du message à chaque vérification
+    messageElement.innerText = "";
+    errorMessageDisplayed = false;
 
-        questionsElement.querySelectorAll('.options').forEach((options, questionIndex) => {
-          const radio = options.querySelector('input[type="radio"]:checked');
+    // Supprimez tous les messages d'erreur précédents
+    questionsElement.querySelectorAll('.error').forEach(errorElement => errorElement.remove());
 
-          if (radio) {
-            allRadiosUnchecked = false;
+    questionsElement.querySelectorAll('.options').forEach((options, questionIndex) => {
+        const radio = options.querySelector('input[type="radio"]:checked');
 
-            const userAnswer = radio.value;
-            selectedAnswers.push({ questionIndex, userAnswer });
+        if (!radio) {
+            allQuestionsAnswered = false;
+            return;  // Sort de la boucle si une question n'a pas de réponse
+        }
 
-            const correctAnswer = quizData[questionIndex].reponses.find(r => r.estcorrect === "1");
+        const userAnswer = radio.value;
+        selectedAnswers.push({ questionIndex, userAnswer });
 
-            if (correctAnswer) {
-              const isCorrect = userAnswer === correctAnswer.texte;
+        const correctAnswer = quizData[questionIndex].reponses.find(r => r.estcorrect === "1");
 
-              if (!isCorrect) {
-                hasErrors = true;
+        if (correctAnswer) {
+            const isCorrect = userAnswer === correctAnswer.texte;
+
+            if (!isCorrect) {
+                errorCount++; // Incrémente le compteur d'erreurs
                 const questionElement = options.previousElementSibling;
                 const errorText = document.createElement("div");
                 errorText.classList.add("error");
                 errorText.innerText = "Erreur dans la réponse. La bonne réponse était : " + correctAnswer.texte;
                 questionElement.appendChild(errorText);
-              }
-
-              options.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
-            } else {
-              console.error("Réponse correcte non trouvée pour la question " + questionIndex);
             }
-          }
-        });
 
-        if (allRadiosUnchecked && !errorMessageDisplayed) {
-          messageElement.innerText = "Veuillez sélectionner au moins une réponse avant de vérifier.";
-          errorMessageDisplayed = true;
-        } else if (hasErrors && !errorMessageDisplayed) {
-          messageElement.innerText = "Certains éléments sont incorrects. Veuillez vérifier les erreurs.";
-          restartButton.style.display = "inline"; // Affichez le bouton "Recommencer"
-          errorMessageDisplayed = true;
-        } else if (!errorMessageDisplayed) {
-          messageElement.innerText = "Les réponses sont correctes!";
-          restartButton.style.display = "inline"; // Affichez le bouton "Recommencer"
-          errorMessageDisplayed = true;
+            options.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
+        } else {
+            console.error("Réponse correcte non trouvée pour la question " + questionIndex);
         }
-      }
+    });
 
-      function restartQuiz() {
-        const questionsElement = document.getElementById("questions");
-        const messageElement = document.getElementById("message");
-        const restartButton = document.getElementById("restartButton");
+    // Affiche le message si au moins une question n'a pas de réponse
+    if (!allQuestionsAnswered && !errorMessageDisplayed) {
+        messageElement.innerText = "Veuillez répondre à toutes les questions avant de vérifier.";
+        errorMessageDisplayed = true;
+        return;
+    }
 
-        // Supprimez tous les messages d'erreur
-        questionsElement.querySelectorAll('.error').forEach(errorElement => errorElement.remove());
+    if (errorCount > 0 && !errorMessageDisplayed) {
+        messageElement.innerText = "Il y a " + errorCount + " erreur(s). Veuillez vérifier les erreurs.";
+        restartButton.style.display = "inline"; // Affichez le bouton "Recommencer"
+        errorMessageDisplayed = true;
+    } else if (!errorMessageDisplayed) {
+        messageElement.innerText = "Les réponses sont correctes!";
+        restartButton.style.display = "inline"; // Affichez le bouton "Recommencer"
+        errorMessageDisplayed = true;
+    }
+}
 
-        // Réinitialisez le message d'erreur/succès
-        messageElement.innerText = "";
+function restartQuiz() {
+    const questionsElement = document.getElementById("questions");
+    const messageElement = document.getElementById("message");
+    const restartButton = document.getElementById("restartButton");
 
-        // Réactivez tous les boutons radio
-        questionsElement.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = false);
+    // Supprimez tous les messages d'erreur
+    questionsElement.querySelectorAll('.error').forEach(errorElement => errorElement.remove());
 
-        // Décochez tous les boutons radio
-        questionsElement.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+    // Réinitialisez le message d'erreur/succès
+    messageElement.innerText = "";
 
-        // Cachez le bouton "Recommencer"
-        restartButton.style.display = "none";
-      }
+    // Réactivez tous les boutons radio
+    questionsElement.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = false);
+
+    // Décochez tous les boutons radio
+    questionsElement.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+
+    // Cachez le bouton "Recommencer"
+    restartButton.style.display = "none";
+
+    // Rafraîchir la page
+    location.reload();
+}
 
       function arraysEqual(arr1, arr2) {
         if (arr1.length !== arr2.length) return false;
