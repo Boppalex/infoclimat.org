@@ -17,6 +17,19 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
     <style>
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+            position: relative;
+            transition: background 1s ease; /* Transition pour le changement de fond */
+        }
+
+        /* Ajout d'une classe pour le fond pendant l'easter egg */
+        body.rainy {
+            background: #333; /* Couleur du fond pendant l'easter egg */
+        }
+
         .superposition-simple {
             position: relative;
             width: 100%;
@@ -73,35 +86,11 @@
 
         }
 
-        .raindrop {
-            background-image: url('Images/goutte.png');
-            /* Chemin vers votre image */
-            background-size: cover;
-            /* Ajustez selon vos besoins */
-            background-repeat: no-repeat;
-            position: absolute;
-            width: 20px;
-            /* Ajustez la largeur selon vos besoins */
-            height: 20px;
-            /* Ajustez la hauteur selon vos besoins */
-            opacity: 0.8;
-            transition: transform 0.5s linear;
-        }
 
         header {
             background-image: url('Images/wave.png');
         }
 
-        body.rainy header {
-
-            background-image: url('Images/wavecloud.png');
-        }
-
-        /* Style appliqué uniquement lorsque la classe 'rainy' est présente sur le body */
-        body.rainy {
-            background-color: #708090;
-            /* Fond gris clair */
-        }
 
         div.testclass {
             background-color: #fff;
@@ -109,9 +98,17 @@
         }
 
         body.rainy div.testclass {
-            background-color: #c3c3c3;
+            background-color: #ffff;
+            color: #fff;
             /* Fond gris clair */
         }
+
+        body.rainy div.intro {
+            color: #fff;
+            /* Fond gris clair */
+        }
+
+
 
         div.card1 {
             background-color: #fff;
@@ -119,20 +116,138 @@
         }
 
         body.rainy div.card1 {
-            background-color: #c3c3c3;
+            background-color: #ffff;
             /* Fond gris clair */
         }
 
+        body.rainy header {
+            background-color: #333;
+            background-image: none;
 
+        }
 
         body.rainy footer {
-            background-color: #708090;
+            background-color: #333;
             overflow: hidden;
             /* Fond gris clair */
 
         }
     </style>
+    <script type="text/javascript">
+        var snow = {
+            wind: 0,
+            maxXrange: 100,
+            minXrange: 10,
+            maxSpeed: 2,
+            minSpeed: 1,
+            color: "#fff",
+            char: "*",
+            maxSize: 20,
+            minSize: 8,
+            flakes: [],
+            WIDTH: 0,
+            HEIGHT: 0,
+            snowActive: false,
 
+            init: function (nb) {
+                var o = this,
+                    frag = document.createDocumentFragment();
+                o.getSize();
+
+                for (var i = 1; i < nb; i++) {
+                    var flake = {
+                        x: o.random(o.WIDTH),
+                        y: -o.maxSize,
+                        xrange: o.minXrange + o.random(o.maxXrange - o.minXrange),
+                        yspeed: o.minSpeed + o.random(o.maxSpeed - o.minSpeed, 100),
+                        life: 0,
+                        size: o.minSize + o.random(o.maxSize - o.minSize),
+                        html: document.createElement("span"),
+                    };
+
+                    flake.html.style.position = "absolute";
+                    flake.html.style.top = flake.y + "px";
+                    flake.html.style.left = flake.x + "px";
+                    flake.html.style.fontSize = flake.size + "px";
+                    flake.html.style.color = o.color;
+                    flake.html.appendChild(document.createTextNode(o.char));
+
+                    frag.appendChild(flake.html);
+                    o.flakes.push(flake);
+                }
+
+                document.body.appendChild(frag);
+                o.animate();
+
+                window.onresize = function () {
+                    o.getSize();
+                };
+            },
+
+            animate: function () {
+                var o = this;
+                for (var i = 0, c = o.flakes.length; i < c; i++) {
+                    var flake = o.flakes[i],
+                        top = flake.y + flake.yspeed,
+                        left = flake.x + Math.sin(flake.life) * flake.xrange + o.wind;
+                    if (top < o.HEIGHT - flake.size - 10 && left < o.WIDTH - flake.size && left > 0) {
+                        flake.html.style.top = top + "px";
+                        flake.html.style.left = left + "px";
+                        flake.y = top;
+                        flake.x += o.wind;
+                        flake.life += 0.01;
+                    } else {
+                        flake.html.style.top = -o.maxSize + "px";
+                        flake.x = o.random(o.WIDTH);
+                        flake.y = -o.maxSize;
+                        flake.html.style.left = flake.x + "px";
+                        flake.life = 0;
+                    }
+                }
+
+                // Continue l'animation seulement si la neige est activée
+                if (o.snowActive) {
+                    setTimeout(function () {
+                        o.animate();
+                    }, 20);
+                }
+            },
+
+            random: function (range, num) {
+                var num = num ? num : 1;
+                return Math.floor(Math.random() * (range + 5) * num) / num;
+            },
+
+            getSize: function () {
+                this.WIDTH = document.body.clientWidth || window.innerWidth;
+                this.HEIGHT = document.body.clientHeight || window.innerHeight;
+            },
+
+            toggleSnow: function () {
+                this.snowActive = !this.snowActive;
+
+                // Ajoute ou retire la classe "rainy" pour le changement de fond
+                document.body.classList.toggle('rainy', this.snowActive);
+
+                if (this.snowActive) {
+                    this.init(100);
+                } else {
+                    // Supprime tous les flocons de neige existants si la neige est désactivée
+                    for (var i = 0, c = this.flakes.length; i < c; i++) {
+                        document.body.removeChild(this.flakes[i].html);
+                    }
+                    this.flakes = [];
+                }
+            },
+        };
+
+        window.addEventListener('keydown', function (event) {
+            if (event.key === '1' && event.ctrlKey) {
+                snow.toggleSnow();
+            }
+        });
+
+    </script>
 </head>
 <header
     class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500">
@@ -207,68 +322,7 @@
 </header>
 
 <body class="bg-gray-100 ">
-    <script>
-        let easterEggActive = false;
-        let ctrlPressed = false;
-        let originalBackgroundColor = document.body.style.backgroundColor;
 
-        // Fonction pour générer une goutte de pluie
-        function createRaindrop() {
-            const raindrop = document.createElement('div');
-            raindrop.className = 'raindrop';
-            raindrop.style.top = '0';
-            raindrop.style.left = Math.random() * window.innerWidth + 'px';
-            document.body.appendChild(raindrop);
-
-            // Utilisation d'une fonction de rappel pour réinitialiser la position après la transition
-            setTimeout(() => {
-                raindrop.style.transform = 'translateY(' + (document.body.offsetHeight - 0) + 'px)';
-            }, 0);
-
-
-            // Détection quand la goutte atteint le bas de la page et la supprimer
-            setTimeout(() => {
-                document.body.removeChild(raindrop);
-            }, 2000);
-        }
-
-        // Générer plusieurs gouttes de pluie en continu
-        setInterval(() => {
-            if (easterEggActive) {
-                for (let i = 0; i < 1; i++) { // Ajoutez 5 gouttes à la fois
-                    createRaindrop();
-                }
-            }
-        }, 50); // Ajoutez une nouvelle série de gouttes toutes les 100 millisecondes
-
-        // Écouteur d'événement pour détecter la pression de la touche Ctrl
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Control') {
-                ctrlPressed = true;
-            } else if (ctrlPressed && event.key === '1') {
-                easterEggActive = !easterEggActive;
-                document.body.classList.toggle('rainy', easterEggActive);
-            }
-        });
-
-        // Écouteur d'événement pour détecter le relâchement de la touche Ctrl
-        document.addEventListener('keyup', function (event) {
-            if (event.key === 'Control') {
-                ctrlPressed = false;
-            }
-        });
-
-        // Écouteur d'événement pour détecter le scroll
-        window.addEventListener('scroll', function () {
-            // Si l'utilisateur a atteint la fin de la page, supprimez toutes les gouttes de pluie
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-                const raindrops = document.querySelectorAll('.raindrop');
-                raindrops.forEach((raindrop) => {
-                    document.body.removeChild(raindrop);
-                });
-            }
-        });
-    </script>
 
     <?php
     // Connexion à la base de données
@@ -294,7 +348,7 @@
 
 
             <div class="imageswip container  gap-4 md:p-12">
-                <div class="text text-3xl font-bold  flex mb-8">
+                <div class="intro text text-3xl font-bold  flex mb-8">
                     <h1>Information climatique :</h1>
                 </div>
                 <div class="swiper-container h-86 flex overflow-hidden ">
@@ -419,7 +473,7 @@
 
 
         <div class="blog container pb-12">
-            <div class="text text-3xl font-bold mb-8  flex">
+            <div class="intro text text-3xl font-bold mb-8  flex">
                 <h1>Dernières Actus :</h1>
             </div>
             <div class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3   gap-8">
