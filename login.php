@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (validateCredentials($username, $password)) {
         // Si les informations d'identification sont valides, rediriger vers la page d'accueil
         $_SESSION["username"] = $username;
-        header("Location: backend.php");
+        header("Location: accueil.php");
         exit();
     } else {
         // Si les informations d'identification ne sont pas valides, afficher un message d'erreur
