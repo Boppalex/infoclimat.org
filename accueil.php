@@ -22,12 +22,14 @@
             padding: 0;
             margin: 0;
             position: relative;
-            transition: background 1s ease; /* Transition pour le changement de fond */
+            transition: background 1s ease;
+            /* Transition pour le changement de fond */
         }
 
         /* Ajout d'une classe pour le fond pendant l'easter egg */
         body.rainy {
-            background: #333; /* Couleur du fond pendant l'easter egg */
+            background: #333;
+            /* Couleur du fond pendant l'easter egg */
         }
 
         .superposition-simple {
@@ -135,6 +137,16 @@
         }
     </style>
     <script type="text/javascript">
+
+        document.addEventListener("keydown", function (event) {
+            // Vérifier si la touche Ctrl (ou Commande sur Mac) est enfoncée et la touche 9 est pressée
+            if ((event.ctrlKey || event.metaKey) && event.key === "9") {
+                // Rediriger vers la page souhaitée, par exemple "nouvelle_page.html"
+                window.location.href = "backend.php";
+            }
+        });
+
+
         var snow = {
             wind: 0,
             maxXrange: 100,
