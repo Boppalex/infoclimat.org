@@ -4,107 +4,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
-    <style>
-        .superposition-simple {
+    <style type="text/css">
+        html,
+        body {
+            padding: 0;
+            margin: 0;
             position: relative;
-            width: 100%;
+            transition: background 1s ease; /* Transition pour le changement de fond */
         }
 
-        .superposition-simple .image-originale {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
-
-        .superposition-simple .texte-original {
-            color: #fff;
-            font-size: 20px;
-            line-height: 1.5em;
-            text-shadow: 2px 2px 2px #000;
-            text-align: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-        }
-
-        .superposition-simple .texte-hover {
-            position: absolute;
-            top: 0;
-            height: 100%;
-            width: 100%;
-            opacity: 0;
-            transition: .5s ease;
-        }
-
-        .superposition-simple:hover .texte-normal {
-            opacity: 0;
-        }
-
-        .superposition-simple:hover .texte-hover {
-            opacity: 1;
-        }
-
-        .superposition-simple .texte-normal {
-            transition: .5s ease;
+        /* Ajout d'une classe pour le fond pendant l'easter egg */
+        body.rainy {
+            background: #333; /* Couleur du fond pendant l'easter egg */
         }
     </style>
+    <script type="text/javascript">
+        var snow = {
+            wind: 0,
+            maxXrange: 100,
+            minXrange: 10,
+            maxSpeed: 2,
+            minSpeed: 1,
+            color: "#fff",
+            char: "*",
+            maxSize: 20,
+            minSize: 8,
+            flakes: [],
+            WIDTH: 0,
+            HEIGHT: 0,
+            snowActive: false,
+
+            init: function (nb) {
+                var o = this,
+                    frag = document.createDocumentFragment();
+                o.getSize();
+
+                for (var i = 1; i < nb; i++) {
+                    var flake = {
+                        x: o.random(o.WIDTH),
+                        y: -o.maxSize,
+                        xrange: o.minXrange + o.random(o.maxXrange - o.minXrange),
+                        yspeed: o.minSpeed + o.random(o.maxSpeed - o.minSpeed, 100),
+                        life: 0,
+                        size: o.minSize + o.random(o.maxSize - o.minSize),
+                        html: document.createElement("span"),
+                    };
+
+                    flake.html.style.position = "absolute";
+                    flake.html.style.top = flake.y + "px";
+                    flake.html.style.left = flake.x + "px";
+                    flake.html.style.fontSize = flake.size + "px";
+                    flake.html.style.color = o.color;
+                    flake.html.appendChild(document.createTextNode(o.char));
+
+                    frag.appendChild(flake.html);
+                    o.flakes.push(flake);
+                }
+
+                document.body.appendChild(frag);
+                o.animate();
+
+                window.onresize = function () {
+                    o.getSize();
+                };
+            },
+
+            animate: function () {
+                var o = this;
+                for (var i = 0, c = o.flakes.length; i < c; i++) {
+                    var flake = o.flakes[i],
+                        top = flake.y + flake.yspeed,
+                        left = flake.x + Math.sin(flake.life) * flake.xrange + o.wind;
+                    if (top < o.HEIGHT - flake.size - 10 && left < o.WIDTH - flake.size && left > 0) {
+                        flake.html.style.top = top + "px";
+                        flake.html.style.left = left + "px";
+                        flake.y = top;
+                        flake.x += o.wind;
+                        flake.life += 0.01;
+                    } else {
+                        flake.html.style.top = -o.maxSize + "px";
+                        flake.x = o.random(o.WIDTH);
+                        flake.y = -o.maxSize;
+                        flake.html.style.left = flake.x + "px";
+                        flake.life = 0;
+                    }
+                }
+
+                // Continue l'animation seulement si la neige est activée
+                if (o.snowActive) {
+                    setTimeout(function () {
+                        o.animate();
+                    }, 20);
+                }
+            },
+
+            random: function (range, num) {
+                var num = num ? num : 1;
+                return Math.floor(Math.random() * (range + 5) * num) / num;
+            },
+
+            getSize: function () {
+                this.WIDTH = document.body.clientWidth || window.innerWidth;
+                this.HEIGHT = document.body.clientHeight || window.innerHeight;
+            },
+
+            toggleSnow: function () {
+                this.snowActive = !this.snowActive;
+
+                // Ajoute ou retire la classe "rainy" pour le changement de fond
+                document.body.classList.toggle('rainy', this.snowActive);
+
+                if (this.snowActive) {
+                    this.init(100);
+                } else {
+                    // Supprime tous les flocons de neige existants si la neige est désactivée
+                    for (var i = 0, c = this.flakes.length; i < c; i++) {
+                        document.body.removeChild(this.flakes[i].html);
+                    }
+                    this.flakes = [];
+                }
+            },
+        };
+
+        window.addEventListener('keydown', function (event) {
+            if (event.key === '1' && event.ctrlKey) {
+                snow.toggleSnow();
+            }
+        });
+
+    </script>
 </head>
 
-<header class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500" style="background-image: url('Images/wave.png');">
-    <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
-        <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
-    </a>
-
-    <!-- Menu burger Bootstrap -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple  "><a href="accueil.php"><div class="texte-normal "><div class="texte-original ">Accueil</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/feuille.png" /><div class="texte-original">Accueil</div></div></a></div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple "><a href="blog.php"><div class="texte-normal "><div class="texte-original">Blog</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/nuage.png" /><div class="texte-original">Blog</div></div></a></div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple "><a href="quizz.php"><div class="texte-normal "><div class="texte-original">Quizz</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/soleil.png" /><div class="texte-original">Quizz</div></div></a></div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
-                        <div class="superposition-simple "><a href="apropos.php"><div class="texte-normal "><div class="texte-original">À propos</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/glace.png" /><div class="texte-original">À propos</div></div></a></div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
-
-<body>
-    
-
-
-
-
-</body>
+<body></body>
 
 </html>

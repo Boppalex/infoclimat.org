@@ -238,40 +238,46 @@ require_once('close.php');
 </header>
 
 <body class="bg-gray-100">
-    <form method="post" class="max-w-md mx-auto my-8 p-6 bg-white rounded shadow-md">
-        <div class="mb-4">
-            <label for="titre" class="block text-gray-700 text-sm font-bold mb-2">Titre</label>
-            <input type="text" name="titre" id="titre"
-                class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
-        </div>
-        <div class="mb-4">
-            <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Description</label>
-            <input type="text" name="description" id="description"
-                class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
-        </div>
-        <div class="mb-4">
-            <label for="article" class="block text-gray-700 text-sm font-bold mb-2">Article</label>
-            <textarea name="article" id="article" class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue" rows="6"></textarea>
-        </div>
-        <div class="mb-4">
-            <label for="categorie" class="block text-gray-700 text-sm font-bold mb-2">Catégorie</label>
-            <input type="text" name="categorie" id="categorie"
-                class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
-        </div>
-        <div class="mb-4">
-            <label for="statut" class="block text-gray-700 text-sm font-bold mb-2">Statut</label>
-            <input type="number" name="statut" id="statut"
-                class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
-        </div>
-        <div class="flex flex-row">
-            <button type="submit">Enregistrer</button>
-            <button type="button" onclick="window.location.href='backend.php'">Retour</button>
-        </div>
-    </form>
+    <div class="container">
+        <form method="post" class="max-w-md mx-auto my-8 p-6 bg-white rounded shadow-md">
+            <div class="mb-4">
+                <label for="titre" class="block text-gray-700 text-sm font-bold mb-2">Titre</label>
+                <input type="text" name="titre" id="titre"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
+            </div>
+            <div class="mb-4">
+                <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Description</label>
+                <input type="text" name="description" id="description"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
+            </div>
+            <div class="mb-4">
+                <label for="article" class="block text-gray-700 text-sm font-bold mb-2">Article</label>
+                <textarea name="article" id="article"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue"
+                    rows="6"></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="categorie" class="block text-gray-700 text-sm font-bold mb-2">Catégorie</label>
+                <input type="text" name="categorie" id="categorie"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
+            </div>
+            <div class="mb-4">
+                <label for="statut" class="block text-gray-700 text-sm font-bold mb-2">Statut</label>
+                <input type="number" name="statut" id="statut"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
+            </div>
+            <div class="flex flex-row">
+                <button type="submit">Enregistrer</button>
+                <button type="button" onclick="window.location.href='backend.php'">Retour</button>
+            </div>
+        </form>
+    </div>
+
 </body>
-<footer class="p-4 w-full fixed bottom-0">
+<footer class="p-4 w-full ">
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>
 </footer>
+
 </html>
