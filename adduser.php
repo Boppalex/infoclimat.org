@@ -268,11 +268,9 @@ require_once('close.php');
                 <input type="text" name="categorie" id="categorie"
                     class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
             </div>
-            <div class="mb-4">
-                <label for="statut" class="block text-gray-700 text-sm font-bold mb-2">Statut</label>
-                <input type="number" name="statut" id="statut"
-                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
-            </div>
+            <?php
+            $statut = 2;
+            ?>
             <div class="flex flex-row">
                 <button type="submit">Enregistrer</button>
                 <button type="button" onclick="window.location.href='backend.php'">Retour</button>
