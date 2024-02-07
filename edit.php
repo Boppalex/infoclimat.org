@@ -54,90 +54,240 @@ require_once('close.php');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des produits</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
+        footer {
+            background-color: #055634;
+            color: white;
+        }
+
+        .superposition-simple {
+            position: relative;
+            width: 100%;
+        }
+
+        .superposition-simple .image-originale {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .superposition-simple .texte-original {
+            color: #fff;
+            font-size: 20px;
+            line-height: 1.5em;
+            text-shadow: 2px 2px 2px #000;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+        }
+
+        .superposition-simple .texte-hover {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+            transition: .5s ease;
+        }
+
+        .superposition-simple:hover .texte-normal {
+            opacity: 0;
+        }
+
+        .superposition-simple:hover .texte-hover {
+            opacity: 1;
+        }
+
+        .superposition-simple .texte-normal {
+            transition: .5s ease;
+        }
+
+        .btn {
+            --color2: #055634;
+            --color1: grey;
+            perspective: 1000px;
+            padding: 1em 1em;
+            background: linear-gradient(var(--color1), var(--color2));
+            border: none;
+            outline: none;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #fff;
+            text-shadow: 0 10px 10px #000;
+            cursor: pointer;
+            transform: rotateX(70deg) rotateZ(30deg);
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+
+        .btn::before {
+            content: "";
+            width: 100%;
+            height: 15px;
+            background-color: var(--color2);
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            transform: rotateX(90deg);
+            transform-origin: bottom;
+        }
+
+        .btn::after {
+            content: "";
+            width: 15px;
+            height: 100%;
+            background-color: var(--color1);
+            position: absolute;
+            top: 0;
+            right: 0;
+            transform: rotateY(-90deg);
+            transform-origin: right;
+        }
+
+        .btn:hover {
+            transform: rotateX(30deg) rotateZ(0);
+        }
+
+
         button {
- outline: none;
- cursor: pointer;
- border: none;
- padding: 0.9rem 2rem;
- margin: 0;
- font-family: inherit;
- font-size: inherit;
- position: relative;
- display: inline-block;
- letter-spacing: 0.05rem;
- font-weight: 700;
- font-size: 17px;
- border-radius: 500px;
- overflow: hidden;
- background: #66ff66;
- color: ghostwhite;
+  border: none;
+  outline: none;
+  background-color: #055634;
+  padding: 10px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 5px;
+  transition: all ease 0.1s;
+  box-shadow: 0px 5px 0px 0px #a29bfe;
 }
 
-button span {
- position: relative;
- z-index: 10;
- transition: color 0.4s;
+button:active {
+  transform: translateY(5px);
+  box-shadow: 0px 0px 0px 0px #a29bfe;
 }
-
-button:hover span {
- color: black;
-}
-
-button::before,
-button::after {
- position: absolute;
- top: 0;
- left: 0;
- width: 100%;
- height: 100%;
- z-index: 0;
-}
-
-button::before {
- content: "";
- background: #000;
- width: 120%;
- left: -10%;
- transform: skew(30deg);
- transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
-}
-
-button:hover::before {
- transform: translate3d(100%, 0, 0);
-}
-
     </style>
 </head>
-<body>
-    <h1>Modifier un produit</h1>
-    <form method="post">
-        <p>
-            <label for="titre">Titre</label>
-            <input type="text" name="titre" id="titre" value="<?= $result['titre'] ?>">
-        </p>
-        <p>
-            <label for="description">Description</label>
-            <textarea name="description" id="description" cols="30" rows="10"><?= $result['description'] ?></textarea>
-        </p>
-        <p>
-            <label for="article">Article</label>
-            <input type="text" name="article" id="article" value="<?= $result['article'] ?>">
-        </p>
-        <p>
-            <label for="categorie">Catégorie</label>
-            <input type="text" name="categorie" id="categorie" value="<?= $result['categorie'] ?>">
-        </p>
-        <p>
-            <label for="statut">Statut</label>
-            <input type="number" name="statut" id="statut" value="<?= $result['statut'] ?>">
-        </p>
-        <p>
-        <button><span>Enregistrer</span></button>
-        </p>
-        <input type="hidden" name="id" value="<?= $result['id'] ?>">
-    </form>
-    <button onclick="window.location.href = 'backend.php';"><span>Retour</span></button>
+<header
+    class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500"
+    style="background-image: url('Images/wave.png');">
+    <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
+        <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
+    </a>
+
+    <!-- Menu burger Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
+                        <div class="superposition-simple  "><a href="accueil.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original ">Accueil</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/feuille.png" />
+                                    <div class="texte-original">Accueil</div>
+                                </div>
+                            </a></div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
+                        <div class="superposition-simple "><a href="blog.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original">Blog</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/nuage.png" />
+                                    <div class="texte-original">Blog</div>
+                                </div>
+                            </a></div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
+                        <div class="superposition-simple "><a href="quizz.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original">Quizz</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/soleil.png" />
+                                    <div class="texte-original">Quizz</div>
+                                </div>
+                            </a></div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
+                        <div class="superposition-simple "><a href="apropos.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original">À propos</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/glace.png" />
+                                    <div class="texte-original">À propos</div>
+                                </div>
+                            </a></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Modifier un produit</h1>
+        <form method="post">
+            <div class="mb-4">
+                <label for="titre" class="block text-sm font-semibold">Titre</label>
+                <input type="text" name="titre" id="titre" value="<?= $result['titre'] ?>" class="w-full border p-2 rounded">
+            </div>
+            <div class="mb-4">
+                <label for="description" class="block text-sm font-semibold">Description</label>
+                <textarea name="description" id="description" cols="30" rows="10"
+                    class="w-full border p-2 rounded"><?= $result['description'] ?></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="article" class="block text-sm font-semibold">Article</label>
+                <input type="text" name="article" id="article" value="<?= $result['article'] ?>"
+                    class="w-full border p-2 rounded">
+            </div>
+            <div class="mb-4">
+                <label for="categorie" class="block text-sm font-semibold">Catégorie</label>
+                <input type="text" name="categorie" id="categorie" value="<?= $result['categorie'] ?>"
+                    class="w-full border p-2 rounded">
+            </div>
+            <div class="mb-4">
+                <label for="statut" class="block text-sm font-semibold">Statut</label>
+                <input type="number" name="statut" id="statut" value="<?= $result['statut'] ?>"
+                    class="w-full border p-2 rounded">
+            </div>
+            <div class="mb-4">
+                <button><span>Enregistrer</span></button>
+                <button onclick="window.location.href = 'backend.php';"><span>Retour</span></button>
+            </div>
+            <input type="hidden" name="id" value="<?= $result['id'] ?>">
+        </form>
+    </div>
 </body>
+<footer class="p-4 w-full">
+        <p class="flex justify-center">@SIO2Groupe2</p>
+        <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
+            Azoulay, Hugo Moreaux</p>
+    </footer>
 </html>
