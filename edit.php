@@ -16,9 +16,10 @@ if(isset($_POST)){
         $statut = strip_tags($_POST['statut']);
 
         $sql = "UPDATE `infocarte` SET `titre`=:titre, `description`=:description, `article`=:article, `categorie`=:categorie, `statut`=:statut WHERE `id`=:id;";
-
+        
         $query = $db->prepare($sql);
 
+        
         $query->bindValue(':titre', $titre, PDO::PARAM_STR);
         $query->bindValue(':description', $description, PDO::PARAM_STR);
         $query->bindValue(':article', $article, PDO::PARAM_STR);
@@ -269,8 +270,30 @@ button:active {
             </div>
             <div class="mb-4">
                 <label for="categorie" class="block text-sm font-semibold">Catégorie</label>
-                <input type="text" name="categorie" id="categorie" value="<?= $result['categorie'] ?>"
-                    class="w-full border p-2 rounded">
+                <select name="categorie" id="categorie" class="w-full border p-2 rounded" <?= $result['categorie'] ?>
+                    <?php
+                    try {
+                        $conn = new PDO("mysql:host=localhost;dbname=infoclimat", "root", "");
+                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    } catch (PDOException $e) {
+                        echo "Connection failed: " . $e->getMessage();
+                    }
+                    ?>
+                    <?php
+                    // Récupération des catégories depuis la base de données
+                    $query = $conn->query("SELECT `id` FROM `categorie`");
+                    $categories = $query->fetchAll(PDO::FETCH_COLUMN);
+            
+
+                    // Génération des options pour le champ select
+                    foreach ($categories as $category) {
+                        $selected = ($category == $result['categorie']) ? 'selected' : '';
+                        var_dump($categories);
+                        echo "<option value=\"$category\" $selected>$category</option>";
+                    }
+                   
+                    ?>
+                </select>   
             </div>
             <div class="mb-4">
                 <label for="statut" class="block text-sm font-semibold">Statut</label>
