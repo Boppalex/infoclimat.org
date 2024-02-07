@@ -145,12 +145,15 @@
     </div>
     <?php
     // Connexion à la base de données
-    $mysqli = new mysqli("localhost", "root", "", "infoclimat");
+    $mysqli = new mysqli("localhost", "root", "rootroot", "infoclimat");
 
     // Vérification de la connexion
     if ($mysqli->connect_error) {
         die("La connexion à la base de données a échoué : " . $mysqli->connect_error);
     }
+
+    // Format
+    $mysqli->set_charset("utf8");
 
     // Initialiser la variable de catégorie
     $categorie = '';
@@ -186,24 +189,24 @@
                     <h1>Notre Blog :</h1>
                 </div>
 
-                <form method="post" class="mb-4 justify-center flex">
-                    <label for="categorie">Filtrer par catégorie :</label>
-                    <select name="categorie" id="categorie" class="border rounded p-1">
-                        <option value="">Toutes les catégories</option>
-                        
-                        <?php
+                <form method="post" class="mb-4 flex items-center justify-center">
+    <label for="categorie" class="mr-2">Filtrer par catégorie :</label>  
+    <select name="categorie" id="categorie" class="border rounded p-1 mr-2" style="margin-top: -3px;">
+        <option value="">Toutes les catégories</option>
+        
+        <?php
+        $categoriesQuery = "SELECT DISTINCT categorie FROM infocarte";
+        $categoriesResult = $mysqli->query($categoriesQuery);
 
-                        $categoriesQuery = "SELECT DISTINCT categorie FROM infocarte";
-                        $categoriesResult = $mysqli->query($categoriesQuery);
+        while ($categorieRow = $categoriesResult->fetch_assoc()) {
+            $selected = ($categorie === $categorieRow['categorie']) ? 'selected' : '';
+            echo '<option value="' . $categorieRow['categorie'] . '" ' . $selected . '>' . $categorieRow['categorie'] . '</option>';
+        }
+        ?>
+    </select>
+    <button type="submit" class="btncat text-white px-2 py-1 rounded" style="margin-top: -3px;">Filtrer</button>
+</form>
 
-
-                        while ($categorieRow = $categoriesResult->fetch_assoc()) {
-                            echo '<option value="' . $categorieRow['categorie'] . '">' . $categorieRow['categorie'] . '</option>';
-                        }
-                        ?>
-                    </select>
-                    <button type="submit" class="btncat text-white px-2 py-1 rounded ml-2">Filtrer</button>
-                </form>
 
                 <div
                     class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:grid-rows-2  gap-8">

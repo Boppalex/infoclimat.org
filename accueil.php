@@ -326,12 +326,15 @@
 
     <?php
     // Connexion à la base de données
-    $mysqli = new mysqli("localhost", "root", "", "infoclimat");
+    $mysqli = new mysqli("localhost", "root", "rootroot", "infoclimat");
 
     // Vérification de la connexion
     if ($mysqli->connect_error) {
         die("La connexion à la base de données a échoué : " . $mysqli->connect_error);
     }
+
+    // Format
+    $mysqli->set_charset("utf8");
 
     // Requête pour récupérer les trois cartes les plus récentes de la table infocarte
     $result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, image FROM infocarte ");
