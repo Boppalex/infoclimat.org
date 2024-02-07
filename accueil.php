@@ -1,3 +1,35 @@
+<?php
+session_start();
+
+// Vérifiez si l'utilisateur est connecté
+$logged_in = isset($_SESSION['username']);
+
+// Si l'utilisateur est connecté, récupérez le nom d'utilisateur
+$username = '';
+if ($logged_in) {
+    // Supposons que vous stockiez le nom d'utilisateur dans une variable de session appelée 'username'
+    $username = $_SESSION['username'];
+}
+
+// Vérifiez si le formulaire de déconnexion a été soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
+    // Détruire toutes les variables de session
+    $_SESSION = array();
+
+    // Détruire la session
+    session_destroy();
+
+    // Rediriger vers la page d'accueil avec un message d'alerte
+    header('Location: accueil.php?logout=true');
+    exit;
+}
+
+// Vérifiez si un message de déconnexion est présent dans l'URL et affichez l'alerte correspondante
+if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
+    echo '<script>alert("Vous êtes déconnecté.");</script>';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,6 +57,16 @@
             transition: background 1s ease;
             /* Transition pour le changement de fond */
         }
+
+        /* CSS */
+        a.testa .hidden.sm\:inline-block {
+            display: none;
+        }
+
+        a.testa:hover .hidden.sm\:inline-block {
+            display: inline-block;
+        }
+
 
         /* Ajout d'une classe pour le fond pendant l'easter egg */
         body.rainy {
@@ -329,6 +371,24 @@
             </ul>
         </div>
     </nav>
+
+    <a class="testa" href="<?php echo $logged_in ? 'logout.php' : 'login.php'; ?>"
+        class="flex items-center mb-2 sm:mb-0 sm:mr-2">
+        <img src="Images/logo.png" alt="logo" class="w-12 h-12 rounded-full ">
+        <span class="hidden sm:inline-block ml-1 text-white rounded-full hover:inline-block">
+            <?php if ($logged_in): ?>
+                <?php echo $username; ?>
+            <?php else: ?>
+                Connexion
+            <?php endif; ?>
+        </span>
+    </a>
+
+
+
+
+
+
 </header>
 
 <body class="bg-gray-100 ">
