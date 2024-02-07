@@ -122,12 +122,14 @@
         body.rainy header {
             background-color: #333;
             background-image: none;
+            transition: background 1s ease;
 
         }
 
         body.rainy footer {
             background-color: #333;
             overflow: hidden;
+            transition: background 1s ease;
             /* Fond gris clair */
 
         }
