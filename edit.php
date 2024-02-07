@@ -1,13 +1,15 @@
 <?php
 require_once('connect.php');
 
-if(isset($_POST)){
-    if(isset($_POST['id']) && !empty($_POST['id'])
+if (isset($_POST)) {
+    if (
+        isset($_POST['id']) && !empty($_POST['id'])
         && isset($_POST['titre']) && !empty($_POST['titre'])
         && isset($_POST['description']) && !empty($_POST['description'])
         && isset($_POST['article']) && !empty($_POST['article'])
         && isset($_POST['categorie']) && !empty($_POST['categorie'])
-        && isset($_POST['statut']) && !empty($_POST['statut'])){
+        && isset($_POST['statut']) && !empty($_POST['statut'])
+    ) {
         $id = strip_tags($_GET['id']);
         $titre = strip_tags($_POST['titre']);
         $description = strip_tags($_POST['description']);
@@ -16,10 +18,10 @@ if(isset($_POST)){
         $statut = strip_tags($_POST['statut']);
 
         $sql = "UPDATE `infocarte` SET `titre`=:titre, `description`=:description, `article`=:article, `categorie`=:categorie, `statut`=:statut WHERE `id`=:id;";
-        
+
         $query = $db->prepare($sql);
 
-        
+
         $query->bindValue(':titre', $titre, PDO::PARAM_STR);
         $query->bindValue(':description', $description, PDO::PARAM_STR);
         $query->bindValue(':article', $article, PDO::PARAM_STR);
@@ -31,9 +33,9 @@ if(isset($_POST)){
 
         header('Location: backend.php');
     }
-    }
+}
 
-if(isset($_GET['id']) && !empty($_GET['id'])){
+if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id = strip_tags($_GET['id']);
     $sql = "SELECT * FROM `infocarte` WHERE `id`=:id;";
 
@@ -51,6 +53,7 @@ require_once('close.php');
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -161,22 +164,22 @@ require_once('close.php');
 
 
         button {
-  border: none;
-  outline: none;
-  background-color: #055634;
-  padding: 10px 20px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #fff;
-  border-radius: 5px;
-  transition: all ease 0.1s;
-  box-shadow: 0px 5px 0px 0px #a29bfe;
-}
+            border: none;
+            outline: none;
+            background-color: #055634;
+            padding: 10px 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            border-radius: 5px;
+            transition: all ease 0.1s;
+            box-shadow: 0px 5px 0px 0px #a29bfe;
+        }
 
-button:active {
-  transform: translateY(5px);
-  box-shadow: 0px 0px 0px 0px #a29bfe;
-}
+        button:active {
+            transform: translateY(5px);
+            box-shadow: 0px 0px 0px 0px #a29bfe;
+        }
     </style>
 </head>
 <header
@@ -250,13 +253,15 @@ button:active {
         </div>
     </nav>
 </header>
+
 <body class="bg-gray-100">
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">Modifier un produit</h1>
         <form method="post">
             <div class="mb-4">
                 <label for="titre" class="block text-sm font-semibold">Titre</label>
-                <input type="text" name="titre" id="titre" value="<?= $result['titre'] ?>" class="w-full border p-2 rounded">
+                <input type="text" name="titre" id="titre" value="<?= $result['titre'] ?>"
+                    class="w-full border p-2 rounded">
             </div>
             <div class="mb-4">
                 <label for="description" class="block text-sm font-semibold">Description</label>
@@ -278,22 +283,21 @@ button:active {
                     } catch (PDOException $e) {
                         echo "Connection failed: " . $e->getMessage();
                     }
-                    ?>
-                    <?php
-                    // Récupération des catégories depuis la base de données
-                    $query = $conn->query("SELECT `id` FROM `categorie`");
-                    $categories = $query->fetchAll(PDO::FETCH_COLUMN);
-            
+                    ?> <?php
+                     // Récupération des catégories depuis la base de données
+                     $query = $conn->query("SELECT `id` FROM `categorie`");
+                     $categories = $query->fetchAll(PDO::FETCH_COLUMN);
 
-                    // Génération des options pour le champ select
-                    foreach ($categories as $category) {
-                        $selected = ($category == $result['categorie']) ? 'selected' : '';
-                        var_dump($categories);
-                        echo "<option value=\"$category\" $selected>$category</option>";
-                    }
-                   
-                    ?>
-                </select>   
+
+                     // Génération des options pour le champ select
+                     foreach ($categories as $category) {
+                         $selected = ($category == $result['categorie']) ? 'selected' : '';
+                         var_dump($categories);
+                         echo "<option value=\"$category\" $selected>$category</option>";
+                     }
+
+                     ?>
+              </select>
             </div>
             <div class="mb-4">
                 <label for="statut" class="block text-sm font-semibold">Statut</label>
@@ -309,8 +313,9 @@ button:active {
     </div>
 </body>
 <footer class="p-4 w-full">
-        <p class="flex justify-center">@SIO2Groupe2</p>
-        <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
-            Azoulay, Hugo Moreaux</p>
-    </footer>
+    <p class="flex justify-center">@SIO2Groupe2</p>
+    <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
+        Azoulay, Hugo Moreaux</p>
+</footer>
+
 </html>
