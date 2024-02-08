@@ -9,8 +9,18 @@ if (!isset($_SESSION["username"])) {
 }
 
 require_once('connect.php');
-// Requête SQL pour récupérer les données
-$sql = 'SELECT infocarte.*, categorie.label as categorie FROM infocarte, categorie WHERE infocarte.categorie = categorie.id' ;
+
+// Recherche par titre
+$searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Requête SQL pour récupérer les données avec recherche par titre
+$sql = 'SELECT infocarte.*, categorie.label as categorie FROM infocarte, categorie WHERE infocarte.categorie = categorie.id';
+
+// Si un terme de recherche est saisi
+if (!empty($searchTerm)) {
+    // Ajout de la condition WHERE pour filtrer par titre
+    $sql .= " AND infocarte.titre LIKE '%" . $searchTerm . "%'";
+}
 
 // Préparation de la requête
 $query = $db->prepare($sql);
@@ -20,7 +30,6 @@ $query->execute();
 
 // Récupération des résultats dans un tableau associatif
 $result = $query->fetchAll(PDO::FETCH_ASSOC);
-
 
 // Vérifiez si l'utilisateur est connecté
 $logged_in = isset($_SESSION['username']);
@@ -45,7 +54,7 @@ if ($logged_in) {
     $result1 = $query->fetch(PDO::FETCH_ASSOC);
 
     // Si la requête a retourné un résultat valide, mettez à jour la variable $is_admin
-    if ($result !== false) {
+    if ($result1 !== false) {
         $is_admin = (int) $result1['isadmin']; // Convertit la valeur en entier
     }
 }
@@ -281,7 +290,14 @@ if ($logged_in) {
         <h1 class="text-3xl" style="text-align: center; margin-top:50px;">Welcome,
             <?php echo $_SESSION["username"]; ?>!
         </h1>
-
+        <div class="container mt-4 mb-4">
+            <form action="" method="GET" class="form-inline justify-content-center">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Rechercher par titre" name="search">
+                </div>
+                <button type="submit" class="ml-3">Rechercher</button>
+            </form>
+        </div>
         <table style="border-collapse: separate; border-spacing: 10px;">
             <thead>
                 <th>ID</th>
