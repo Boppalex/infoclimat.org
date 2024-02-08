@@ -10,7 +10,7 @@ if (!isset($_SESSION["username"])) {
 
 require_once('connect.php');
 // Requête SQL pour récupérer les données
-$sql = 'SELECT * FROM `infocarte`' ;
+$sql = 'SELECT * FROM `infocarte` WHERE statut = 0';
 
 // Préparation de la requête
 $query = $db->prepare($sql);
@@ -51,6 +51,7 @@ if ($logged_in) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -67,6 +68,10 @@ if ($logged_in) {
     <style>
         header {
             background-image: url('Images/wave.png');
+        }
+
+        th.bgtabl {
+            background-color: #055634;
         }
 
         /* CSS */
@@ -229,6 +234,22 @@ if ($logged_in) {
                             </a></div>
                     </div>
                 </li>
+                <?php if ($logged_in && $is_admin != 1): ?>
+
+                    <li class="nav-item">
+                        <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
+                            <div class="superposition-simple "><a href="backuser.php">
+                                    <div class="texte-normal ">
+                                        <div class="texte-original">Carte</div>
+                                    </div>
+                                    <div class="texte-hover "><img decoding="async" class="image-originale "
+                                            src="Images/feuillemorte.png" />
+                                        <div class="texte-original">Carte</div>
+                                    </div>
+                                </a></div>
+                        </div>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
                         <div class="superposition-simple "><a href="apropos.php">
@@ -242,22 +263,6 @@ if ($logged_in) {
                             </a></div>
                     </div>
                 </li>
-                <?php if ($logged_in && $is_admin === 1): ?>
-
-                    <li class="nav-item">
-                        <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
-                            <div class="superposition-simple "><a href="backend.php">
-                                    <div class="texte-normal ">
-                                        <div class="texte-original">Back</div>
-                                    </div>
-                                    <div class="texte-hover "><img decoding="async" class="image-originale "
-                                            src="Images/feuillemorte.png" />
-                                        <div class="texte-original">Back</div>
-                                    </div>
-                                </a></div>
-                        </div>
-                    </li>
-                <?php endif; ?>
             </ul>
         </div>
     </nav>
@@ -277,65 +282,55 @@ if ($logged_in) {
 </header>
 
 <body class="bg-gray-100 ">
-    <div class="container">
-        <h1 class="text-3xl" style="text-align: center; margin-top:50px;">Welcome,
+    <div class="container  p-4 ">
+        <h1 class="text-3xl text-center mb-8">Bienvenue sur votre espace ,
             <?php echo $_SESSION["username"]; ?>!
         </h1>
 
-        <table style="border-collapse: separate; border-spacing: 10px;">
+        <table class="  border-collapse border border-gray-200">
             <thead>
-                <th>ID</th>
-                <th>Titre</th>
-                <th>Description</th>
-                <th>Article</th>
-                <th>Catégorie</th>
-                <th>Statut</th>
+                <tr>
+                    <th
+                        class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
+                        Titre</th>
+                    <th
+                        class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
+                        Description</th>
+                    <th
+                        class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
+                        Article</th>
+                    <th
+                        class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
+                        Catégorie</th>
+                </tr>
             </thead>
             <tbody>
-                <?php
-                foreach ($result as $carte) {
-                    ?>
-                    <tr>
-                        <td>
-                            <?= $carte['id'] ?>
-                        </td>
-                        <td>
+                <?php foreach ($result as $carte): ?>
+                    <tr class="bg-gray-100 hover:bg-gray-200">
+                        <td class="p-4 ">
                             <?= $carte['titre'] ?>
                         </td>
-                        <td>
+                        <td class="p-4 ">
                             <?= $carte['description'] ?>
                         </td>
-                        <td>
+                        <td class="p-4 ">
                             <?= $carte['article'] ?>
                         </td>
-                        <td>
+                        <td class="p-4 ">
                             <?= $carte['categorie'] ?>
                         </td>
-                        <td>
-                            <?= $carte['statut'] ?>
-                        </td>
-                        <td>
-                            </br>
-                            <a href="edit.php?id=<?= $carte['id'] ?>">Modifier</a>
-                            <a href="delete.php?id=<?= $carte['id'] ?>">Supprimer</a>
-                        </td>
                     </tr>
-                    <?php
-                }
-                ?>
+                <?php endforeach; ?>
             </tbody>
-        </table>
-        <a href="add.php" class="text-white">
-            <button class="btn">Ajouter
-            </button>
-        </a>
 
+        </table>
     </div>
-    <footer class="p-4 w-full">
-        <p class="flex justify-center">@SIO2Groupe2</p>
-        <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
-            Azoulay, Hugo Moreaux</p>
-    </footer>
 </body>
+
+<footer class="p-4 w-full">
+    <p class="flex justify-center">@SIO2Groupe2</p>
+    <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
+        Azoulay, Hugo Moreaux</p>
+</footer>
 
 </html>

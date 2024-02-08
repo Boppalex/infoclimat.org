@@ -1,3 +1,38 @@
+<?php
+session_start();
+
+require_once "connect.php";
+
+// Vérifiez si l'utilisateur est connecté
+$logged_in = isset($_SESSION['username']);
+
+// Si l'utilisateur est connecté, récupérez le nom d'utilisateur
+$username = '';
+$is_admin = false; // Par défaut, l'utilisateur n'est pas un administrateur
+if ($logged_in) {
+    // Supposons que vous stockiez le nom d'utilisateur dans une variable de session appelée 'username'
+    $username = $_SESSION['username'];
+
+    // Préparation de la requête SQL pour récupérer isadmin de la base de données
+    $sql = "SELECT isadmin FROM utilisateur WHERE nom = :username";
+
+    // Préparation de la requête
+    $query = $db->prepare($sql);
+
+    // Exécution de la requête
+    $query->execute([':username' => $username]);
+
+    // Récupération des résultats
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+
+    // Si la requête a retourné un résultat valide, mettez à jour la variable $is_admin
+    if ($result !== false) {
+        $is_admin = (int) $result['isadmin']; // Convertit la valeur en entier
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +46,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <title>À Propos</title>
     <style>
+        header {
+            background-image: url('Images/wave.png');
+        }
 
         footer {
             background-color: #055634;
@@ -61,11 +99,21 @@
         .superposition-simple .texte-normal {
             transition: .5s ease;
         }
+
+        /* CSS */
+        a.testa .hidden.sm\:inline-block {
+            display: none;
+        }
+
+        a.testa:hover .hidden.sm\:inline-block {
+            display: inline-block;
+        }
     </style>
-    
+
 </head>
 
-<header class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500" style="background-image: url('Images/wave.png');">
+<header
+    class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500">
     <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
         <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
     </a>
@@ -80,27 +128,104 @@
             <ul class="navbar-nav">
                 <li class="nav-item active">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple  "><a href="accueil.php"><div class="texte-normal "><div class="texte-original ">Accueil</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/feuille.png" /><div class="texte-original">Accueil</div></div></a></div>
+                        <div class="superposition-simple  "><a href="accueil.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original ">Accueil</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/feuille.png" />
+                                    <div class="texte-original">Accueil</div>
+                                </div>
+                            </a></div>
                     </div>
                 </li>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple "><a href="blog.php"><div class="texte-normal "><div class="texte-original">Blog</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/nuage.png" /><div class="texte-original">Blog</div></div></a></div>
+                        <div class="superposition-simple "><a href="blog.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original">Blog</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/nuage.png" />
+                                    <div class="texte-original">Blog</div>
+                                </div>
+                            </a></div>
                     </div>
                 </li>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple "><a href="quizz.php"><div class="texte-normal "><div class="texte-original">Quizz</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/soleil.png" /><div class="texte-original">Quizz</div></div></a></div>
+                        <div class="superposition-simple "><a href="quizz.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original">Quizz</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/soleil.png" />
+                                    <div class="texte-original">Quizz</div>
+                                </div>
+                            </a></div>
                     </div>
                 </li>
+                <?php if ($logged_in && $is_admin != 1): ?>
+
+                    <li class="nav-item">
+                        <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
+                            <div class="superposition-simple "><a href="backuser.php">
+                                    <div class="texte-normal ">
+                                        <div class="texte-original">Carte</div>
+                                    </div>
+                                    <div class="texte-hover "><img decoding="async" class="image-originale "
+                                            src="Images/feuillemorte.png" />
+                                        <div class="texte-original">Carte</div>
+                                    </div>
+                                </a></div>
+                        </div>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
-                        <div class="superposition-simple "><a href="apropos.php"><div class="texte-normal "><div class="texte-original">À propos</div></div><div class="texte-hover "><img decoding="async" class="image-originale " src="Images/glace.png" /><div class="texte-original">À propos</div></div></a></div>
+                        <div class="superposition-simple "><a href="apropos.php">
+                                <div class="texte-normal ">
+                                    <div class="texte-original">Nous</div>
+                                </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/glace.png" />
+                                    <div class="texte-original">Nous</div>
+                                </div>
+                            </a></div>
                     </div>
                 </li>
+                <?php if ($logged_in && $is_admin === 1): ?>
+
+                    <li class="nav-item">
+                        <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
+                            <div class="superposition-simple "><a href="backend.php">
+                                    <div class="texte-normal ">
+                                        <div class="texte-original">Back</div>
+                                    </div>
+                                    <div class="texte-hover "><img decoding="async" class="image-originale "
+                                            src="Images/feuillemorte.png" />
+                                        <div class="texte-original">Back</div>
+                                    </div>
+                                </a></div>
+                        </div>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>
+
+    <!-- Lien de connexion / déconnexion -->
+    <a class="testa" href="<?php echo $logged_in ? 'logout.php' : 'login.php'; ?>"
+        class="flex items-center mb-2 sm:mb-0 sm:mr-2">
+        <img src="Images/logo.png" alt="logo" class="w-12 h-12 rounded-full ">
+        <span class="hidden sm:inline-block ml-1 text-white rounded-full hover:inline-block">
+            <?php if ($logged_in): ?>
+                <?php echo $username; ?>
+            <?php else: ?>
+                Connexion
+            <?php endif; ?>
+        </span>
+    </a>
 </header>
 
 <body class="bg-gray-100">
