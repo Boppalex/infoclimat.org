@@ -381,6 +381,18 @@ if ($logged_in) {
           questionElement.appendChild(optionsElement);
           questionsElement.appendChild(questionElement);
         });
+
+      // Ajoutez un gestionnaire d'événements à toutes les cases à cocher
+      document.querySelectorAll('input[type="radio"]').forEach(function(checkbox) {
+          checkbox.addEventListener('change', function() {
+              // Recherchez l'élément de la page suivant la question actuelle
+              var nextQuestion = this.closest('.question').nextElementSibling;
+              if (nextQuestion) {
+                  // Faites défiler la page automatiquement vers la question suivante
+                  nextQuestion.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+          });
+      });
       }
 
       let errorMessageDisplayed = false;
@@ -471,9 +483,11 @@ if ($logged_in) {
         // Cachez le bouton "Recommencer"
         restartButton.style.display = "none";
 
-        // Rafraîchir la page
-        location.reload();
-      }
+
+    // Défilez vers le haut de la page
+    window.scrollTo(0, 0);   
+}
+
 
       function arraysEqual(arr1, arr2) {
         if (arr1.length !== arr2.length) return false;

@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = "";
+$password = "rootroot";
 $dbname = "infoclimat";
 
 // Créer une connexion
