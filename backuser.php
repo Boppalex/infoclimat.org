@@ -66,6 +66,11 @@ if ($logged_in) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <title>CRUD admin</title>
     <style>
+        button.btn {
+            background-color: #055634;
+            color: white;
+        }
+
         header {
             background-image: url('Images/wave.png');
         }
@@ -133,52 +138,7 @@ if ($logged_in) {
             transition: .5s ease;
         }
 
-        .btn {
-            --color2: #055634;
-            --color1: grey;
-            perspective: 1000px;
-            padding: 1em 1em;
-            background: linear-gradient(var(--color1), var(--color2));
-            border: none;
-            outline: none;
-            font-size: 20px;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #fff;
-            text-shadow: 0 10px 10px #000;
-            cursor: pointer;
-            transform: rotateX(70deg) rotateZ(30deg);
-            transform-style: preserve-3d;
-            transition: transform 0.5s;
-        }
-
-        .btn::before {
-            content: "";
-            width: 100%;
-            height: 15px;
-            background-color: var(--color2);
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            transform: rotateX(90deg);
-            transform-origin: bottom;
-        }
-
-        .btn::after {
-            content: "";
-            width: 15px;
-            height: 100%;
-            background-color: var(--color1);
-            position: absolute;
-            top: 0;
-            right: 0;
-            transform: rotateY(-90deg);
-            transform-origin: right;
-        }
-
-        .btn:hover {
-            transform: rotateX(30deg) rotateZ(0);
-        }
+        
     </style>
 </head>
 <header
@@ -290,18 +250,25 @@ if ($logged_in) {
         <table class="  border-collapse border border-gray-200">
             <thead>
                 <tr>
+
                     <th id="titre"
                         class="bgtabl px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider" array_multisort()>
                         Titre <button onclick="sortTable('titre')">Trier</button>
                     </th>
+
                     <th class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
                         Description</th>
                     <th class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
                         Article</th>
+
                     <th id="categorie"
                         class="bgtabl px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                         Catégorie <button onclick="sortTable('categorie')">Trier</button>
                     </th>
+
+                    <th class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
+                        Bouton</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -320,6 +287,10 @@ if ($logged_in) {
                         <td class="p-4 ">
                         <?= substr($carte['categorie'], 0, 255) . (strlen($carte['categorie']) > 255 ? '...' : '') ?>
                         </td>
+                        <td>
+                        <a href="edit.php?id=<?= $carte['id'] ?>"><button class="btn hover:shadow-md"><span>Modifier</span></button>
+                            </a>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -333,7 +304,7 @@ if ($logged_in) {
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>
 </footer>
-<!-- <script>
+<script>
     function sortTable(columnName) {
         var table, rows, switching, i, x, y, shouldSwitch;
         table = document.querySelector('table   ');
@@ -368,6 +339,6 @@ if ($logged_in) {
         }
         return -1;
     }
-</script> -->
+</script> 
 
 </html>
