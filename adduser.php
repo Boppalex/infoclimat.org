@@ -1,7 +1,6 @@
 <?php
 session_start();
-
-require_once "connect.php";
+require_once('connect.php');
 
 // Vérifiez si l'utilisateur est connecté
 $logged_in = isset($_SESSION['username']);
@@ -31,6 +30,39 @@ if ($logged_in) {
     }
 }
 
+
+if (isset($_POST)) {
+    if (
+        isset($_POST['titre']) && !empty($_POST['titre'])
+        && isset($_POST['description']) && !empty($_POST['description'])
+        && isset($_POST['article']) && !empty($_POST['article'])
+        && isset($_POST['categorie']) && !empty($_POST['categorie'])
+        && isset($_POST['statut']) && !empty($_POST['statut'])
+    ) {
+        $titre = strip_tags($_POST['titre']);
+        $description = strip_tags($_POST['description']);
+        $article = strip_tags($_POST['article']);
+        $categorie = strip_tags($_POST['categorie']);
+        $statut = strip_tags($_POST['statut']);
+
+        $sql = "INSERT INTO `infocarte` (`titre`, `description`, `article`, `categorie`, `statut`) VALUES (:titre, :description, :article, :categorie, :statut)";
+
+
+        $query = $db->prepare($sql);
+
+        $query->bindValue(':titre', $titre, PDO::PARAM_STR);
+        $query->bindValue(':description', $description, PDO::PARAM_STR);
+        $query->bindValue(':article', $article, PDO::PARAM_STR);
+        $query->bindValue(':categorie', $categorie, PDO::PARAM_STR);
+        $query->bindValue(':statut', $statut, PDO::PARAM_STR);
+
+        $query->execute();
+        $_SESSION['message'] = "Produit ajouté avec succès !";
+        header('Location: blog.php');
+    }
+}
+
+require_once('close.php');
 ?>
 
 <!DOCTYPE html>
@@ -39,21 +71,45 @@ if ($logged_in) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <title>À Propos</title>
+
     <style>
-        header {
-            background-image: url('Images/wave.png');
+
+        html,
+        body{
+            padding: 0;
+            margin: 0;
+            position: relative;
+            transition: background 4s ease;
+            /* Transition pour le changement de fond */
         }
 
+        /* CSS */
+        a.testa .hidden.sm\:inline-block {
+            display: none;
+        }
+
+        a.testa:hover .hidden.sm\:inline-block {
+            display: inline-block;
+        }
+
+
+        /* Ajout d'une classe pour le fond pendant l'easter egg */
+        body.rainy {
+            background: #333;
+            /* Couleur du fond pendant l'easter egg */
+        }
+        
         footer {
             background-color: #055634;
             color: white;
         }
+        
 
         .superposition-simple {
             position: relative;
@@ -99,19 +155,129 @@ if ($logged_in) {
         .superposition-simple .texte-normal {
             transition: .5s ease;
         }
-
-        /* CSS */
-        a.testa .hidden.sm\:inline-block {
-            display: none;
+        body {
+            margin: 0;
+            background-color: #f3f4f6;
         }
 
-        a.testa:hover .hidden.sm\:inline-block {
-            display: inline-block;
+        footer {
+            background-color: #055634;
+            color: white;
+
+        }
+
+        header {
+            background-image: url('Images/wave.png');
+        }
+
+
+        div.testclass {
+            background-color: #fff;
+            /* Fond gris clair */
+        }
+
+        body.rainy div.testclass {
+            background-color: #ffff;
+            color: #fff;
+            /* Fond gris clair */
+        }
+
+        body.rainy div.intro {
+            color: #fff;
+            /* Fond gris clair */
+        }
+
+
+
+        div.card1 {
+            background-color: #fff;
+            /* Fond gris clair */
+        }
+
+        body.rainy div.card1 {
+            background-color: #ffff;
+            /* Fond gris clair */
+        }
+
+        body.rainy header {
+            background-image: none;
+        }
+
+        body.rainy footer {
+
+            background-color: #333;
+            overflow: hidden;
+            transition: background 4s ease;
+            /* Fond gris clair */
+
+        }
+
+        .btn {
+            --color2: #055634;
+            --color1: grey;
+            perspective: 1000px;
+            padding: 1em 1em;
+            background: linear-gradient(var(--color1), var(--color2));
+            border: none;
+            outline: none;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #fff;
+            text-shadow: 0 10px 10px #000;
+            cursor: pointer;
+            transform: rotateX(70deg) rotateZ(30deg);
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+
+        .btn::before {
+            content: "";
+            width: 100%;
+            height: 15px;
+            background-color: var(--color2);
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            transform: rotateX(90deg);
+            transform-origin: bottom;
+        }
+
+        .btn::after {
+            content: "";
+            width: 15px;
+            height: 100%;
+            background-color: var(--color1);
+            position: absolute;
+            top: 0;
+            right: 0;
+            transform: rotateY(-90deg);
+            transform-origin: right;
+        }
+
+        .btn:hover {
+            transform: rotateX(30deg) rotateZ(0);
+        }
+
+        button {
+            border: none;
+            outline: none;
+            background-color: #055634;
+            padding: 10px 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            border-radius: 5px;
+            transition: all ease 0.1s;
+            box-shadow: 0px 5px 0px 0px #a29bfe;
+        }
+
+        button:active {
+            transform: translateY(5px);
+            box-shadow: 0px 0px 0px 0px #a29bfe;
         }
     </style>
-
 </head>
-
 <header
     class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500">
     <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
@@ -198,7 +364,7 @@ if ($logged_in) {
 
                     <li class="nav-item">
                         <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
-                            <div class="superposition-simple "><a href="backend.php">
+                            <div class="superposition-simple "><a href="blog.php">
                                     <div class="texte-normal ">
                                         <div class="texte-original">Back</div>
                                     </div>
@@ -228,48 +394,68 @@ if ($logged_in) {
     </a>
 </header>
 
+
 <body class="bg-gray-100">
-
-    <div class="container mx-auto p-8">
-        <h1 class="text-3xl font-bold mb-8">À Propos</h1>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-8">
-            <!-- Premier block -->
-            <div class="bg-white p-4 rounded-lg shadow-md">
-                <h2 class="text-xl font-bold mb-2">L'équipe : </h2>
-                <p class="text-gray-700">- Cirade Adrien </br>- Bopp Alexandre </br>- Moreaux Hugo </br> - Bourguignon
-                    Roman </br>- Azoulay Samuel </br> - Thomassin Steven</p>
+    <div class="container">
+        <form method="post" class="max-w-md mx-auto my-8 p-6 bg-white rounded shadow-md">
+            <div class="mb-4">
+                <label for="titre" class="block text-gray-700 text-sm font-bold mb-2">Titre</label>
+                <input type="text" name="titre" id="titre"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
             </div>
-
-            <!-- Deuxième block -->
-            <div class="bg-white p-4 rounded-lg shadow-md">
-                <img src="Images/ImageClimat.jpg" alt="Image 1" class="w-full h-100 object-cover mb-4 rounded-lg">
+            <div class="mb-4">
+                <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Description</label>
+                <input type="text" name="description" id="description"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
             </div>
-
-            <!-- Troisième block -->
-            <div class="bg-white p-4 rounded-lg shadow-md">
-                <img src="Images/nuitinfo.png" alt="Image 2" class="w-full h-100 object-cover mb-4 rounded-lg">
+            <div class="mb-4">
+                <label for="article" class="block text-gray-700 text-sm font-bold mb-2">Article</label>
+                <textarea name="article" id="article"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue"
+                    rows="6"></textarea>
             </div>
+            <div class="mb-4">
+                <label for="categorie" class="block text-gray-700 text-sm font-bold mb-2">Catégorie</label>
+                <select name="categorie" id="categorie"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
+                    <?php
+                    try {
+                        $conn = new PDO("mysql:host=localhost;dbname=infoclimat", "root", "");
+                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            <!-- Quatrième block -->
-            <div class="bg-white p-4 rounded-lg shadow-md">
-                <h2 class="text-xl font-bold mb-2">Le projet : </h2>
-                <p class="text-gray-700">Le projet vise à créer une application ludique permettant au grand public de
-                    distinguer entre fausses informations et solutions réelles pour le climat. Face aux défis du
-                    changement climatique, l'objectif est de fournir des informations claires, basées sur des données
-                    chiffrées et des sources fiables. Porté par le Réseau Action Climat et le Bureau de la Nuit de
-                    l'Info 2023, cette application vise à sensibiliser et éduquer un public sans connaissances
-                    préalables sur le sujet et de montrer que des actions positives sont à notre portée.</p>
+                        // Récupération des catégories depuis la base de données
+                        $query = $conn->query("SELECT `id` FROM `categorie`");
+                        $categories = $query->fetchAll(PDO::FETCH_COLUMN);
+
+                        // Génération des options pour le champ select
+                        foreach ($categories as $category) {
+                            $selected = ($category == $result['categorie']) ? 'selected' : '';
+                            echo "<option value=\"$category\" $selected>$category</option>";
+                        }
+                    } catch (PDOException $e) {
+                        echo "Connection failed: " . $e->getMessage();
+                    }
+                    ?>
+                </select>
             </div>
-        </div>
+            <div class="mb-4 hidden">
+                <label for="statut" class="block text-gray-700 text-sm font-bold mb-2">Statut</label>
+                <input type="number" name="statut" id="statut" min="2" max="2" value="2" readonly
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
+            </div>
+            <div class="flex flex-row">
+                <button type="submit">Enregistrer</button>
+                <button type="button" onclick="window.location.href='blog.php'">Retour</button>
+            </div>
+        </form>
     </div>
 </body>
 
-<footer class=" p-4 w-full">
+</body>
+<footer class="p-4 w-full ">
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>
 </footer>
-
 
 </html>
