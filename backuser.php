@@ -10,7 +10,7 @@ if (!isset($_SESSION["username"])) {
 
 require_once('connect.php');
 // Requête SQL pour récupérer les données
-$sql = 'SELECT * FROM `infocarte` WHERE statut = 0';
+$sql = 'SELECT * FROM `infocarte` WHERE statut = 2';
 
 // Préparation de la requête
 $query = $db->prepare($sql);
@@ -290,18 +290,18 @@ if ($logged_in) {
         <table class="  border-collapse border border-gray-200">
             <thead>
                 <tr>
-                    <th
-                        class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
-                        Titre</th>
-                    <th
-                        class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
+                    <th id="titre"
+                        class="bgtabl px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        Titre <button onclick="sortTable('titre')">Trier</button>
+                    </th>
+                    <th class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
                         Description</th>
-                    <th
-                        class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
+                    <th class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
                         Article</th>
-                    <th
-                        class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
-                        Catégorie</th>
+                    <th id="categorie"
+                        class="bgtabl px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        Catégorie <button onclick="sortTable('categorie')">Trier</button>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -332,5 +332,41 @@ if ($logged_in) {
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>
 </footer>
+<script>
+    function sortTable(columnName) {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.querySelector('table');
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("td")[getIndex(columnName)].textContent;
+                y = rows[i + 1].getElementsByTagName("td")[getIndex(columnName)].textContent;
+                if (columnName === 'titre') {
+                    shouldSwitch = x.toLowerCase() > y.toLowerCase();
+                } else {
+                    shouldSwitch = Number(x) > Number(y);
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    function getIndex(columnName) {
+        var headers = document.querySelectorAll('th');
+        for (var i = 0; i < headers.length; i++) {
+            if (headers[i].id === columnName) {
+                return i;
+            }
+        }
+        return -1;
+    }
+</script>
 
 </html>

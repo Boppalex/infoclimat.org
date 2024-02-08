@@ -289,7 +289,7 @@ require_once('close.php');
             </div>
             <div class="mb-4">
                 <label for="statut" class="block text-gray-700 text-sm font-bold mb-2">Statut</label>
-                <input type="number" name="statut" id="statut"
+                <input type="number" name="statut" id="statut" min="1" max="2"
                     class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
             </div>
             <div class="flex flex-row">
