@@ -9,14 +9,18 @@ if (!isset($_SESSION["username"])) {
 }
 
 require_once('connect.php');
-// Requête SQL pour récupérer les données
-$sql = 'SELECT * FROM `infocarte` WHERE statut = 2';
+
+// Récupérer l'ID de l'utilisateur connecté
+$user_id = $_SESSION["user_id"];
+
+// Requête SQL pour récupérer les données de l'utilisateur connecté
+$sql = 'SELECT infocarte.*, categorie.label as categorie FROM infocarte, categorie, utilisateur  WHERE infocarte.categorie = categorie.id AND infocarte.creerpar = utilisateur.id AND utilisateur.id = :user_id';
 
 // Préparation de la requête
 $query = $db->prepare($sql);
 
-// Exécution de la requête
-$query->execute();
+// Exécution de la requête en liant la valeur de :user_id
+$query->execute([':user_id' => $user_id]);
 
 // Récupération des résultats dans un tableau associatif
 $result = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -137,8 +141,6 @@ if ($logged_in) {
         .superposition-simple .texte-normal {
             transition: .5s ease;
         }
-
-        
     </style>
 </head>
 <header
@@ -252,7 +254,8 @@ if ($logged_in) {
                 <tr>
 
                     <th id="titre"
-                        class="bgtabl px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider" array_multisort()>
+                        class="bgtabl px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                        array_multisort()>
                         Titre <button onclick="sortTable('titre')">Trier</button>
                     </th>
 
@@ -273,33 +276,37 @@ if ($logged_in) {
             </thead>
             <tbody>
                 <?php foreach ($result as $carte): ?>
-                    <tr class="bg-gray-100 hover:bg-gray-200">
-                        <td class="p-4 ">
-                        <?= substr($carte['titre'], 0, 255) . (strlen($carte['titre']) > 255 ? '...' : '') ?>
-                        </td>
-                        <td class="p-4 ">
-                            <?= substr($carte['description'], 0, 255) . (strlen($carte['description']) > 255 ? '...' : '') ?>
-                        </td>
-                        <td class="p-4 ">
-                            <?= substr($carte['article'], 0, 255) . (strlen($carte['article']) > 255 ? '...' : '') ?>
-
-                        </td>
-                        <td class="p-4 ">
-                        <?= substr($carte['categorie'], 0, 255) . (strlen($carte['categorie']) > 255 ? '...' : '') ?>
-                        </td>
-                        <td>
-                        <a href="edit.php?id=<?= $carte['id'] ?>"><button class="btn hover:shadow-md"><span>Modifier</span></button>
-                            </a>
-                        </td>
-                    </tr>
+                    <a href="article.php?id=<?= $carte['id'] ?>">
+                        <tr class="bg-gray-100 hover:bg-gray-200">
+                            <td class="p-4 bg-gray-700">
+                                <a class="text-black hover:text-black" href="article.php?id=<?= $carte['id'] ?>"><button class="w-full h-full border-2 rounded bg-white">
+                                    <?= substr($carte['titre'], 0, 255) . (strlen($carte['titre']) > 255 ? '...' : '') ?>
+                                </button></a>
+                            </td>
+                            <td class="p-4">
+                                <?= substr($carte['description'], 0, 255) . (strlen($carte['description']) > 255 ? '...' : '') ?>
+                            </td>
+                            <td class="p-4">
+                                <?= substr($carte['article'], 0, 255) . (strlen($carte['article']) > 255 ? '...' : '') ?>
+                            </td>
+                            <td class="p-4">
+                                <?= substr($carte['categorie'], 0, 255) . (strlen($carte['categorie']) > 255 ? '...' : '') ?>
+                            </td>
+                            <td>
+                                <a href="edit.php?id=<?= $carte['id'] ?>"><button
+                                        class="btn hover:shadow-md"><span>Modifier</span></button></a>
+                            </td>
+                        </tr>
+                    </a>
                 <?php endforeach; ?>
+
             </tbody>
 
         </table>
     </div>
 </body>
 
-<footer class="p-4 w-full">
+<footer class="p-4 w-full fixed bottom-0">
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>
@@ -339,6 +346,6 @@ if ($logged_in) {
         }
         return -1;
     }
-</script> 
+</script>
 
 </html>
