@@ -327,10 +327,12 @@ if ($logged_in) {
                                 </div>
 
                                 <div class="boutonvalidation p-2 justify-end flex">
-                                    <button
-                                        class="px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
-                                        <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
-                                    </button>
+                                    <div class="boutonvalidation p-2 justify-end flex">
+                                        <a href="article.php?id=<?php echo $row['id']; ?>"
+                                            class="bg-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
+                                            <span class="text-black text-sm">En savoir plus</span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -57,7 +57,7 @@
                     // Vérification que les mots de passe correspondent
                     if ($password === $confirm_password) {
                         // Hashage du mot de passe
-                        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                        //$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
                         // Préparation de la requête SQL pour insérer l'utilisateur dans la base de données
                         $sql = "INSERT INTO utilisateur (nom, motpasse) VALUES (:username, :password)";
@@ -67,7 +67,7 @@
 
                         // Liaison des paramètres avec les valeurs postées depuis le formulaire
                         $query->bindParam(':username', $username, PDO::PARAM_STR);
-                        $query->bindParam(':password', $hashed_password, PDO::PARAM_STR);
+                        $query->bindParam(':password', $password, PDO::PARAM_STR);
 
                         // Exécution de la requête
                         if ($query->execute()) {
