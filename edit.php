@@ -295,9 +295,6 @@ require_once('close.php');
                     <button type="submit" class="btn w-full" onclick="window.location.href = 'backend.php';">
                         Enregistrer
                     </button>
-                    <?php
-                    echo "Vous avez modifier un article";
-                    ?>
                 <?php } ?>
                 <?php if ($logged_in && $is_admin != 1) { ?>
 
