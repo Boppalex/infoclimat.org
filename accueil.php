@@ -397,18 +397,19 @@ if ($logged_in) {
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
                         <div class="superposition-simple "><a href="api_carte.php">
                             <div class="texte-normal ">
-                                <div class="texte-original">Carte</div>
+                                <div class="texte-original">Map</div>
                             </div>
                                 <div class="texte-hover "><img decoding="async" class="image-originale "
                                         src="Images/glace.png" />
-                                <div class="texte-original">Carte</div>
+                                <div class="texte-original">Map</div>
                             </div>
                         </a></div>
                     </div>
                 </li>
 
-                <?php if ($logged_in && $is_admin === 1): ?>
 <!-- Back -------------------------------------------------------------------------------------->
+                <?php if ($logged_in && $is_admin === 1): ?>
+
                     <li class="nav-item">
                         <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
                             <div class="superposition-simple "><a href="backend.php">
