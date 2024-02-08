@@ -237,7 +237,7 @@ if ($logged_in) {
     </div>
     <?php
     // Connexion à la base de données
-    $mysqli = new mysqli("localhost", "root", "rootroot", "infoclimat");
+    $mysqli = new mysqli("localhost", "root", "", "infoclimat");
 
     // Vérification de la connexion
     if ($mysqli->connect_error) {
@@ -288,13 +288,15 @@ if ($logged_in) {
         <option value="">Toutes les catégories</option>
         
         <?php
-        $categoriesQuery = "SELECT DISTINCT categorie FROM infocarte";
+        $categoriesQuery = "SELECT DISTINCT categorie, categorie.label FROM infocarte INNER JOIN categorie ON infocarte.categorie = categorie.id";
+   
+        error_log($categoriesQuery);
         $categoriesResult = $mysqli->query($categoriesQuery);
 
 
         while ($categorieRow = $categoriesResult->fetch_assoc()) {
             $selected = ($categorie === $categorieRow['categorie']) ? 'selected' : '';
-            echo '<option value="' . $categorieRow['categorie'] . '" ' . $selected . '>' . $categorieRow['categorie'] . '</option>';
+            echo '<option value="' . $categorieRow['categorie'] . '" ' . $selected . '>' . $categorieRow['label'] . '</option>';
         }
         ?>
     </select>
