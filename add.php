@@ -1,6 +1,13 @@
 <?php
+session_start();
 require_once('connect.php');
 
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION["username"])) {
+    // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
+    header("Location: login.php");
+    exit();
+}
 if (isset($_POST)) {
     if (
         isset($_POST['titre']) && !empty($_POST['titre'])
@@ -258,12 +265,32 @@ require_once('close.php');
             </div>
             <div class="mb-4">
                 <label for="categorie" class="block text-gray-700 text-sm font-bold mb-2">Catégorie</label>
-                <input type="text" name="categorie" id="categorie"
+                <select name="categorie" id="categorie"
                     class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
+                    <?php
+                    try {
+                        $conn = new PDO("mysql:host=localhost;dbname=infoclimat", "root", "");
+                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                        // Récupération des catégories depuis la base de données
+                        $query = $conn->query("SELECT `label, id` FROM `categorie`");
+                        
+                        $categories = $query->fetchAll(PDO::FETCH_COLUMN);
+
+                        // Génération des options pour le champ select
+                        foreach ($categories as $category) {
+                            $selected = ($category == $result['categorie']) ? 'selected' : '';
+                            echo "<option value=\"$category\" $selected>$category</option>";
+                        }
+                    } catch (PDOException $e) {
+                        echo "Connection failed: " . $e->getMessage();
+                    }
+                    ?>
+                </select>
             </div>
             <div class="mb-4">
                 <label for="statut" class="block text-gray-700 text-sm font-bold mb-2">Statut</label>
-                <input type="number" name="statut" id="statut"
+                <input type="number" name="statut" id="statut" min="1" max="2"
                     class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
             </div>
             <div class="flex flex-row">
@@ -272,8 +299,8 @@ require_once('close.php');
             </div>
         </form>
     </div>
-
 </body>
+
 <footer class="p-4 w-full ">
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel

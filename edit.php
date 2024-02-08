@@ -3,6 +3,7 @@ session_start();
 
 require_once('connect.php');
 
+
 // Vérifiez si l'utilisateur est connecté
 $logged_in = isset($_SESSION['username']);
 
@@ -31,6 +32,7 @@ if ($logged_in) {
     }
 }
 
+
 if (isset($_POST)) {
     if (
         isset($_POST['id']) && !empty($_POST['id'])
@@ -40,7 +42,9 @@ if (isset($_POST)) {
         && isset($_POST['categorie']) && !empty($_POST['categorie'])
         && isset($_POST['statut']) && !empty($_POST['statut'])
     ) {
+
         $id = strip_tags($_GET['id']);
+
         $titre = strip_tags($_POST['titre']);
         $description = strip_tags($_POST['description']);
         $article = strip_tags($_POST['article']);
@@ -66,7 +70,8 @@ if (isset($_POST)) {
 
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id = strip_tags($_GET['id']);
-    $sql = "SELECT * FROM `infocarte` WHERE `id`=:id;";
+    $sql = "SELECT infocarte.*, categorie.label as categorie_label, categorie.id as categorie_id  FROM infocarte JOIN categorie ON infocarte.categorie = categorie.id WHERE infocarte.id=:id;";
+   
 
     $query = $db->prepare($sql);
 
@@ -74,7 +79,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $query->execute();
 
     $result = $query->fetch();
-
 }
 
 require_once('close.php');
@@ -158,6 +162,7 @@ require_once('close.php');
         .superposition-simple .texte-normal {
             transition: .5s ease;
         }
+
     </style>
 </head>
 <header
@@ -253,8 +258,31 @@ require_once('close.php');
             </div>
             <div class="mb-4">
                 <label for="categorie" class="block text-sm font-semibold">Catégorie</label>
-                <input type="text" name="categorie" id="categorie" value="<?= $result['categorie'] ?>"
-                    class="w-full border p-2 rounded">
+                <select name="categorie" id="categorie" class="w-full border p-2 rounded">
+                    <?php
+                    try {
+                        $db = new PDO("mysql:host=localhost;dbname=infoclimat", "root", "");
+                        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                        // Récupération des catégories depuis la base de données
+                        $query = $db->query("SELECT * FROM categorie;");
+                        $categories = $query->fetchAll(PDO::FETCH_ASSOC);
+
+                        foreach ($categories as $category) {
+                            $selected = ($category['id'] == $result['categorie']) ? 'selected' : '';
+                            $idcat = $category['id'];
+                            $idlab = $category['label'];
+
+                            // Générer l'option pour chaque catégorie
+                            ?>
+                                <option <?= $idcat === $result["categorie_id"] ? "selected" : "" ?> value="<?= $idcat ?>" $selected><?= $idlab ?></option>
+                            <?php
+                        }
+                    } catch (PDOException $e) {
+                        echo "Connection failed: " . $e->getMessage();
+                    }
+                    ?>
+                </select>
             </div>
             <div class="mb-4">
                 <label for="statut" class="block text-sm font-semibold">Statut</label>

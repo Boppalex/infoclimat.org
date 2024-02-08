@@ -1,7 +1,6 @@
 <?php
 session_start();
-
-require_once "connect.php";
+require_once('connect.php');
 
 // Vérifiez si l'utilisateur est connecté
 $logged_in = isset($_SESSION['username']);
@@ -31,6 +30,39 @@ if ($logged_in) {
     }
 }
 
+
+if (isset($_POST)) {
+    if (
+        isset($_POST['titre']) && !empty($_POST['titre'])
+        && isset($_POST['description']) && !empty($_POST['description'])
+        && isset($_POST['article']) && !empty($_POST['article'])
+        && isset($_POST['categorie']) && !empty($_POST['categorie'])
+        && isset($_POST['statut']) && !empty($_POST['statut'])
+    ) {
+        $titre = strip_tags($_POST['titre']);
+        $description = strip_tags($_POST['description']);
+        $article = strip_tags($_POST['article']);
+        $categorie = strip_tags($_POST['categorie']);
+        $statut = strip_tags($_POST['statut']);
+
+        $sql = "INSERT INTO `infocarte` (`titre`, `description`, `article`, `categorie`, `statut`) VALUES (:titre, :description, :article, :categorie, :statut)";
+
+
+        $query = $db->prepare($sql);
+
+        $query->bindValue(':titre', $titre, PDO::PARAM_STR);
+        $query->bindValue(':description', $description, PDO::PARAM_STR);
+        $query->bindValue(':article', $article, PDO::PARAM_STR);
+        $query->bindValue(':categorie', $categorie, PDO::PARAM_STR);
+        $query->bindValue(':statut', $statut, PDO::PARAM_STR);
+
+        $query->execute();
+        $_SESSION['message'] = "Produit ajouté avec succès !";
+        header('Location: blog.php');
+    }
+}
+
+require_once('close.php');
 ?>
 
 <!DOCTYPE html>
@@ -39,6 +71,7 @@ if ($logged_in) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -46,8 +79,14 @@ if ($logged_in) {
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
     <style>
-        header {
-            background-image: url('Images/wave.png');
+
+        html,
+        body{
+            padding: 0;
+            margin: 0;
+            position: relative;
+            transition: background 4s ease;
+            /* Transition pour le changement de fond */
         }
 
         /* CSS */
@@ -59,10 +98,18 @@ if ($logged_in) {
             display: inline-block;
         }
 
+
+        /* Ajout d'une classe pour le fond pendant l'easter egg */
+        body.rainy {
+            background: #333;
+            /* Couleur du fond pendant l'easter egg */
+        }
+        
         footer {
             background-color: #055634;
             color: white;
         }
+        
 
         .superposition-simple {
             position: relative;
@@ -108,12 +155,128 @@ if ($logged_in) {
         .superposition-simple .texte-normal {
             transition: .5s ease;
         }
+        body {
+            margin: 0;
+            background-color: #f3f4f6;
+        }
 
-        .btncat {
+        footer {
             background-color: #055634;
+            color: white;
+
+        }
+
+        header {
+            background-image: url('Images/wave.png');
+        }
+
+
+        div.testclass {
+            background-color: #fff;
+            /* Fond gris clair */
+        }
+
+        body.rainy div.testclass {
+            background-color: #ffff;
+            color: #fff;
+            /* Fond gris clair */
+        }
+
+        body.rainy div.intro {
+            color: #fff;
+            /* Fond gris clair */
+        }
+
+
+
+        div.card1 {
+            background-color: #fff;
+            /* Fond gris clair */
+        }
+
+        body.rainy div.card1 {
+            background-color: #ffff;
+            /* Fond gris clair */
+        }
+
+        body.rainy header {
+            background-image: none;
+        }
+
+        body.rainy footer {
+
+            background-color: #333;
+            overflow: hidden;
+            transition: background 4s ease;
+            /* Fond gris clair */
+
+        }
+
+        .btn {
+            --color2: #055634;
+            --color1: grey;
+            perspective: 1000px;
+            padding: 1em 1em;
+            background: linear-gradient(var(--color1), var(--color2));
+            border: none;
+            outline: none;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #fff;
+            text-shadow: 0 10px 10px #000;
+            cursor: pointer;
+            transform: rotateX(70deg) rotateZ(30deg);
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+
+        .btn::before {
+            content: "";
+            width: 100%;
+            height: 15px;
+            background-color: var(--color2);
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            transform: rotateX(90deg);
+            transform-origin: bottom;
+        }
+
+        .btn::after {
+            content: "";
+            width: 15px;
+            height: 100%;
+            background-color: var(--color1);
+            position: absolute;
+            top: 0;
+            right: 0;
+            transform: rotateY(-90deg);
+            transform-origin: right;
+        }
+
+        .btn:hover {
+            transform: rotateX(30deg) rotateZ(0);
+        }
+
+        button {
+            border: none;
+            outline: none;
+            background-color: #055634;
+            padding: 10px 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            border-radius: 5px;
+            transition: all ease 0.1s;
+            box-shadow: 0px 5px 0px 0px #a29bfe;
+        }
+
+        button:active {
+            transform: translateY(5px);
+            box-shadow: 0px 0px 0px 0px #a29bfe;
         }
     </style>
-
 </head>
 <header
     class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500">
@@ -201,7 +364,7 @@ if ($logged_in) {
 
                     <li class="nav-item">
                         <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
-                            <div class="superposition-simple "><a href="backend.php">
+                            <div class="superposition-simple "><a href="blog.php">
                                     <div class="texte-normal ">
                                         <div class="texte-original">Back</div>
                                     </div>
@@ -231,133 +394,65 @@ if ($logged_in) {
     </a>
 </header>
 
+
 <body class="bg-gray-100">
-    <div>
-
-    </div>
-    <?php
-    // Connexion à la base de données
-    $mysqli = new mysqli("localhost", "root", "", "infoclimat");
-
-    // Vérification de la connexion
-    if ($mysqli->connect_error) {
-        die("La connexion à la base de données a échoué : " . $mysqli->connect_error);
-    }
-
-    // Initialiser la variable de catégorie
-    $categorie = '';
-
-    // Vérifier si le formulaire a été soumis
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Récupérer la catégorie sélectionnée (si elle existe)
-        $categorie = isset($_POST['categorie']) ? $_POST['categorie'] : '';
-    }
-
-    // Requête pour récupérer les informations de la table infocarte avec filtrage par catégorie
-    $query = "SELECT id, titre, description, article, categorie, statut, image FROM infocarte";
-
-    // Ajouter le filtre de catégorie si une catégorie est sélectionnée
-    if (!empty($categorie)) {
-        // Utilisez la catégorie dans la clause WHERE de la requête
-        $query .= " WHERE categorie = '" . $mysqli->real_escape_string($categorie) . "'";
-    }
-
-    // Exécuter la requête
-    $result = $mysqli->query($query);
-
-    // Vérification s'il y a des résultats
-    if ($result->num_rows > 0) {
-        ?>
-        <!DOCTYPE html>
-        <html lang="fr">
-
-        <body class="bg-gray-100 pt-8">
-
-            <div class="blog container pb-12 pt-12">
-                <div class="text text-3xl font-bold mb-8 ">
-                    <h1>Notre Blog :</h1>
-                </div>
-
-                <form method="post" class="mb-4 justify-center flex">
-                    <label for="categorie">Filtrer par catégorie :</label>
-                    <select name="categorie" id="categorie" class="border rounded p-1">
-                        <option value="">Toutes les catégories</option>
-
-                        <?php
-
-                        $categoriesQuery = "SELECT DISTINCT categorie FROM infocarte";
-                        $categoriesResult = $mysqli->query($categoriesQuery);
-
-
-                        while ($categorieRow = $categoriesResult->fetch_assoc()) {
-                            echo '<option value="' . $categorieRow['categorie'] . '">' . $categorieRow['categorie'] . '</option>';
-                        }
-                        ?>
-                    </select>
-                    <button type="submit" class="btncat text-white px-2 py-1 rounded ml-2">Filtrer</button>
-                </form>
-
-                <div
-                    class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:grid-rows-2  gap-8">
+    <div class="container">
+        <form method="post" class="max-w-md mx-auto my-8 p-6 bg-white rounded shadow-md">
+            <div class="mb-4">
+                <label for="titre" class="block text-gray-700 text-sm font-bold mb-2">Titre</label>
+                <input type="text" name="titre" id="titre"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
+            </div>
+            <div class="mb-4">
+                <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Description</label>
+                <input type="text" name="description" id="description"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
+            </div>
+            <div class="mb-4">
+                <label for="article" class="block text-gray-700 text-sm font-bold mb-2">Article</label>
+                <textarea name="article" id="article"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue"
+                    rows="6"></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="categorie" class="block text-gray-700 text-sm font-bold mb-2">Catégorie</label>
+                <select name="categorie" id="categorie"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
                     <?php
+                    try {
+                        $conn = new PDO("mysql:host=localhost;dbname=infoclimat", "root", "");
+                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                    while ($row = $result->fetch_assoc()) {
-                        ?>
-                        <div class="flex flex-col sm:flex-row col-span-1 row-span-1 sm:hover:shadow-lg rounded-3xl">
-                            <div class="card1 border bg-white w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
-                                <div class="Photo flex justify-center">
-                                    <?php
-                                    if (empty($row['image'])) {
-                                        // Afficher l'image par défaut si la colonne "image" est vide
-                                        echo '<img src="Images/ImageClimat.jpg" alt="Image par défaut" class="w-full h-44 rounded-t-3xl object-cover">';
-                                    } else {
-                                        // Encodage de l'image en base64 si la colonne "image" n'est pas vide
-                                        $imageData = base64_encode($row['image']);
-                                        $imageType = "image/jpeg"; // Assurez-vous que le type correspond à votre base de données
-                                        // Afficher l'image depuis la base de données
-                                        echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="image' . $row['id'] . '" class="w-full h-44 rounded-t-3xl object-cover">';
-                                    }
-                                    ?>
-                                </div>
+                        // Récupération des catégories depuis la base de données
+                        $query = $conn->query("SELECT `id` FROM `categorie`");
+                        $categories = $query->fetchAll(PDO::FETCH_COLUMN);
 
-                                <div class="infocard pl-10 pt-4 pr-10">
-                                    <div class="flex flex-row">
-                                        <?php echo $row['description']; ?>
-                                    </div>
-                                </div>
-
-                                <div class="boutonvalidation p-2 justify-end flex">
-                                    <div class="boutonvalidation p-2 justify-end flex">
-                                        <a href="article.php?id=<?php echo $row['id']; ?>"
-                                            class="bg-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
-                                            <span class="text-black text-sm">En savoir plus</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php
+                        // Génération des options pour le champ select
+                        foreach ($categories as $category) {
+                            $selected = ($category == $result['categorie']) ? 'selected' : '';
+                            echo "<option value=\"$category\" $selected>$category</option>";
+                        }
+                    } catch (PDOException $e) {
+                        echo "Connection failed: " . $e->getMessage();
                     }
                     ?>
-                </div>
-                
+                </select>
             </div>
-            <div class= "justify-center flex pb-8">
-<button type="submit" class="btncat text-white px-2 py-1 rounded ml-2 centered-button" onclick="window.location.href = 'adduser.php';">Créer un article</button>
+            <div class="mb-4 hidden">
+                <label for="statut" class="block text-gray-700 text-sm font-bold mb-2">Statut</label>
+                <input type="number" name="statut" id="statut" min="2" max="2" value="2" readonly
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
             </div>
-
-
-        <?php
-    } else {
-        echo "Aucun résultat trouvé dans la base de données.";
-    }
-
-    // Fermer la connexion à la base de données
-    $mysqli->close();
-    ?>
+            <div class="flex flex-row">
+                <button type="submit">Enregistrer</button>
+                <button type="button" onclick="window.location.href='blog.php'">Retour</button>
+            </div>
+        </form>
+    </div>
+</body>
 
 </body>
-<footer class=" p-4  w-full">
+<footer class="p-4 w-full ">
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>
