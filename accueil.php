@@ -133,6 +133,52 @@
             /* Fond gris clair */
 
         }
+
+        .cookie-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f5f5f5;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  z-index: 1000;
+}
+
+.cookie-container p {
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.accept-cookies-btn {
+  appearance: none;
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.accept-cookies-btn:hover {
+  background-color: #3e8e41;
+}
+
+.accept-cookies-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px #3e8e41;
+}
+
+.cookie-container.hide {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease;
+}
     </style>
     <script type="text/javascript">
         var snow = {
@@ -247,6 +293,13 @@
                 snow.toggleSnow();
             }
         });
+
+        $(document).ready(function() {
+  $('.accept-cookies-btn').on('click', function() {
+    $('.cookie-container').addClass('hide');
+    // Ici, vous pouvez aussi stocker un cookie pour indiquer que l'utilisateur a accepté les cookies
+  });
+});
 
     </script>
 </head>
@@ -536,6 +589,11 @@
     ?>
 
 </body>
+
+<div class="cookie-container">
+  <p>En visitant ce site web, vous acceptez notre politique d'utilisation des cookies. <a href="Images/louis.jpg">En savoir plus</a>.</p>
+  <button class="accept-cookies-btn">Accepter tous les cookies</button>
+</div>
 
 <footer class=" rainy footerpage  p-4  w-full">
     <p class="flex justify-center">@SIO2Groupe2</p>
