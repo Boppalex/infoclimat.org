@@ -249,7 +249,7 @@ if ($logged_in) {
             <?php echo $_SESSION["username"]; ?>!
         </h1>
 
-        <table class="  border-collapse border border-gray-200">
+        <table class="w-full  border-collapse border border-gray-200">
             <thead>
                 <tr>
 
@@ -266,11 +266,11 @@ if ($logged_in) {
 
                     <th id="categorie"
                         class="bgtabl px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                        Catégorie <button onclick="sortTable('categorie')">Trier</button>
+                        Catégorie
                     </th>
 
                     <th class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
-                        Bouton</th>
+                        Modification</th>
 
                 </tr>
             </thead>
@@ -278,21 +278,21 @@ if ($logged_in) {
                 <?php foreach ($result as $carte): ?>
                     <a href="article.php?id=<?= $carte['id'] ?>">
                         <tr class="bg-gray-100 hover:bg-gray-200">
-                            <td class="p-4 bg-gray-700">
+                            <td class="p-4 bg-gray-700 border-2">
                                 <a class="text-black hover:text-black" href="article.php?id=<?= $carte['id'] ?>"><button class="w-full h-full border-2 rounded bg-white">
                                     <?= substr($carte['titre'], 0, 255) . (strlen($carte['titre']) > 255 ? '...' : '') ?>
                                 </button></a>
                             </td>
-                            <td class="p-4">
+                            <td class="p-4 border-2">
                                 <?= substr($carte['description'], 0, 255) . (strlen($carte['description']) > 255 ? '...' : '') ?>
                             </td>
-                            <td class="p-4">
+                            <td class="p-4 border-2">
                                 <?= substr($carte['article'], 0, 255) . (strlen($carte['article']) > 255 ? '...' : '') ?>
                             </td>
-                            <td class="p-4">
+                            <td class="p-4 border-2">
                                 <?= substr($carte['categorie'], 0, 255) . (strlen($carte['categorie']) > 255 ? '...' : '') ?>
                             </td>
-                            <td>
+                            <td class="border-2 p-4">
                                 <a href="edit.php?id=<?= $carte['id'] ?>"><button
                                         class="btn hover:shadow-md"><span>Modifier</span></button></a>
                             </td>
@@ -306,10 +306,9 @@ if ($logged_in) {
     </div>
 </body>
 
-<footer class="p-4 w-full">
+<footer class="p-4 w-full absolute bottom-0">
     <p class="flex justify-center">@SIO2Groupe2</p>
-    <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
-        Azoulay, Hugo Moreaux</p>
+    <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel Azoulay, Hugo Moreaux</p>
 </footer>
 <script>
     function sortTable(columnName) {
