@@ -1,79 +1,101 @@
 <?php
+
 session_start();
+
+// Connexion à la base de données
+require_once "connect.php";
+
+// Initialisation des variables
+$article_title = '';
+$article_description = '';
+$article_article = '';
+$article_categorie = '';
+$article_image = '';
+$article_datecreation = '';
 
 // Vérifiez si l'utilisateur est connecté
 $logged_in = isset($_SESSION['username']);
 
 // Si l'utilisateur est connecté, récupérez le nom d'utilisateur
 $username = '';
+$is_admin = false; // Par défaut, l'utilisateur n'est pas un administrateur
 if ($logged_in) {
     // Supposons que vous stockiez le nom d'utilisateur dans une variable de session appelée 'username'
     $username = $_SESSION['username'];
+
+    // Préparation de la requête SQL pour récupérer isadmin de la base de données
+    $sql = "SELECT isadmin FROM utilisateur WHERE nom = :username";
+
+    // Préparation de la requête
+    $query = $db->prepare($sql);
+
+    // Exécution de la requête
+    $query->execute([':username' => $username]);
+
+    // Récupération des résultats
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+
+    // Si la requête a retourné un résultat valide, mettez à jour la variable $is_admin
+    if ($result !== false) {
+        $is_admin = (int) $result['isadmin']; // Convertit la valeur en entier
+    }
 }
+// Vérifier si l'ID de l'article est passé dans l'URL
+if (isset($_GET['id'])) {
+    // Récupérer l'ID de l'article depuis l'URL
+    $article_id = $_GET['id'];
 
-// Vérifiez si le formulaire de déconnexion a été soumis
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
-    // Détruire toutes les variables de session
-    $_SESSION = array();
+    // Requête SQL pour récupérer les informations de l'article depuis la base de données
+    $sql = 'SELECT * FROM `infocarte` WHERE id = :article_id';
 
-    // Détruire la session
-    session_destroy();
+    // Préparation de la requête
+    $query = $db->prepare($sql);
 
-    // Rediriger vers la page d'accueil avec un message d'alerte
-    header('Location: accueil.php?logout=true');
-    exit;
-}
+    // Liaison du paramètre :article_id avec la valeur de l'ID de l'article
+    $query->bindParam(':article_id', $article_id, PDO::PARAM_INT);
 
-// Vérifiez si un message de déconnexion est présent dans l'URL et affichez l'alerte correspondante
-if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
-    echo '<script>alert("Vous êtes déconnecté.");</script>';
+    // Exécution de la requête
+    $query->execute();
+
+    // Récupération des résultats dans un tableau associatif
+    $article = $query->fetch(PDO::FETCH_ASSOC);
+
+    // Vérifier si l'article existe
+    if ($article) {
+        // Récupérer les informations de l'article
+        $article_title = $article['titre'];
+        $article_description = $article['description'];
+        $article_article = $article['article'];
+        $article_categorie = $article['categorie'];
+        $article_image = $article['image'];
+        $article_datecreation = $article['datecreation']; // Ajout de la date de création de l'article
+    } else {
+        // Redirection vers une autre page si l'article n'est pas trouvé
+        header("Location: passerelle.php");
+        exit();
+    }
+} else {
+    // Redirection vers une autre page si l'ID de l'article n'est pas passé dans l'URL
+    header("Location: passerelle.php");
+    exit();
 }
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemple Tailwind CSS</title>
-    <!-- Utilisation du CDN pour Tailwind CSS (à des fins de démonstration) -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <title>Article</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
     <style>
-        html,
-        body {
-            padding: 0;
-            margin: 0;
-            position: relative;
-            transition: background 1s ease;
-            /* Transition pour le changement de fond */
-        }
-
-        /* CSS */
-        a.testa .hidden.sm\:inline-block {
-            display: none;
-        }
-
-        a.testa:hover .hidden.sm\:inline-block {
-            display: inline-block;
-        }
-
-
-        /* Ajout d'une classe pour le fond pendant l'easter egg */
-        body.rainy {
-            background: #333;
-            /* Couleur du fond pendant l'easter egg */
-        }
-
         .superposition-simple {
             position: relative;
             width: 100%;
@@ -119,187 +141,21 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
             transition: .5s ease;
         }
 
-        body {
-            margin: 0;
-            background-color: #f3f4f6;
-        }
-
         footer {
             background-color: #055634;
             color: white;
-
         }
 
         header {
             background-image: url('Images/wave.png');
         }
 
-
-        div.testclass {
-            background-color: #fff;
-            /* Fond gris clair */
-        }
-
-        body.rainy div.testclass {
-            background-color: #ffff;
-            color: #fff;
-            /* Fond gris clair */
-        }
-
-        body.rainy div.intro {
-            color: #fff;
-            /* Fond gris clair */
-        }
-
-
-
-        div.card1 {
-            background-color: #fff;
-            /* Fond gris clair */
-        }
-
-        body.rainy div.card1 {
-            background-color: #ffff;
-            /* Fond gris clair */
-        }
-
         body.rainy header {
             background-image: none;
         }
-
-        body.rainy footer {
-            background-color: #333;
-            overflow: hidden;
-            transition: background 1s ease;
-            /* Fond gris clair */
-
-        }
     </style>
-    <script type="text/javascript">
-
-        document.addEventListener("keydown", function (event) {
-            // Vérifier si la touche Ctrl (ou Commande sur Mac) est enfoncée et la touche 9 est pressée
-            if ((event.ctrlKey || event.metaKey) && event.key === "9") {
-                // Rediriger vers la page souhaitée, par exemple "nouvelle_page.html"
-                window.location.href = "backend.php";
-            }
-        });
 
 
-        var snow = {
-            wind: 0,
-            maxXrange: 100,
-            minXrange: 10,
-            maxSpeed: 2,
-            minSpeed: 1,
-            color: "#fff",
-            char: "*",
-            maxSize: 20,
-            minSize: 8,
-            flakes: [],
-            WIDTH: 0,
-            HEIGHT: 0,
-            snowActive: false,
-
-            init: function (nb) {
-                var o = this,
-                    frag = document.createDocumentFragment();
-                o.getSize();
-
-                for (var i = 1; i < nb; i++) {
-                    var flake = {
-                        x: o.random(o.WIDTH),
-                        y: -o.maxSize,
-                        xrange: o.minXrange + o.random(o.maxXrange - o.minXrange),
-                        yspeed: o.minSpeed + o.random(o.maxSpeed - o.minSpeed, 100),
-                        life: 0,
-                        size: o.minSize + o.random(o.maxSize - o.minSize),
-                        html: document.createElement("span"),
-                    };
-
-                    flake.html.style.position = "absolute";
-                    flake.html.style.top = flake.y + "px";
-                    flake.html.style.left = flake.x + "px";
-                    flake.html.style.fontSize = flake.size + "px";
-                    flake.html.style.color = o.color;
-                    flake.html.appendChild(document.createTextNode(o.char));
-
-                    frag.appendChild(flake.html);
-                    o.flakes.push(flake);
-                }
-
-                document.body.appendChild(frag);
-                o.animate();
-
-                window.onresize = function () {
-                    o.getSize();
-                };
-            },
-
-            animate: function () {
-                var o = this;
-                for (var i = 0, c = o.flakes.length; i < c; i++) {
-                    var flake = o.flakes[i],
-                        top = flake.y + flake.yspeed,
-                        left = flake.x + Math.sin(flake.life) * flake.xrange + o.wind;
-                    if (top < o.HEIGHT - flake.size - 10 && left < o.WIDTH - flake.size && left > 0) {
-                        flake.html.style.top = top + "px";
-                        flake.html.style.left = left + "px";
-                        flake.y = top;
-                        flake.x += o.wind;
-                        flake.life += 0.01;
-                    } else {
-                        flake.html.style.top = -o.maxSize + "px";
-                        flake.x = o.random(o.WIDTH);
-                        flake.y = -o.maxSize;
-                        flake.html.style.left = flake.x + "px";
-                        flake.life = 0;
-                    }
-                }
-
-                // Continue l'animation seulement si la neige est activée
-                if (o.snowActive) {
-                    setTimeout(function () {
-                        o.animate();
-                    }, 20);
-                }
-            },
-
-            random: function (range, num) {
-                var num = num ? num : 1;
-                return Math.floor(Math.random() * (range + 5) * num) / num;
-            },
-
-            getSize: function () {
-                this.WIDTH = document.body.clientWidth || window.innerWidth;
-                this.HEIGHT = document.body.clientHeight || window.innerHeight;
-            },
-
-            toggleSnow: function () {
-                this.snowActive = !this.snowActive;
-
-                // Ajoute ou retire la classe "rainy" pour le changement de fond
-                document.body.classList.toggle('rainy', this.snowActive);
-
-                if (this.snowActive) {
-                    this.init(100);
-                } else {
-                    // Supprime tous les flocons de neige existants si la neige est désactivée
-                    for (var i = 0, c = this.flakes.length; i < c; i++) {
-                        document.body.removeChild(this.flakes[i].html);
-                    }
-                    this.flakes = [];
-                }
-            },
-        };
-
-        window.addEventListener('keydown', function (event) {
-            if (event.key === '1' && event.ctrlKey) {
-                snow.toggleSnow();
-            }
-        });
-
-    </script>
 </head>
 <header
     class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500">
@@ -316,7 +172,6 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
                         <div class="superposition-simple  "><a href="accueil.php">
                                 <div class="texte-normal ">
@@ -355,23 +210,56 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
                             </a></div>
                     </div>
                 </li>
+                <?php if ($logged_in && $is_admin != 1): ?>
+
+                    <li class="nav-item">
+                        <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
+                            <div class="superposition-simple "><a href="backuser.php">
+                                    <div class="texte-normal ">
+                                        <div class="texte-original">Carte</div>
+                                    </div>
+                                    <div class="texte-hover "><img decoding="async" class="image-originale "
+                                            src="Images/feuillemorte.png" />
+                                        <div class="texte-original">Carte</div>
+                                    </div>
+                                </a></div>
+                        </div>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
                         <div class="superposition-simple "><a href="apropos.php">
                                 <div class="texte-normal ">
-                                    <div class="texte-original">À propos</div>
+                                    <div class="texte-original">Nous</div>
                                 </div>
                                 <div class="texte-hover "><img decoding="async" class="image-originale "
                                         src="Images/glace.png" />
-                                    <div class="texte-original">À propos</div>
+                                    <div class="texte-original">Nous</div>
                                 </div>
                             </a></div>
                     </div>
                 </li>
+                <?php if ($logged_in && $is_admin === 1): ?>
+
+                    <li class="nav-item">
+                        <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
+                            <div class="superposition-simple "><a href="backend.php">
+                                    <div class="texte-normal ">
+                                        <div class="texte-original">Back</div>
+                                    </div>
+                                    <div class="texte-hover "><img decoding="async" class="image-originale "
+                                            src="Images/feuillemorte.png" />
+                                        <div class="texte-original">Back</div>
+                                    </div>
+                                </a></div>
+                        </div>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>
 
+    <!-- Lien de connexion / déconnexion -->
     <a class="testa" href="<?php echo $logged_in ? 'logout.php' : 'login.php'; ?>"
         class="flex items-center mb-2 sm:mb-0 sm:mr-2">
         <img src="Images/logo.png" alt="logo" class="w-12 h-12 rounded-full ">
@@ -383,227 +271,209 @@ if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
             <?php endif; ?>
         </span>
     </a>
-
-
-
-
-
-
 </header>
 
-<body class="bg-gray-100 ">
+<body class="bg-gray-100 text-gray-800 font-sans">
 
-    <?php
-    // Connexion à la base de données
-    $mysqli = new mysqli("localhost", "root", "", "infoclimat");
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-3xl mx-auto bg-white shadow-md p-8 rounded-lg">
+            <h1 class="text-3xl font-bold mb-4 text-center">
+                <?php echo $article_title; ?>
+            </h1>
 
-    // Vérification de la connexion
-    if ($mysqli->connect_error) {
-        die("La connexion à la base de données a échoué : " . $mysqli->connect_error);
-    }
-
-    // Requête pour récupérer les trois cartes les plus récentes de la table infocarte
-    $result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, image FROM infocarte ");
-
-    // Vérification s'il y a des résultats
-    if ($result->num_rows > 0) {
-        ?>
-        <!DOCTYPE html>
-        <html lang="fr">
-
-        <!-- ... Votre en-tête existant ... -->
-
-        <body class="bg-gray-100 ">
-
-
-            <div class="imageswip container  gap-4 md:p-12">
-                <div class="intro text text-3xl font-bold  flex mb-8">
-                    <h1>Information climatique :</h1>
-                </div>
-                <div class="swiper-container h-86 flex overflow-hidden ">
-
-                    <div class="swiper-wrapper">
-                        <?php
-                        // Boucle à travers les résultats
-                        while ($row = $result->fetch_assoc()) {
-                            ?>
-                            <div class="testclass rainy swiper-slide relative border-2 bg-gray-100 rounded-2xl p-4  shadow-lg">
-                                <div class="image1 relative h-64">
-                                    <a href="#">
-                                        <?php
-                                        if (empty($row['image'])) {
-                                            // Afficher l'image par défaut si la colonne "image" est vide
-                                            echo '<img src="Images/ImageClimat2.jpg" alt="Image par défaut" class="w-full h-full rounded-2xl object-cover">';
-                                        } else {
-                                            // Encodage de l'image en base64
-                                            $imageData = base64_encode($row['image']);
-                                            $imageType = "image/jpeg"; // Ajustez selon le type d'image dans votre base de données
-                                
-                                            // Affichage de l'image
-                                            echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="Image ' . $row['id'] . '" class="w-full h-full object-cover rounded-2xl">';
-                                        }
-                                        ?>
-
-                                        <div
-                                            class="overlay absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                                            <p class="text-black font-bold">
-                                                <?php echo $row['description']; ?>
-                                            </p>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <?php
-                        }
-                        ?>
-                    </div>
-
-                    <!-- Ajoutez les flèches de navigation si vous le souhaitez 
-                <div class="swiper-button-next text-white bg-blue-500 hover:bg-blue-600 rounded-full w-8 h-8 flex items-center justify-center absolute top-1/2 -translate-y-1/2 right-4 cursor-pointer"></div>
-                <div class="swiper-button-prev text-white bg-blue-500 hover:bg-blue-600 rounded-full w-8 h-8 flex items-center justify-center absolute top-1/2 -translate-y-1/2 left-4 cursor-pointer"></div>-->
-                </div>
-
-                <script>
-                    var swiper;
-
-                    function initSwiper() {
-                        var slidesPerView = (window.innerWidth < 768) ? 1 : 2; // Si l'écran est petit, affiche une seule image, sinon deux.
-
-                        swiper = new Swiper('.swiper-container', {
-                            slidesPerView: slidesPerView,
-                            spaceBetween: 20,
-                            loop: true,
-                            navigation: {
-                                nextEl: '.swiper-button-next',
-                                prevEl: '.swiper-button-prev',
-                            },
-                            pagination: {
-                                el: '.swiper-pagination',
-                                clickable: true,
-                            },
-                            autoplay: {
-                                delay: 4000,
-                                disableOnInteraction: false,
-                            },
-                        });
-
-                        // Gestion des événements de survol pour la pause/reprise du défilement
-                        var swiperContainer = document.querySelector('.swiper-container');
-
-                        swiperContainer.addEventListener('mouseenter', function () {
-                            swiper.autoplay.stop();
-                        });
-
-                        swiperContainer.addEventListener('mouseleave', function () {
-                            swiper.autoplay.start();
-                        });
-                    }
-
-                    // Appeler la fonction initSwiper au chargement de la page
-                    window.addEventListener('load', function () {
-                        initSwiper();
-
-                        // Mettre à jour le nombre de slides visibles si la fenêtre est redimensionnée
-                        window.addEventListener('resize', function () {
-                            swiper.destroy(); // Détruire l'instance Swiper existante
-                            initSwiper(); // Initialiser une nouvelle instance Swiper
-                        });
-                    });
-                </script>
-            </div>
-
-        </body>
-
-        </html>
-
-        <?php
-    } else {
-        echo "Aucun résultat trouvé dans la base de données.";
-    }
-
-
-
-
-
-    // Requête pour récupérer les trois cartes les plus récentes de la table infocarte
-    $result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, image FROM infocarte ORDER BY datecreation DESC LIMIT 3");
-
-
-    // Vérification s'il y a des résultats
-    if ($result->num_rows > 0) {
-        ?>
-        <!DOCTYPE html>
-        <html lang="fr">
-
-        <!-- ... Votre en-tête existant ... -->
-        </header>
-
-
-
-
-        <div class="blog container pb-12">
-            <div class="intro text text-3xl font-bold mb-8  flex">
-                <h1>Dernières Actus :</h1>
-            </div>
-            <div class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3   gap-8">
-                <?php
-                // Boucle à travers les résultats
-                while ($row = $result->fetch_assoc()) {
-                    ?>
-                    <div class="flex flex-col sm:flex-row col-span-1 row-span-1 sm:hover:shadow-lg rounded-3xl">
-                        <div class=" rainy card1  border  w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
-                            <div class="Photo flex justify-center">
-                                <?php
-                                if (empty($row['image'])) {
-                                    // Afficher l'image par défaut si la colonne "image" est vide
-                                    echo '<img src="Images/ImageClimat2.jpg" alt="Image par défaut" class="w-full h-44 rounded-t-3xl object-cover">';
-                                } else {
-                                    // Encodage de l'image en base64
-                                    $imageData = base64_encode($row['image']);
-
-                                    // Type de contenu de l'image (assurez-vous que cela correspond au type d'image dans votre base de données)
-                                    $imageType = "image/jpeg"; // Exemple pour le format JPEG, ajustez selon votre besoin
-                        
-                                    // Affichage de l'image
-                                    echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="image' . $row['id'] . '" class="w-full h-44 rounded-t-3xl object-cover">';
-                                }
-                                ?>
-                            </div>
-
-                            <div class="infocard pl-10 pt-4 pr-10">
-                                <div class="flex flex-row">
-                                    <?php echo $row['titre'] . ' :'; ?>
-                                    <br>
-                                    <?php echo $row['description']; ?>
-                                </div>
-                            </div>
-
-                            <div class="boutonvalidation p-2 justify-end flex">
-                                <button
-                                    class="bg-white  px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
-                                    <a href="#" class="text-black hover:text-black text-sm">En savoir plus</a>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+            <div class="container h-72 overflow-hidden rounded-lg mb-8 border-2">
+                <?php if (empty($article_image)): ?>
+                    <!-- Afficher l'image par défaut si la colonne "image" est vide -->
+                    <img src="Images/ImageClimat2.jpg" alt="Image par défaut" class="w-full object-cover">
+                <?php else: ?>
                     <?php
-                }
-                ?>
-            </div>
-        </div>
-    </body>
-    <?php
-    } else {
-        echo "Aucun résultat trouvé dans la base de données.";
-    }
+                    // Encodage de l'image en base64
+                    $imageData = base64_encode($article_image);
 
-    // Fermer la connexion à la base de données
-    $mysqli->close();
-    ?>
+                    // Type de contenu de l'image (assurez-vous que cela correspond au type d'image dans votre base de données)
+                    $imageType = "image/jpeg"; // Exemple pour le format JPEG, ajustez selon votre besoin
+                    ?>
+                    <!-- Affichage de l'image -->
+                    <img src="data:<?php echo $imageType; ?>;base64,<?php echo $imageData; ?>"
+                        alt="<?php echo $article_title; ?>" class="object-cover object-center h-full w-full">
+                <?php endif; ?>
+            </div>
+
+
+            <div class="border-2 rounded-lg p-4">
+                <p class="text-lg mb-8 leading-relaxed">
+                    <?php echo $article_description; ?>
+                </p>
+
+                <p class="text-lg mb-8 leading-relaxed">
+                    <?php echo $article_article; ?>
+                </p>
+
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-lg mb-4">Catégorie:
+                            <?php echo $article_categorie; ?>
+                        </p>
+                        <p class="text-lg mb-4">Date de création:
+                            <?php echo $article_datecreation; ?>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-lg mb-4">Auteur:
+                            à récupérer
+                        </p>
+                        <p class="text-lg mb-4">Source:
+                            à récupérer
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <?php if ($logged_in): ?>
+                <div class="container mx-auto ">
+
+                    <h2 class="text-xl font-semibold mb-2">Ajouter un commentaire</h2>
+                    <form id="commentForm">
+                        <div class="mb-4">
+                            <label for="name" class="block text-gray-700">Votre nom</label>
+                            <?php
+
+                            // Si l'utilisateur est connecté, remplissez automatiquement le champ "Nom" avec le nom d'utilisateur
+                            echo '<input id="name" value="' . $username . '" class="mt-1 w-full border p-2 rounded-md focus:outline-none focus:border-blue-500" disabled>';
+
+                            ?>
+                        </div>
+                        <div class="mb-4">
+                            <label for="comment" class="block text-gray-700">Votre commentaire</label>
+                            <textarea id="comment" placeholder="Votre commentaire" required
+                                class="mt-1 px-4 py-2 w-full border rounded-md focus:outline-none focus:border-blue-500"></textarea>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <button type="submit"
+                                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Envoyer</button>
+
+                            <button id="toggleButton"
+                                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Trier</button>
+
+                        </div>
+                    </form>
+
+
+                    <div id="comments" class="mb-4 pt-8 flex flex-col">
+                        <!-- Les commentaires seront affichés ici -->
+                    </div>
+                </div>
+            <?php endif; ?>
+            <script>
+                // Déclaration de la variable savedComments en dehors de la fonction DOMContentLoaded
+                var savedComments = [];
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Récupérer les commentaires sauvegardés dans le stockage local lors du chargement de la page
+                    var articleId = <?php echo $article_id; ?>;
+                    var articleCommentsKey = 'comments_' + articleId;
+                    savedComments = JSON.parse(localStorage.getItem(articleCommentsKey)) || [];
+                    var commentsContainer = document.getElementById('comments');
+
+                    // Afficher les commentaires sauvegardés
+                    savedComments.forEach(function (commentData) {
+                        var commentElement = createCommentElement(commentData.name, commentData.comment);
+                        commentsContainer.appendChild(commentElement);
+                    });
+
+                    // Ajouter un gestionnaire d'événements au formulaire de commentaire
+                    document.getElementById('commentForm').addEventListener('submit', function (event) {
+                        event.preventDefault(); // Empêcher le formulaire de se soumettre normalement
+
+                        // Récupérer les valeurs du formulaire
+                        var name = document.getElementById('name').value;
+                        var comment = document.getElementById('comment').value;
+
+                        // Créer un élément de commentaire
+                        var commentElement = createCommentElement(name, comment);
+
+                        // Ajouter le commentaire à la section de commentaires
+                        commentsContainer.appendChild(commentElement);
+
+                        // Sauvegarder le commentaire dans le stockage local avec l'ID de l'article
+                        savedComments.push({ name: name, comment: comment });
+                        localStorage.setItem(articleCommentsKey, JSON.stringify(savedComments));
+
+                        // Réinitialiser le formulaire
+                        document.getElementById('name').value = '';
+                        document.getElementById('comment').value = '';
+                    });
+
+                    // Ajouter un gestionnaire d'événements pour le bouton de basculement
+                    document.getElementById('toggleButton').addEventListener('click', function () {
+                        commentsContainer.classList.toggle('flex-col');
+                        commentsContainer.classList.toggle('flex-col-reverse');
+                    });
+                });
+
+                function createCommentElement(name, comment) {
+                    var commentContainer = document.createElement('div');
+                    commentContainer.classList.add('max-w-70', 'relative'); // Ajout de relative pour positionner le bouton de suppression
+
+                    var authorElement = document.createElement('div');
+                    authorElement.textContent = name;
+                    authorElement.classList.add('comment-author', 'font-bold');
+                    commentContainer.appendChild(authorElement);
+
+                    var commentContent = document.createElement('div');
+                    commentContent.textContent = comment;
+                    commentContent.classList.add('comment-content', 'bg-white', 'rounded-2xl', 'p-2', 'overflow-auto', 'border', 'border-gray-300', 'inline-block');
+                    commentContainer.appendChild(commentContent);
+
+                    
+
+                    <?php if ($logged_in && $is_admin === 1): ?>
+                        // Boutons d'action pour l'administrateur
+                        var actionButtons = document.createElement('div');
+                        actionButtons.classList.add('absolute', 'top-2', 'right-2');
+
+                        // Bouton de modification du commentaire
+                        var editButton = document.createElement('button');
+                        editButton.textContent = 'Modifier';
+                        editButton.classList.add('px-2', 'py-1', 'mr-2', 'bg-blue-600', 'text-white', 'rounded-md', 'text-xs', 'hover:bg-blue-700', 'focus:outline-none');
+                        editButton.addEventListener('click', function () {
+                            // Remplir le formulaire de modification avec les données existantes
+                            document.getElementById('name').value = name;
+                            document.getElementById('comment').value = comment;
+                        });
+                        actionButtons.appendChild(editButton);
+
+                        // Bouton de suppression du commentaire
+                        var deleteButton = document.createElement('button');
+                        deleteButton.textContent = 'Supprimer';
+                        deleteButton.classList.add('px-2', 'py-1', 'bg-red-600', 'text-white', 'rounded-md', 'text-xs', 'hover:bg-red-700', 'focus:outline-none');
+                        deleteButton.addEventListener('click', function () {
+                            commentContainer.remove(); // Supprimer le commentaire du DOM
+                            // Supprimer le commentaire du localStorage en recherchant l'index du commentaire dans savedComments
+                            var articleId = <?php echo $article_id; ?>;
+                            var index = savedComments.findIndex(function (item) {
+                                return item.name === name && item.comment === comment;
+                            });
+                            if (index !== -1) {
+                                savedComments.splice(index, 1);
+                                localStorage.setItem('comments_' + articleId, JSON.stringify(savedComments));
+                            }
+                        });
+                        actionButtons.appendChild(deleteButton);
+
+                        commentContainer.appendChild(actionButtons);
+                    <?php endif; ?>
+                    return commentContainer;
+                }
+            </script>
+
+        </div>
+
+    </div>
 
 </body>
-
-<footer class=" rainy footerpage  p-4  w-full">
+<footer class="p-4 w-full ">
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>
