@@ -394,7 +394,7 @@ function restartQuiz() {
     restartButton.style.display = "none";
 
     // Défilez vers le haut de la page
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0);   
 }
 
       function arraysEqual(arr1, arr2) {
