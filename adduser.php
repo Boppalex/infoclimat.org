@@ -2,6 +2,7 @@
 session_start();
 require_once('connect.php');
 
+$user_id = $_SESSION["user_id"];
 // Vérifiez si l'utilisateur est connecté
 $logged_in = isset($_SESSION['username']);
 
@@ -30,8 +31,9 @@ if ($logged_in) {
     }
 }
 
-
-if (isset($_POST)) {
+// Vérification de la méthode de requête HTTP
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Vérification des données du formulaire
     if (
         isset($_POST['titre']) && !empty($_POST['titre'])
         && isset($_POST['description']) && !empty($_POST['description'])
@@ -39,31 +41,45 @@ if (isset($_POST)) {
         && isset($_POST['categorie']) && !empty($_POST['categorie'])
         && isset($_POST['statut']) && !empty($_POST['statut'])
     ) {
-        $titre = strip_tags($_POST['titre']);
-        $description = strip_tags($_POST['description']);
-        $article = strip_tags($_POST['article']);
-        $categorie = strip_tags($_POST['categorie']);
-        $statut = strip_tags($_POST['statut']);
+        // Nettoyage et récupération des données du formulaire
+        $titre = htmlspecialchars($_POST['titre']);
+        $description = htmlspecialchars($_POST['description']);
+        $article = htmlspecialchars($_POST['article']);
+        $categorie = htmlspecialchars($_POST['categorie']);
+        $statut = htmlspecialchars($_POST['statut']);
 
-        $sql = "INSERT INTO `infocarte` (`titre`, `description`, `article`, `categorie`, `statut`) VALUES (:titre, :description, :article, :categorie, :statut)";
+        // Requête SQL pour insérer un nouvel article dans la table infocarte
+        $sql = "INSERT INTO `infocarte` (`titre`, `description`, `article`, `categorie`, `statut`, `creerpar`) VALUES (:titre, :description, :article, :categorie, :statut, :user_id)";
 
-
+        // Préparation de la requête
         $query = $db->prepare($sql);
 
-        $query->bindValue(':titre', $titre, PDO::PARAM_STR);
-        $query->bindValue(':description', $description, PDO::PARAM_STR);
-        $query->bindValue(':article', $article, PDO::PARAM_STR);
-        $query->bindValue(':categorie', $categorie, PDO::PARAM_STR);
-        $query->bindValue(':statut', $statut, PDO::PARAM_STR);
+        // Liaison des paramètres
+        $query->bindParam(':titre', $titre, PDO::PARAM_STR);
+        $query->bindParam(':description', $description, PDO::PARAM_STR);
+        $query->bindParam(':article', $article, PDO::PARAM_STR);
+        $query->bindParam(':categorie', $categorie, PDO::PARAM_STR);
+        $query->bindParam(':statut', $statut, PDO::PARAM_STR);
+        $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 
+        // Exécution de la requête
         $query->execute();
+
+        // Redirection vers la page de blog avec un message de succès
         $_SESSION['message'] = "Produit ajouté avec succès !";
         header('Location: blog.php');
+        exit();
+    } else {
+        // Redirection vers la page de blog avec un message d'erreur si des champs sont manquants
+        $_SESSION['error'] = "Tous les champs doivent être remplis.";
+        header('Location: blog.php');
+        exit();
     }
 }
 
 require_once('close.php');
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
