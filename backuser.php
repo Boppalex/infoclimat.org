@@ -291,7 +291,7 @@ if ($logged_in) {
             <thead>
                 <tr>
                     <th id="titre"
-                        class="bgtabl px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                        class="bgtabl px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider" array_multisort()>
                         Titre <button onclick="sortTable('titre')">Trier</button>
                     </th>
                     <th class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
@@ -308,16 +308,17 @@ if ($logged_in) {
                 <?php foreach ($result as $carte): ?>
                     <tr class="bg-gray-100 hover:bg-gray-200">
                         <td class="p-4 ">
-                            <?= $carte['titre'] ?>
+                        <?= substr($carte['titre'], 0, 255) . (strlen($carte['titre']) > 255 ? '...' : '') ?>
                         </td>
                         <td class="p-4 ">
-                            <?= $carte['description'] ?>
+                            <?= substr($carte['description'], 0, 255) . (strlen($carte['description']) > 255 ? '...' : '') ?>
                         </td>
                         <td class="p-4 ">
-                            <?= $carte['article'] ?>
+                            <?= substr($carte['article'], 0, 255) . (strlen($carte['article']) > 255 ? '...' : '') ?>
+
                         </td>
                         <td class="p-4 ">
-                            <?= $carte['categorie'] ?>
+                        <?= substr($carte['categorie'], 0, 255) . (strlen($carte['categorie']) > 255 ? '...' : '') ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -332,10 +333,10 @@ if ($logged_in) {
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>
 </footer>
-<script>
+<!-- <script>
     function sortTable(columnName) {
         var table, rows, switching, i, x, y, shouldSwitch;
-        table = document.querySelector('table');
+        table = document.querySelector('table   ');
         switching = true;
         while (switching) {
             switching = false;
@@ -367,6 +368,6 @@ if ($logged_in) {
         }
         return -1;
     }
-</script>
+</script> -->
 
 </html>
