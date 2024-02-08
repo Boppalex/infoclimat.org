@@ -397,11 +397,11 @@ if ($logged_in) {
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
                         <div class="superposition-simple "><a href="api_carte.php">
                             <div class="texte-normal ">
-                                <div class="texte-original">Nous</div>
+                                <div class="texte-original">Carte</div>
                             </div>
                                 <div class="texte-hover "><img decoding="async" class="image-originale "
                                         src="Images/glace.png" />
-                                <div class="texte-original">Nous</div>
+                                <div class="texte-original">Carte</div>
                             </div>
                         </a></div>
                     </div>
