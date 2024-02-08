@@ -452,7 +452,7 @@ require_once('close.php');
 </body>
 
 </body>
-<footer class="p-4 w-full ">
+<footer class="p-4 w-full fixed bottom-0 ">
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
         Azoulay, Hugo Moreaux</p>

@@ -243,7 +243,7 @@ if ($logged_in) {
 
             <!-- Deuxième block -->
             <div class="bg-white p-4 rounded-lg shadow-md">
-                <img src="Images/ImageClimat.jpg" alt="Image 1" class="w-full h-100 object-cover mb-4 rounded-lg">
+                <img src="Images/nous.jpg" alt="Image 1" class="w-full h-100 object-cover mb-4 rounded-lg">
             </div>
 
             <!-- Troisième block -->
