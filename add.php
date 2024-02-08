@@ -1,46 +1,4 @@
-<?php
-session_start();
-require_once('connect.php');
 
-// Vérifier si l'utilisateur est connecté
-if (!isset($_SESSION["username"])) {
-    // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
-    header("Location: login.php");
-    exit();
-}
-if (isset($_POST)) {
-    if (
-        isset($_POST['titre']) && !empty($_POST['titre'])
-        && isset($_POST['description']) && !empty($_POST['description'])
-        && isset($_POST['article']) && !empty($_POST['article'])
-        && isset($_POST['categorie']) && !empty($_POST['categorie'])
-        && isset($_POST['statut']) && !empty($_POST['statut'])
-    ) {
-        $titre = strip_tags($_POST['titre']);
-        $description = strip_tags($_POST['description']);
-        $article = strip_tags($_POST['article']);
-        $categorie = strip_tags($_POST['categorie']);
-        $statut = strip_tags($_POST['statut']);
-
-        $sql = "INSERT INTO `infocarte` (`titre`, `description`, `article`, `categorie`, `statut`) VALUES (:titre, :description, :article, :categorie, :statut)";
-
-
-        $query = $db->prepare($sql);
-
-        $query->bindValue(':titre', $titre, PDO::PARAM_STR);
-        $query->bindValue(':description', $description, PDO::PARAM_STR);
-        $query->bindValue(':article', $article, PDO::PARAM_STR);
-        $query->bindValue(':categorie', $categorie, PDO::PARAM_STR);
-        $query->bindValue(':statut', $statut, PDO::PARAM_STR);
-
-        $query->execute();
-        $_SESSION['message'] = "Produit ajouté avec succès !";
-        header('Location: backend.php');
-    }
-}
-
-require_once('close.php');
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,55 +14,7 @@ require_once('close.php');
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
     <style>
-        footer {
-            background-color: #055634;
-            color: white;
-        }
 
-        .superposition-simple {
-            position: relative;
-            width: 100%;
-        }
-
-        .superposition-simple .image-originale {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
-
-        .superposition-simple .texte-original {
-            color: #fff;
-            font-size: 20px;
-            line-height: 1.5em;
-            text-shadow: 2px 2px 2px #000;
-            text-align: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-        }
-
-        .superposition-simple .texte-hover {
-            position: absolute;
-            top: 0;
-            height: 100%;
-            width: 100%;
-            opacity: 0;
-            transition: .5s ease;
-        }
-
-        .superposition-simple:hover .texte-normal {
-            opacity: 0;
-        }
-
-        .superposition-simple:hover .texte-hover {
-            opacity: 1;
-        }
-
-        .superposition-simple .texte-normal {
-            transition: .5s ease;
-        }
 
         .btn {
             --color2: #055634;
@@ -172,77 +82,49 @@ require_once('close.php');
         }
     </style>
 </head>
-<header
-    class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500"
-    style="background-image: url('Images/wave.png');">
-    <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
-        <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
-    </a>
+<?php
+include 'header.php';
+?>
 
-    <!-- Menu burger Bootstrap -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple  "><a href="accueil.php">
-                                <div class="texte-normal ">
-                                    <div class="texte-original ">Accueil</div>
-                                </div>
-                                <div class="texte-hover "><img decoding="async" class="image-originale "
-                                        src="Images/feuille.png" />
-                                    <div class="texte-original">Accueil</div>
-                                </div>
-                            </a></div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple "><a href="blog.php">
-                                <div class="texte-normal ">
-                                    <div class="texte-original">Blog</div>
-                                </div>
-                                <div class="texte-hover "><img decoding="async" class="image-originale "
-                                        src="Images/nuage.png" />
-                                    <div class="texte-original">Blog</div>
-                                </div>
-                            </a></div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple "><a href="quizz.php">
-                                <div class="texte-normal ">
-                                    <div class="texte-original">Quizz</div>
-                                </div>
-                                <div class="texte-hover "><img decoding="async" class="image-originale "
-                                        src="Images/soleil.png" />
-                                    <div class="texte-original">Quizz</div>
-                                </div>
-                            </a></div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
-                        <div class="superposition-simple "><a href="apropos.php">
-                                <div class="texte-normal ">
-                                    <div class="texte-original">À propos</div>
-                                </div>
-                                <div class="texte-hover "><img decoding="async" class="image-originale "
-                                        src="Images/glace.png" />
-                                    <div class="texte-original">À propos</div>
-                                </div>
-                            </a></div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
+<?php
+
+require_once('connect.php');
+
+// Vérifier si l'utilisateur est connecté
+
+if (isset($_POST)) {
+    if (
+        isset($_POST['titre']) && !empty($_POST['titre'])
+        && isset($_POST['description']) && !empty($_POST['description'])
+        && isset($_POST['article']) && !empty($_POST['article'])
+        && isset($_POST['categorie']) && !empty($_POST['categorie'])
+        && isset($_POST['statut']) && !empty($_POST['statut'])
+    ) {
+        $titre = strip_tags($_POST['titre']);
+        $description = strip_tags($_POST['description']);
+        $article = strip_tags($_POST['article']);
+        $categorie = strip_tags($_POST['categorie']);
+        $statut = strip_tags($_POST['statut']);
+
+        $sql = "INSERT INTO `infocarte` (`titre`, `description`, `article`, `categorie`, `statut`) VALUES (:titre, :description, :article, :categorie, :statut)";
+
+
+        $query = $db->prepare($sql);
+
+        $query->bindValue(':titre', $titre, PDO::PARAM_STR);
+        $query->bindValue(':description', $description, PDO::PARAM_STR);
+        $query->bindValue(':article', $article, PDO::PARAM_STR);
+        $query->bindValue(':categorie', $categorie, PDO::PARAM_STR);
+        $query->bindValue(':statut', $statut, PDO::PARAM_STR);
+
+        $query->execute();
+        $_SESSION['message'] = "Produit ajouté avec succès !";
+        header('Location: backend.php');
+    }
+}
+
+require_once('close.php');
+?>
 
 <body class="bg-gray-100">
     <div class="container">
@@ -299,7 +181,7 @@ require_once('close.php');
                 <input type="number" name="statut" id="statut" min="1" max="2"
                     class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
             </div>
-            <div class="flex flex-row">
+            <div class="flex flex-row gap-2">
                 <button type="submit">Enregistrer</button>
                 <button type="button" onclick="window.location.href='backend.php'">Retour</button>
             </div>
