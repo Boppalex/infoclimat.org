@@ -312,7 +312,7 @@ if ($logged_in) {
         <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
     </a>
 
-    <!-- Menu burger Bootstrap -->
+<!-- Menu burger Bootstrap ---------------------------------------------------------------------------------------------------------------------------------------------->
     <nav class="navbar navbar-expand-lg navbar-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -333,6 +333,7 @@ if ($logged_in) {
                             </a></div>
                     </div>
                 </li>
+<!-- Icône Blog --------------------------------------------------------------------------------------------------------------------------------------------------------------------->
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
                         <div class="superposition-simple "><a href="blog.php">
@@ -346,6 +347,7 @@ if ($logged_in) {
                             </a></div>
                     </div>
                 </li>
+<!-- Icône Quizz --------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
                         <div class="superposition-simple "><a href="quizz.php">
@@ -359,8 +361,8 @@ if ($logged_in) {
                             </a></div>
                     </div>
                 </li>
+<!-- Icône Carte ------------------------------------------------------------------------------------------------------------------------------------------------------------------->
                 <?php if ($logged_in && $is_admin != 1): ?>
-
                     <li class="nav-item">
                         <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
                             <div class="superposition-simple "><a href="backuser.php">
@@ -375,6 +377,7 @@ if ($logged_in) {
                         </div>
                     </li>
                 <?php endif; ?>
+<!-- Icône "Nous" ------------------------------------------------------------------------------------------------------------------------------------------------------------------------>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
                         <div class="superposition-simple "><a href="apropos.php">
@@ -388,8 +391,24 @@ if ($logged_in) {
                             </a></div>
                     </div>
                 </li>
-                <?php if ($logged_in && $is_admin === 1): ?>
 
+<!-- Icône Carte intéractive ------------------------------------------------------------------------------------>
+                <li class="nav-item">
+                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
+                        <div class="superposition-simple "><a href="api_carte.php">
+                            <div class="texte-normal ">
+                                <div class="texte-original">Nous</div>
+                            </div>
+                                <div class="texte-hover "><img decoding="async" class="image-originale "
+                                        src="Images/glace.png" />
+                                <div class="texte-original">Nous</div>
+                            </div>
+                        </a></div>
+                    </div>
+                </li>
+
+                <?php if ($logged_in && $is_admin === 1): ?>
+<!-- Back -------------------------------------------------------------------------------------->
                     <li class="nav-item">
                         <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
                             <div class="superposition-simple "><a href="backend.php">
