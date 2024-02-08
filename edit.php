@@ -10,7 +10,7 @@ if (isset($_POST)) {
         && isset($_POST['categorie']) && !empty($_POST['categorie'])
         && isset($_POST['statut']) && !empty($_POST['statut'])
     ) {
-        $id = strip_tags($_GET['id']);
+        $id = strip_tags($_POST['id']);
         $titre = strip_tags($_POST['titre']);
         $description = strip_tags($_POST['description']);
         $article = strip_tags($_POST['article']);
@@ -20,7 +20,6 @@ if (isset($_POST)) {
         $sql = "UPDATE `infocarte` SET `titre`=:titre, `description`=:description, `article`=:article, `categorie`=:categorie, `statut`=:statut WHERE `id`=:id;";
 
         $query = $db->prepare($sql);
-
 
         $query->bindValue(':titre', $titre, PDO::PARAM_STR);
         $query->bindValue(':description', $description, PDO::PARAM_STR);
@@ -37,7 +36,8 @@ if (isset($_POST)) {
 
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id = strip_tags($_GET['id']);
-    $sql = "SELECT * FROM `infocarte` WHERE `id`=:id;";
+    $sql = "SELECT infocarte.*, categorie.label as categorie_label, categorie.id as categorie_id  FROM infocarte JOIN categorie ON infocarte.categorie = categorie.id WHERE infocarte.id=:id;";
+   
 
     $query = $db->prepare($sql);
 
@@ -45,7 +45,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $query->execute();
 
     $result = $query->fetch();
-
 }
 
 require_once('close.php');
@@ -275,29 +274,31 @@ require_once('close.php');
             </div>
             <div class="mb-4">
                 <label for="categorie" class="block text-sm font-semibold">Catégorie</label>
-                <select name="categorie" id="categorie" class="w-full border p-2 rounded" <?= $result['categorie'] ?>
+                <select name="categorie" id="categorie" class="w-full border p-2 rounded">
                     <?php
                     try {
-                        $conn = new PDO("mysql:host=localhost;dbname=infoclimat", "root", "");
-                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                        $db = new PDO("mysql:host=localhost;dbname=infoclimat", "root", "");
+                        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                        // Récupération des catégories depuis la base de données
+                        $query = $db->query("SELECT * FROM categorie;");
+                        $categories = $query->fetchAll(PDO::FETCH_ASSOC);
+
+                        foreach ($categories as $category) {
+                            $selected = ($category['id'] == $result['categorie']) ? 'selected' : '';
+                            $idcat = $category['id'];
+                            $idlab = $category['label'];
+
+                            // Générer l'option pour chaque catégorie
+                            ?>
+                                <option <?= $idcat === $result["categorie_id"] ? "selected" : "" ?> value="<?= $idcat ?>" $selected><?= $idlab ?></option>
+                            <?php
+                        }
                     } catch (PDOException $e) {
                         echo "Connection failed: " . $e->getMessage();
                     }
-                    ?> <?php
-                     // Récupération des catégories depuis la base de données
-                     $query = $conn->query("SELECT `id` FROM `categorie`");
-                     $categories = $query->fetchAll(PDO::FETCH_COLUMN);
-
-
-                     // Génération des options pour le champ select
-                     foreach ($categories as $category) {
-                         $selected = ($category == $result['categorie']) ? 'selected' : '';
-                         var_dump($categories);
-                         echo "<option value=\"$category\" $selected>$category</option>";
-                     }
-
-                     ?>
-              </select>
+                    ?>
+                </select>
             </div>
             <div class="mb-4">
                 <label for="statut" class="block text-sm font-semibold">Statut</label>

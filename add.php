@@ -266,7 +266,8 @@ require_once('close.php');
                         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                         // Récupération des catégories depuis la base de données
-                        $query = $conn->query("SELECT `id` FROM `categorie`");
+                        $query = $conn->query("SELECT `label, id` FROM `categorie`");
+                        
                         $categories = $query->fetchAll(PDO::FETCH_COLUMN);
 
                         // Génération des options pour le champ select
