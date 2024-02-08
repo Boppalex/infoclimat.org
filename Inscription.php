@@ -60,7 +60,7 @@
                         //$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
                         // Préparation de la requête SQL pour insérer l'utilisateur dans la base de données
-                        $sql = "INSERT INTO utilisateur (nom, motpasse) VALUES (:username, :password)";
+                        $sql = "INSERT INTO utilisateur (nom, motpasse, isadmin) VALUES (:username, :password, 2)";
 
                         // Préparation de la requête
                         $query = $db->prepare($sql);
