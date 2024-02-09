@@ -1,7 +1,4 @@
 <?php
-
-
-
 // Connexion à la base de données
 require_once "connect.php";
 
@@ -19,13 +16,12 @@ if (isset($_GET['id'])) {
     $article_id = $_GET['id'];
 
     // Requête SQL pour récupérer les informations de l'article depuis la base de données
-    $sql = 'SELECT * FROM `infocarte` WHERE id = :article_id';
-
+    $sql = "SELECT infocarte.*, categorie.label as categorie_label, categorie.id as categorie_id  FROM infocarte JOIN categorie ON infocarte.categorie = categorie.id WHERE infocarte.id=:id;";
     // Préparation de la requête
     $query = $db->prepare($sql);
 
     // Liaison du paramètre :article_id avec la valeur de l'ID de l'article
-    $query->bindParam(':article_id', $article_id, PDO::PARAM_INT);
+    $query->bindParam(':id', $article_id, PDO::PARAM_INT);
 
     // Exécution de la requête
     $query->execute();
@@ -39,7 +35,7 @@ if (isset($_GET['id'])) {
         $article_title = $article['titre'];
         $article_description = $article['description'];
         $article_article = $article['article'];
-        $article_categorie = $article['categorie'];
+        $article_categorie = $article['categorie_label'];
         $article_image = $article['image'];
         $article_datecreation = $article['datecreation']; // Ajout de la date de création de l'article
     } else {
