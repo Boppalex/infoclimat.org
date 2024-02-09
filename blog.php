@@ -79,13 +79,15 @@ include 'header.php';
         <option value="">Toutes les catégories</option>
         
         <?php
-        $categoriesQuery = "SELECT DISTINCT categorie FROM infocarte";
+        $categoriesQuery = "SELECT DISTINCT categorie, categorie.label FROM infocarte INNER JOIN categorie ON infocarte.categorie = categorie.id";
+   
+        error_log($categoriesQuery);
         $categoriesResult = $mysqli->query($categoriesQuery);
 
 
         while ($categorieRow = $categoriesResult->fetch_assoc()) {
             $selected = ($categorie === $categorieRow['categorie']) ? 'selected' : '';
-            echo '<option value="' . $categorieRow['categorie'] . '" ' . $selected . '>' . $categorieRow['categorie'] . '</option>';
+            echo '<option value="' . $categorieRow['categorie'] . '" ' . $selected . '>' . $categorieRow['label'] . '</option>';
         }
         ?>
     </select>

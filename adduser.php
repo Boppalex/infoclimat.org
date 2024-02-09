@@ -161,21 +161,27 @@ require_once('close.php');
             </div>
             <div class="mb-4">
                 <label for="categorie" class="block text-gray-700 text-sm font-bold mb-2">Catégorie</label>
-                <select name="categorie" id="categorie"
-                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
+                <select name="categorie" id="categorie" class="w-full border p-2 rounded">
                     <?php
                     try {
-                        $conn = new PDO("mysql:host=localhost;dbname=infoclimat", "root", "");
-                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                        $db = new PDO("mysql:host=localhost;dbname=infoclimat", "root", "");
+                        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                         // Récupération des catégories depuis la base de données
-                        $query = $conn->query("SELECT `id` FROM `categorie`");
-                        $categories = $query->fetchAll(PDO::FETCH_COLUMN);
+                        $query = $db->query("SELECT * FROM categorie;");
+                        $categories = $query->fetchAll(PDO::FETCH_ASSOC);
 
-                        // Génération des options pour le champ select
                         foreach ($categories as $category) {
-                            $selected = ($category == $result['categorie']) ? 'selected' : '';
-                            echo "<option value=\"$category\" $selected>$category</option>";
+                            $selected = ($category['id'] == $result['categorie_id']) ? 'selected' : '';
+                            $idcat = $category['id'];
+                            $idlab = $category['label'];
+
+                            // Générer l'option pour chaque catégorie
+                            ?>
+                            <option <?= $selected ?> value="<?= $idcat ?>">
+                                <?= $idlab ?>
+                            </option>
+                            <?php
                         }
                     } catch (PDOException $e) {
                         echo "Connection failed: " . $e->getMessage();
@@ -197,8 +203,10 @@ require_once('close.php');
 </body>
 
 </body>
+
 <?php
 include('footer.php');
 ?>
+
 
 </html>

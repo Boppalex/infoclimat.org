@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -91,7 +89,14 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
         <h1 class="text-3xl" style="text-align: center; margin-top:50px;">Welcome,
             <?php echo $_SESSION["username"]; ?>!
         </h1>
-
+        <div class="container mt-4 mb-4">
+            <form action="" method="GET" class="form-inline justify-content-center">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Rechercher par titre" name="search">
+                </div>
+                <button type="submit" class="ml-3">Rechercher</button>
+            </form>
+        </div>
         <table style="border-collapse: separate; border-spacing: 10px;">
             <thead>
                 <th>ID</th>
