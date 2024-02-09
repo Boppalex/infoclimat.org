@@ -10,8 +10,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
+    <style>
+        button.btncat {
+            background-color: #055634;
+            color: white;
+        }
+    </style>
 </head>
+
+
+
 <?php
 include 'header.php';
 ?>
@@ -42,12 +50,12 @@ include 'header.php';
     }
 
     // Requête pour récupérer les informations de la table infocarte avec filtrage par catégorie
-    $query = "SELECT id, titre, description, article, categorie, statut, image FROM infocarte Where statut = '1'";
+    $query = "SELECT id, titre, description, article, categorie, statut, image FROM infocarte WHERE statut = '1'";
 
     // Ajouter le filtre de catégorie si une catégorie est sélectionnée
     if (!empty($categorie)) {
         // Utilisez la catégorie dans la clause WHERE de la requête
-        $query .= " WHERE categorie = '" . $mysqli->real_escape_string($categorie) . "'";
+        $query .= " AND categorie = '" . $mysqli->real_escape_string($categorie) . "'";
     }
 
     // Exécuter la requête
@@ -139,6 +147,7 @@ include 'header.php';
 
         <?php
     } else {
+        
         echo "Aucun résultat trouvé dans la base de données.";
     }
 
