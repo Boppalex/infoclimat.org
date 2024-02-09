@@ -12,7 +12,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Ajouter votre logique de validation ici
     if (validateCredentials($username, $password)) {
         // Si les informations d'identification sont valides, rediriger vers la page d'accueil
+        $userId = getUserId($username);
+        $_SESSION["user_id"] = $userId;
         $_SESSION["username"] = $username;
+        
         header("Location: accueil.php");
         exit();
     } else {
@@ -20,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errorMessage = "Invalid username or password";
     }
 }
+
 // Fonction de validation des informations d'identification avec interrogation de la base de données
 function validateCredentials($username, $password)
 {
@@ -27,11 +31,7 @@ function validateCredentials($username, $password)
     $dbHost = "localhost";
     $dbUser = "root";
     $dbPassword = "";
-
-
     $dbName = "infoclimat";
-
-
 
     // Connexion à la base de données
     $conn = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
@@ -40,8 +40,6 @@ function validateCredentials($username, $password)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-
-
 
     // Utilisation d'une requête préparée pour éviter les injections SQL
     $query = "SELECT * FROM utilisateur WHERE nom=? AND motpasse=?";
@@ -53,6 +51,7 @@ function validateCredentials($username, $password)
     if (!$stmt) {
         die("Error in preparing statement: " . $conn->error);
     }
+
     // Lier les paramètres
     $stmt->bind_param("ss", $username, $password);
 
@@ -64,13 +63,63 @@ function validateCredentials($username, $password)
 
     // Fermer la connexion à la base de données
     $stmt->close();
-
     $conn->close();
 
     // Vérifier si la requête a renvoyé une correspondance
     return ($result->num_rows > 0);
 }
+
+// Fonction pour récupérer l'ID de l'utilisateur
+function getUserId($username)
+{
+    // Remplacez ces informations par celles de votre base de données
+    $dbHost = "localhost";
+    $dbUser = "root";
+    $dbPassword = "";
+    $dbName = "infoclimat";
+
+    // Connexion à la base de données
+    $conn = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
+
+    // Vérifier la connexion
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Utilisation d'une requête préparée pour éviter les injections SQL
+    $query = "SELECT id FROM utilisateur WHERE nom=?";
+
+    // Préparer la requête
+    $stmt = $conn->prepare($query);
+
+    // Vérifier si la préparation a échoué
+    if (!$stmt) {
+        die("Error in preparing statement: " . $conn->error);
+    }
+
+    // Lier les paramètres
+    $stmt->bind_param("s", $username);
+
+    // Exécuter la requête
+    $stmt->execute();
+
+    // Récupérer le résultat
+    $result = $stmt->get_result();
+
+    // Fermer la connexion à la base de données
+    $stmt->close();
+    $conn->close();
+
+    // Récupérer l'ID de l'utilisateur s'il existe
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return $row["id"];
+    } else {
+        return null;
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
