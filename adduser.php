@@ -1,3 +1,67 @@
+
+<?php
+include('header.php');
+?>
+<?php
+
+require_once('connect.php');
+
+
+// Vérification de la méthode de requête HTTP
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Vérification des données du formulaire
+    if (
+        isset($_POST['titre']) && !empty($_POST['titre'])
+        && isset($_POST['description']) && !empty($_POST['description'])
+        && isset($_POST['article']) && !empty($_POST['article'])
+        && isset($_POST['categorie']) && !empty($_POST['categorie'])
+        && isset($_POST['statut']) && !empty($_POST['statut'])
+    ) {
+        // Nettoyage et récupération des données du formulaire
+        $titre = htmlspecialchars($_POST['titre']);
+        $description = htmlspecialchars($_POST['description']);
+        $article = htmlspecialchars($_POST['article']);
+        $categorie = htmlspecialchars($_POST['categorie']);
+        $statut = htmlspecialchars($_POST['statut']);
+        $user_id = $_SESSION['user_id'];
+
+        // Ajout de l'image
+        $image = $_FILES['image']['name'];
+        $image = file_get_contents($_FILES['image']['tmp_name']);
+
+        // Requête SQL pour insérer un nouvel article dans la table infocarte
+        $sql = "INSERT INTO `infocarte` (`titre`, `description`, `article`, `categorie`, `statut`, `image`, `creerpar`) VALUES (:titre, :description, :article, :categorie, :statut, :image, :user_id)";
+
+        // Préparation de la requête
+        $query = $db->prepare($sql);
+
+        // Liaison des paramètres
+        $query->bindParam(':titre', $titre, PDO::PARAM_STR);
+        $query->bindParam(':description', $description, PDO::PARAM_STR);
+        $query->bindParam(':article', $article, PDO::PARAM_STR);
+        $query->bindParam(':categorie', $categorie, PDO::PARAM_STR);
+        $query->bindParam(':statut', $statut, PDO::PARAM_STR);
+        $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $query->bindValue(':image', $image, PDO::PARAM_STR);
+        $query->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+
+        // Exécution de la requête
+        $query->execute();
+
+        // Redirection vers la page de blog avec un message de succès
+        $_SESSION['message'] = "Produit ajouté avec succès !";
+        exit();
+    } else {
+        // Redirection vers la page de blog avec un message d'erreur si des champs sont manquants
+        $_SESSION['error'] = "Tous les champs doivent être remplis.";
+        header('Location: blog.php');
+        exit();
+    }
+}
+
+require_once('close.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,60 +144,11 @@
         }
     </style>
 </head>
-<?php
-include 'header.php';
-?>
 
-<?php
-
-require_once('connect.php');
-
-// Vérifier si l'utilisateur est connecté
-
-if (isset($_POST)) {
-    if (
-        isset($_POST['titre']) && !empty($_POST['titre'])
-        && isset($_POST['description']) && !empty($_POST['description'])
-        && isset($_POST['article']) && !empty($_POST['article'])
-        && isset($_POST['categorie']) && !empty($_POST['categorie'])
-        && isset($_POST['statut']) && !empty($_POST['statut'])
-    ) {
-        $titre = strip_tags($_POST['titre']);
-        $description = strip_tags($_POST['description']);
-        $article = strip_tags($_POST['article']);
-        $categorie = strip_tags($_POST['categorie']);
-        $statut = strip_tags($_POST['statut']);
-        $user_id = $_SESSION['user_id'];
-
-        // Ajout de l'image
-        $image = $_FILES['image']['name'];
-        $image = file_get_contents($_FILES['image']['tmp_name']);
-
-        $sql = "INSERT INTO `infocarte` (`titre`, `description`, `article`, `categorie`, `statut`, `image`, `creerpar`) VALUES (:titre, :description, :article, :categorie, :statut, :image, :user_id)";
-
-
-        $query = $db->prepare($sql);
-
-        $query->bindValue(':titre', $titre, PDO::PARAM_STR);
-        $query->bindValue(':description', $description, PDO::PARAM_STR);
-        $query->bindValue(':article', $article, PDO::PARAM_STR);
-        $query->bindValue(':categorie', $categorie, PDO::PARAM_STR);
-        $query->bindValue(':statut', $statut, PDO::PARAM_STR);
-        $query->bindValue(':image', $image, PDO::PARAM_STR);
-        $query->bindValue(':user_id', $user_id, PDO::PARAM_STR);
-
-        $query->execute();
-        $_SESSION['message'] = "Produit ajouté avec succès !";
-        
-    }
-}
-
-require_once('close.php');
-?>
 
 <body class="bg-gray-100">
     <div class="container">
-        <form method="post" class="max-w-md mx-auto my-8 p-6 bg-white rounded shadow-md" enctype="multipart/form-data">
+    <form method="post" class="max-w-md mx-auto my-8 p-6 bg-white rounded shadow-md" enctype="multipart/form-data">
             <div class="mb-4">
                 <label for="titre" class="block text-gray-700 text-sm font-bold mb-2">Titre</label>
                 <input type="text" name="titre" id="titre"
@@ -151,7 +166,7 @@ require_once('close.php');
                     rows="6"></textarea>
             </div>
             <div class="mb-4">
-                <label for="categorie" class="block text-sm font-semibold">Catégorie</label>
+                <label for="categorie" class="block text-gray-700 text-sm font-bold mb-2">Catégorie</label>
                 <select name="categorie" id="categorie" class="w-full border p-2 rounded">
                     <?php
                     try {
@@ -180,10 +195,9 @@ require_once('close.php');
                     ?>
                 </select>
             </div>
-
-            <div class="mb-4">
+            <div class="mb-4 hidden">
                 <label for="statut" class="block text-gray-700 text-sm font-bold mb-2">Statut</label>
-                <input type="number" name="statut" id="statut" min="1" max="2"
+                <input type="number" name="statut" id="statut" min="2" max="2" value="2" readonly
                     class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
             </div>
             <div class="mb-4">
@@ -191,16 +205,19 @@ require_once('close.php');
                 <input type="file" name="image" id="image"
                     class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
             </div>
-            <div class="flex flex-row gap-2">
+            <div class="flex flex-row">
                 <button type="submit">Enregistrer</button>
-                <button type="button" onclick="window.location.href='backend.php'">Retour</button>
+                <button type="button" onclick="window.location.href='blog.php'">Retour</button>
             </div>
         </form>
     </div>
 </body>
 
+</body>
+
 <?php
-include 'footer.php';
+include('footer.php');
 ?>
+
 
 </html>

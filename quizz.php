@@ -12,10 +12,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <style>
-    body {
-      text-align: center;
-    }
-
+    
     .quiz-container {
       max-width: 1100px;
       margin: 0 auto;
@@ -84,127 +81,11 @@
       font-weight: bold;
     }
 
-    footer {
-      background-color: #055634;
-      color: white;
-      margin-top: auto;
-    }
-
-    .superposition-simple {
-      position: relative;
-      width: 100%;
-    }
-
-    .superposition-simple .image-originale {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    .superposition-simple .texte-original {
-      color: #fff;
-      font-size: 20px;
-      line-height: 1.5em;
-      text-shadow: 2px 2px 2px #000;
-      text-align: center;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%;
-    }
-
-    .superposition-simple .texte-hover {
-      position: absolute;
-      top: 0;
-      height: 100%;
-      width: 100%;
-      opacity: 0;
-      transition: .5s ease;
-    }
-
-    .superposition-simple:hover .texte-normal {
-      opacity: 0;
-    }
-
-    .superposition-simple:hover .texte-hover {
-      opacity: 1;
-    }
-
-    .superposition-simple .texte-normal {
-      transition: .5s ease;
-    }
   </style>
 </head>
-<header
-  class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500"
-  style="background-image: url('Images/wave.png');">
-  <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
-    <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
-  </a>
-
-  <!-- Menu burger Bootstrap -->
-  <nav class="navbar navbar-expand-lg navbar-light">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item active">
-
-          <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-            <div class="superposition-simple  "><a href="accueil.php">
-                <div class="texte-normal ">
-                  <div class="texte-original ">Accueil</div>
-                </div>
-                <div class="texte-hover "><img decoding="async" class="image-originale " src="Images/feuille.png" />
-                  <div class="texte-original">Accueil</div>
-                </div>
-              </a></div>
-          </div>
-        </li>
-        <li class="nav-item">
-          <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-            <div class="superposition-simple "><a href="blog.php">
-                <div class="texte-normal ">
-                  <div class="texte-original">Blog</div>
-                </div>
-                <div class="texte-hover "><img decoding="async" class="image-originale " src="Images/nuage.png" />
-                  <div class="texte-original">Blog</div>
-                </div>
-              </a></div>
-          </div>
-        </li>
-        <li class="nav-item">
-          <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-            <div class="superposition-simple "><a href="quizz.php">
-                <div class="texte-normal ">
-                  <div class="texte-original">Quizz</div>
-                </div>
-                <div class="texte-hover "><img decoding="async" class="image-originale " src="Images/soleil.png" />
-                  <div class="texte-original">Quizz</div>
-                </div>
-              </a></div>
-          </div>
-        </li>
-        <li class="nav-item">
-          <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
-            <div class="superposition-simple "><a href="apropos.php">
-                <div class="texte-normal ">
-                  <div class="texte-original">À propos</div>
-                </div>
-                <div class="texte-hover "><img decoding="async" class="image-originale " src="Images/glace.png" />
-                  <div class="texte-original">À propos</div>
-                </div>
-              </a></div>
-
-          </div>
-        </li>
-      </ul>
-    </div>
-  </nav>
-</header>
+<?php
+include 'header.php';
+?>
 
 <body class="bg-gray-100 ">
   <div class="contenu container">
@@ -214,7 +95,9 @@
     <div class="bg-gray-100 quiz-container ">
       <div id="questions"></div>
       <div id="message" class="message"></div>
+      </br>
       <button onclick="checkAnswers()">Vérifier</button>
+      </br>
       </br>
       <button id="restartButton" style="display: none;" onclick="restartQuiz()">Recommencer</button>
     </div>
@@ -289,6 +172,18 @@
           questionElement.appendChild(optionsElement);
           questionsElement.appendChild(questionElement);
         });
+
+      // Ajoutez un gestionnaire d'événements à toutes les cases à cocher
+      document.querySelectorAll('input[type="radio"]').forEach(function(checkbox) {
+          checkbox.addEventListener('change', function() {
+              // Recherchez l'élément de la page suivant la question actuelle
+              var nextQuestion = this.closest('.question').nextElementSibling;
+              if (nextQuestion) {
+                  // Faites défiler la page automatiquement vers la question suivante
+                  nextQuestion.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+          });
+      });
       }
 
       let errorMessageDisplayed = false;
@@ -298,8 +193,10 @@
         const messageElement = document.getElementById("message");
         const restartButton = document.getElementById("restartButton");
         selectedAnswers = [];
-        let hasErrors = false;
-        let allRadiosUnchecked = true;
+        let errorCount = 0; // Ajoutez une variable pour compter le nombre d'erreurs
+
+        // Vérifie si au moins une question n'a pas de réponse sélectionnée
+        let allQuestionsAnswered = true;
 
         // Réinitialise le contenu du message à chaque vérification
         messageElement.innerText = "";
@@ -311,38 +208,43 @@
         questionsElement.querySelectorAll('.options').forEach((options, questionIndex) => {
           const radio = options.querySelector('input[type="radio"]:checked');
 
-          if (radio) {
-            allRadiosUnchecked = false;
+          if (!radio) {
+            allQuestionsAnswered = false;
+            return;  // Sort de la boucle si une question n'a pas de réponse
+          }
 
-            const userAnswer = radio.value;
-            selectedAnswers.push({ questionIndex, userAnswer });
+          const userAnswer = radio.value;
+          selectedAnswers.push({ questionIndex, userAnswer });
 
-            const correctAnswer = quizData[questionIndex].reponses.find(r => r.estcorrect === "1");
+          const correctAnswer = quizData[questionIndex].reponses.find(r => r.estcorrect === "1");
 
-            if (correctAnswer) {
-              const isCorrect = userAnswer === correctAnswer.texte;
+          if (correctAnswer) {
+            const isCorrect = userAnswer === correctAnswer.texte;
 
-              if (!isCorrect) {
-                hasErrors = true;
-                const questionElement = options.previousElementSibling;
-                const errorText = document.createElement("div");
-                errorText.classList.add("error");
-                errorText.innerText = "Erreur dans la réponse. La bonne réponse était : " + correctAnswer.texte;
-                questionElement.appendChild(errorText);
-              }
-
-              options.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
-            } else {
-              console.error("Réponse correcte non trouvée pour la question " + questionIndex);
+            if (!isCorrect) {
+              errorCount++; // Incrémente le compteur d'erreurs
+              const questionElement = options.previousElementSibling;
+              const errorText = document.createElement("div");
+              errorText.classList.add("error");
+              errorText.innerText = "Erreur dans la réponse. La bonne réponse était : " + correctAnswer.texte;
+              questionElement.appendChild(errorText);
             }
+
+            options.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = true);
+          } else {
+            console.error("Réponse correcte non trouvée pour la question " + questionIndex);
           }
         });
 
-        if (allRadiosUnchecked && !errorMessageDisplayed) {
-          messageElement.innerText = "Veuillez sélectionner au moins une réponse avant de vérifier.";
+        // Affiche le message si au moins une question n'a pas de réponse
+        if (!allQuestionsAnswered && !errorMessageDisplayed) {
+          messageElement.innerText = "Veuillez répondre à toutes les questions avant de vérifier.";
           errorMessageDisplayed = true;
-        } else if (hasErrors && !errorMessageDisplayed) {
-          messageElement.innerText = "Certains éléments sont incorrects. Veuillez vérifier les erreurs.";
+          return;
+        }
+
+        if (errorCount > 0 && !errorMessageDisplayed) {
+          messageElement.innerText = "Il y a " + errorCount + " erreur(s). Veuillez vérifier les erreurs.";
           restartButton.style.display = "inline"; // Affichez le bouton "Recommencer"
           errorMessageDisplayed = true;
         } else if (!errorMessageDisplayed) {
@@ -371,7 +273,12 @@
 
         // Cachez le bouton "Recommencer"
         restartButton.style.display = "none";
-      }
+
+
+    // Défilez vers le haut de la page
+    window.scrollTo(0, 0);   
+}
+
 
       function arraysEqual(arr1, arr2) {
         if (arr1.length !== arr2.length) return false;
@@ -390,11 +297,9 @@
   </div>
 
 </body>
-
-<footer class="p-4 w-full fixed bottom-0">
-  <p class="flex justify-center">@SIO2Groupe2</p>
-  <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
-    Azoulay, Hugo Moreaux</p>
-</footer>
+</br>
+<?php
+include 'footer.php';
+?>
 
 </html>

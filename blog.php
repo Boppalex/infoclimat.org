@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,137 +12,19 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
     <style>
-        footer {
-            background-color: #055634;
-            color: white;
-        }
-
-        .superposition-simple {
-            position: relative;
-            width: 100%;
-        }
-
-        .superposition-simple .image-originale {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
-
-        .superposition-simple .texte-original {
-            color: #fff;
-            font-size: 20px;
-            line-height: 1.5em;
-            text-shadow: 2px 2px 2px #000;
-            text-align: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-        }
-
-        .superposition-simple .texte-hover {
-            position: absolute;
-            top: 0;
-            height: 100%;
-            width: 100%;
-            opacity: 0;
-            transition: .5s ease;
-        }
-
-        .superposition-simple:hover .texte-normal {
-            opacity: 0;
-        }
-
-        .superposition-simple:hover .texte-hover {
-            opacity: 1;
-        }
-
-        .superposition-simple .texte-normal {
-            transition: .5s ease;
-        }
-
         .btncat {
             background-color: #055634;
         }
     </style>
 
 </head>
-<header
-    class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500"
-    style="background-image: url('Images/wave.png');">
-    <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
-        <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
-    </a>
-
-    <!-- Menu burger Bootstrap -->
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple  "><a href="accueil.php">
-                                <div class="texte-normal ">
-                                    <div class="texte-original ">Accueil</div>
-                                </div>
-                                <div class="texte-hover "><img decoding="async" class="image-originale "
-                                        src="Images/feuille.png" />
-                                    <div class="texte-original">Accueil</div>
-                                </div>
-                            </a></div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple "><a href="blog.php">
-                                <div class="texte-normal ">
-                                    <div class="texte-original">Blog</div>
-                                </div>
-                                <div class="texte-hover "><img decoding="async" class="image-originale "
-                                        src="Images/nuage.png" />
-                                    <div class="texte-original">Blog</div>
-                                </div>
-                            </a></div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
-                        <div class="superposition-simple "><a href="quizz.php">
-                                <div class="texte-normal ">
-                                    <div class="texte-original">Quizz</div>
-                                </div>
-                                <div class="texte-hover "><img decoding="async" class="image-originale "
-                                        src="Images/soleil.png" />
-                                    <div class="texte-original">Quizz</div>
-                                </div>
-                            </a></div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
-                        <div class="superposition-simple "><a href="apropos.php">
-                                <div class="texte-normal ">
-                                    <div class="texte-original">À propos</div>
-                                </div>
-                                <div class="texte-hover "><img decoding="async" class="image-originale "
-                                        src="Images/glace.png" />
-                                    <div class="texte-original">À propos</div>
-                                </div>
-                            </a></div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
+<?php
+include 'header.php';
+?>
 
 <body class="bg-gray-100">
     <div>
-        
+
     </div>
     <?php
     // Connexion à la base de données
@@ -151,6 +34,9 @@
     if ($mysqli->connect_error) {
         die("La connexion à la base de données a échoué : " . $mysqli->connect_error);
     }
+
+    // Format
+    $mysqli->set_charset("utf8");
 
     // Initialiser la variable de catégorie
     $categorie = '';
@@ -162,12 +48,12 @@
     }
 
     // Requête pour récupérer les informations de la table infocarte avec filtrage par catégorie
-    $query = "SELECT id, titre, description, article, categorie, statut, image FROM infocarte";
+    $query = "SELECT id, titre, description, article, categorie, statut, image FROM infocarte Where statut = '1'";
 
     // Ajouter le filtre de catégorie si une catégorie est sélectionnée
     if (!empty($categorie)) {
         // Utilisez la catégorie dans la clause WHERE de la requête
-        $query .= " WHERE categorie = '" . $mysqli->real_escape_string($categorie) . "'";
+        $query .= " AND categorie = '" . $mysqli->real_escape_string($categorie) . "'";
     }
 
     // Exécuter la requête
@@ -186,24 +72,28 @@
                     <h1>Notre Blog :</h1>
                 </div>
 
-                <form method="post" class="mb-4 justify-center flex">
-                    <label for="categorie">Filtrer par catégorie :</label>
-                    <select name="categorie" id="categorie" class="border rounded p-1">
-                        <option value="">Toutes les catégories</option>
-                        
-                        <?php
 
-                        $categoriesQuery = "SELECT DISTINCT categorie FROM infocarte";
-                        $categoriesResult = $mysqli->query($categoriesQuery);
+                <form method="post" class="mb-4 flex items-center justify-center">
+    <label for="categorie" class="mr-2">Filtrer par catégorie :</label>  
+    <select name="categorie" id="categorie" class="border rounded p-1 mr-2" style="margin-top: -3px;">
+        <option value="">Toutes les catégories</option>
+        
+        <?php
+        $categoriesQuery = "SELECT DISTINCT categorie, categorie.label FROM infocarte INNER JOIN categorie ON infocarte.categorie = categorie.id";
+   
+        error_log($categoriesQuery);
+        $categoriesResult = $mysqli->query($categoriesQuery);
 
 
-                        while ($categorieRow = $categoriesResult->fetch_assoc()) {
-                            echo '<option value="' . $categorieRow['categorie'] . '">' . $categorieRow['categorie'] . '</option>';
-                        }
-                        ?>
-                    </select>
-                    <button type="submit" class="btncat text-white px-2 py-1 rounded ml-2">Filtrer</button>
-                </form>
+        while ($categorieRow = $categoriesResult->fetch_assoc()) {
+            $selected = ($categorie === $categorieRow['categorie']) ? 'selected' : '';
+            echo '<option value="' . $categorieRow['categorie'] . '" ' . $selected . '>' . $categorieRow['label'] . '</option>';
+        }
+        ?>
+    </select>
+    <button type="submit" class="btncat text-white px-2 py-1 rounded" style="margin-top: -3px;">Filtrer</button>
+</form>
+
 
                 <div
                     class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:grid-rows-2  gap-8">
@@ -235,10 +125,12 @@
                                 </div>
 
                                 <div class="boutonvalidation p-2 justify-end flex">
-                                    <button
-                                        class="px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
-                                        <a href="#" class="text-black hover:text-white text-sm">En savoir plus</a>
-                                    </button>
+                                    <div class="boutonvalidation p-2 justify-end flex">
+                                        <a href="article.php?id=<?php echo $row['id']; ?>"
+                                            class="bg-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
+                                            <span class="text-black text-sm">En savoir plus</span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -246,8 +138,13 @@
                     }
                     ?>
                 </div>
+                
             </div>
-        </body>
+            <div class= "justify-center flex pb-8">
+<button type="submit" class="btncat text-white px-2 py-1 rounded ml-2 centered-button" onclick="window.location.href = 'adduser.php';">Créer un article</button>
+            </div>
+
+
         <?php
     } else {
         echo "Aucun résultat trouvé dans la base de données.";
@@ -258,10 +155,8 @@
     ?>
 
 </body>
-<footer class=" p-4  w-full">
-    <p class="flex justify-center">@SIO2Groupe2</p>
-    <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
-        Azoulay, Hugo Moreaux</p>
-</footer>
+<?php
+include 'footer.php';
+?>
 
 </html>

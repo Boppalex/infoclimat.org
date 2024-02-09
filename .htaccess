@@ -1,19 +1,22 @@
 RewriteEngine On
 
-# Rediriger l'accueil.php vers /home
+# Rediriger accueil.php vers /home
 RewriteRule ^home$ accueil.php [L]
 
-# Rediriger le login.php vers /login
+# Rediriger login.php vers /login
 RewriteRule ^login$ login.php [L]
 
-# Rediriger le backend.php vers /admin
+# Rediriger backend.php vers /admin
 RewriteRule ^admin$ backend.php [L]
 
-# Rediriger le backend.php vers /blog
+# Rediriger blog.php vers /blog
 RewriteRule ^blog$ blog.php [L]
 
-# Rediriger le backend.php vers /nous
-RewriteRule ^blog$ apropos.php [L]
+# Rediriger backend.php vers /nous
+RewriteRule ^nous$ apropos.php [L]
 
-# Rediriger le backend.php vers /quizz
+# Rediriger quizz.php vers /quizz
 RewriteRule ^quizz$ quizz.php [L]
+
+# Définir acceuil.php comme la page par défaut
+DirectoryIndex accueil.php
