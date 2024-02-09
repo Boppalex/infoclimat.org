@@ -274,11 +274,9 @@ include 'header.php';
         // Cachez le bouton "Recommencer"
         restartButton.style.display = "none";
 
-
     // Défilez vers le haut de la page
     window.scrollTo(0, 0);   
 }
-
 
       function arraysEqual(arr1, arr2) {
         if (arr1.length !== arr2.length) return false;

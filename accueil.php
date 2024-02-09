@@ -37,7 +37,7 @@ include 'header.php';
     $mysqli->set_charset("utf8");
 
     // Requête pour récupérer les trois cartes les plus récentes de la table infocarte
-    $result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, image FROM infocarte ");
+    $result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, pays, image FROM infoswiper");
 
     // Vérification s'il y a des résultats
     if ($result->num_rows > 0) {
@@ -63,7 +63,7 @@ include 'header.php';
                             ?>
                             <div class="testclass rainy swiper-slide relative border-2 bg-gray-100 rounded-2xl p-4  shadow-lg">
                                 <div class="image1 relative h-64">
-                                    <a href="#">
+                                    <a href="article_catastrophe.php?id=<?php echo $row['id']; ?>">
                                         <?php
                                         if (empty($row['image'])) {
                                             // Afficher l'image par défaut si la colonne "image" est vide
@@ -237,11 +237,47 @@ include 'header.php';
 
 </body>
 
-<div class="cookie-container">
-    <p>En visitant ce site web, vous acceptez notre politique d'utilisation des cookies. <a href="Images/louis.jpg">En
-            savoir plus</a>.</p>
-    <button class="accept-cookies-btn">Accepter tous les cookies</button>
+
+
+
+=======
+<div class="cookie-container" id="cookieContainer">
+  <p>En visitant ce site web, vous acceptez notre politique d'utilisation des cookies. <a href="Images/louis.jpg">En savoir plus</a>.</p>
+  <button class="accept-cookies-btn" id="acceptCookiesBtn">Accepter tous les cookies</button>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var cookieContainer = document.getElementById('cookieContainer');
+  var acceptCookiesBtn = document.getElementById('acceptCookiesBtn');
+  
+  // Vérifier si le cookie 'cookiesAccepted' existe
+  if (getCookie('cookiesAccepted')) {
+    // Masquer le conteneur de cookies s'il a déjà été accepté
+    cookieContainer.style.display = 'none';
+  }
+  
+  // Ajouter un écouteur d'événement au bouton pour créer le cookie
+  acceptCookiesBtn.addEventListener('click', function() {
+    // Créer un cookie qui expire dans 365 jours
+    document.cookie = 'cookiesAccepted=true; expires=' + new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000).toUTCString() + '; path=/';
+    // Masquer le conteneur de cookies après avoir accepté
+    cookieContainer.style.display = 'none';
+  });
+});  
+
+// Fonction pour récupérer la valeur d'un cookie par son nom
+function getCookie(name) {
+  var cookies = document.cookie.split(';');
+  for (var i = 0; i < cookies.length; i++) {
+    var cookie = cookies[i].trim();
+    if (cookie.indexOf(name + '=') === 0) {
+      return cookie.substring(name.length + 1);
+    }
+  }
+  return null;
+}
+</script>
 
 <?php
 include 'footer.php';
