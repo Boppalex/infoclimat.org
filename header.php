@@ -223,7 +223,7 @@ if ($logged_in) {
         }
     </style>
     <script type="text/javascript">
-
+        
         document.addEventListener("keydown", function (event) {
             // Vérifier si la touche Ctrl (ou Commande sur Mac) est enfoncée et la touche 9 est pressée
             if ((event.ctrlKey || event.metaKey) && event.key === "9") {
@@ -357,7 +357,7 @@ if ($logged_in) {
 </head>
 <header
     class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500">
-    <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
+    <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2 ">
         <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
     </a>
 
@@ -367,7 +367,7 @@ if ($logged_in) {
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="collapse navbar-collapse " id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">

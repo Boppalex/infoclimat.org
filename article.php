@@ -154,10 +154,10 @@ include 'header.php';
 
                         <div class="flex flex-col sm:flex-row gap-2">
                             <button type="submit"
-                                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Envoyer</button>
+                                class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600">Envoyer</button>
 
                             <button id="toggleButton"
-                                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Trier</button>
+                                class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600">Trier</button>
 
                         </div>
                     </form>
