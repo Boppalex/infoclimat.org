@@ -286,6 +286,7 @@ $result = $mysqli->query($query);
                 </div>
 
                 <form method="post" class="mb-4 flex items-center justify-center">
+
                 <label for="categorie" class="mr-2">Filtrer par catégorie :</label>  
         <select name="categorie" id="categorie" class="border rounded p-1 mr-2" style="margin-top: -3px;">
             <option value="">Toutes les catégories</option>
