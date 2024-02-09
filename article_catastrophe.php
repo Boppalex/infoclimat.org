@@ -1,4 +1,7 @@
+
 <?php
+include 'header.php';
+
 // Connexion à la base de données
 require_once "connect.php";
 
@@ -122,11 +125,16 @@ if (isset($_GET['id'])) {
                 </div>
             </div>
 
-
+            <div class="mt-8">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2677.6248912325027!2d2.024501576823527!3d47.846859871354965!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e51d8afbda55d5%3A0x3f7ab15696bf7746!2s473%20Rte%20d&#39;Orl%C3%A9ans%2C%2045640%20Sandillon!5e0!3m2!1sfr!2sfr!4v1707490827292!5m2!1sfr!2sfr"  style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="w-full h-72"></iframe>
+            </div>
 
         </div>
     </div>
 
 </body>
+<?php
 
+include 'footer.php';
+?>
 </html>
