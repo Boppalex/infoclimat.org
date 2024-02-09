@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -105,8 +103,13 @@ if (isset($_POST)) {
         $article = strip_tags($_POST['article']);
         $categorie = strip_tags($_POST['categorie']);
         $statut = strip_tags($_POST['statut']);
+        $user_id = $_SESSION['user_id'];
 
-        $sql = "INSERT INTO `infocarte` (`titre`, `description`, `article`, `categorie`, `statut`) VALUES (:titre, :description, :article, :categorie, :statut)";
+        // Ajout de l'image
+        $image = $_FILES['image']['name'];
+        $image = file_get_contents($_FILES['image']['tmp_name']);
+
+        $sql = "INSERT INTO `infocarte` (`titre`, `description`, `article`, `categorie`, `statut`, `image`, `creerpar`) VALUES (:titre, :description, :article, :categorie, :statut, :image, :user_id)";
 
 
         $query = $db->prepare($sql);
@@ -116,10 +119,12 @@ if (isset($_POST)) {
         $query->bindValue(':article', $article, PDO::PARAM_STR);
         $query->bindValue(':categorie', $categorie, PDO::PARAM_STR);
         $query->bindValue(':statut', $statut, PDO::PARAM_STR);
+        $query->bindValue(':image', $image, PDO::PARAM_STR);
+        $query->bindValue(':user_id', $user_id, PDO::PARAM_STR);
 
         $query->execute();
         $_SESSION['message'] = "Produit ajouté avec succès !";
-        header('Location: backend.php');
+        
     }
 }
 
@@ -128,7 +133,7 @@ require_once('close.php');
 
 <body class="bg-gray-100">
     <div class="container">
-        <form method="post" class="max-w-md mx-auto my-8 p-6 bg-white rounded shadow-md">
+        <form method="post" class="max-w-md mx-auto my-8 p-6 bg-white rounded shadow-md" enctype="multipart/form-data">
             <div class="mb-4">
                 <label for="titre" class="block text-gray-700 text-sm font-bold mb-2">Titre</label>
                 <input type="text" name="titre" id="titre"
@@ -179,6 +184,11 @@ require_once('close.php');
             <div class="mb-4">
                 <label for="statut" class="block text-gray-700 text-sm font-bold mb-2">Statut</label>
                 <input type="number" name="statut" id="statut" min="1" max="2"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
+            </div>
+            <div class="mb-4">
+                <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Image</label>
+                <input type="file" name="image" id="image"
                     class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
             </div>
             <div class="flex flex-row gap-2">

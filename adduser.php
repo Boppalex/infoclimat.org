@@ -23,9 +23,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $article = htmlspecialchars($_POST['article']);
         $categorie = htmlspecialchars($_POST['categorie']);
         $statut = htmlspecialchars($_POST['statut']);
+        $user_id = $_SESSION['user_id'];
+
+        // Ajout de l'image
+        $image = $_FILES['image']['name'];
+        $image = file_get_contents($_FILES['image']['tmp_name']);
 
         // Requête SQL pour insérer un nouvel article dans la table infocarte
-        $sql = "INSERT INTO `infocarte` (`titre`, `description`, `article`, `categorie`, `statut`, `creerpar`) VALUES (:titre, :description, :article, :categorie, :statut, :user_id)";
+        $sql = "INSERT INTO `infocarte` (`titre`, `description`, `article`, `categorie`, `statut`, `image`, `creerpar`) VALUES (:titre, :description, :article, :categorie, :statut, :image, :user_id)";
 
         // Préparation de la requête
         $query = $db->prepare($sql);
@@ -37,13 +42,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $query->bindParam(':categorie', $categorie, PDO::PARAM_STR);
         $query->bindParam(':statut', $statut, PDO::PARAM_STR);
         $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $query->bindValue(':image', $image, PDO::PARAM_STR);
+        $query->bindValue(':user_id', $user_id, PDO::PARAM_STR);
 
         // Exécution de la requête
         $query->execute();
 
         // Redirection vers la page de blog avec un message de succès
         $_SESSION['message'] = "Produit ajouté avec succès !";
-        header('Location: blog.php');
         exit();
     } else {
         // Redirection vers la page de blog avec un message d'erreur si des champs sont manquants
@@ -142,7 +148,7 @@ require_once('close.php');
 
 <body class="bg-gray-100">
     <div class="container">
-        <form method="post" class="max-w-md mx-auto my-8 p-6 bg-white rounded shadow-md">
+    <form method="post" class="max-w-md mx-auto my-8 p-6 bg-white rounded shadow-md" enctype="multipart/form-data">
             <div class="mb-4">
                 <label for="titre" class="block text-gray-700 text-sm font-bold mb-2">Titre</label>
                 <input type="text" name="titre" id="titre"
@@ -192,6 +198,11 @@ require_once('close.php');
             <div class="mb-4 hidden">
                 <label for="statut" class="block text-gray-700 text-sm font-bold mb-2">Statut</label>
                 <input type="number" name="statut" id="statut" min="2" max="2" value="2" readonly
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
+            </div>
+            <div class="mb-4">
+                <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Image</label>
+                <input type="file" name="image" id="image"
                     class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
             </div>
             <div class="flex flex-row">

@@ -53,7 +53,7 @@ include 'header.php';
     // Ajouter le filtre de catégorie si une catégorie est sélectionnée
     if (!empty($categorie)) {
         // Utilisez la catégorie dans la clause WHERE de la requête
-        $query .= " WHERE categorie = '" . $mysqli->real_escape_string($categorie) . "'";
+        $query .= " AND categorie = '" . $mysqli->real_escape_string($categorie) . "'";
     }
 
     // Exécuter la requête
