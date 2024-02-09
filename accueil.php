@@ -74,7 +74,7 @@ include 'header.php';
                                             $imageType = "image/jpeg"; // Ajustez selon le type d'image dans votre base de données
                                 
                                             // Affichage de l'image
-                                            echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="Image ' . $row['id'] . '" class="w-full h-full object-cover rounded-2xl">';
+                                            echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="Image ' . $row['id'] . '" class="w-full h-full object-fit rounded-2xl">';
                                         }
                                         ?>
 

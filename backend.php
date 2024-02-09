@@ -79,10 +79,6 @@
 include 'header.php';
 ?>
 <?php
-
-
-
-
 require_once('connect.php');
 // Requête SQL pour récupérer les données
 $sql = 'SELECT infocarte.*, categorie.label as categorie FROM infocarte, categorie WHERE infocarte.categorie = categorie.id';
