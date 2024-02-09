@@ -256,17 +256,21 @@ if ($logged_in) {
         $categorie = isset($_POST['categorie']) ? $_POST['categorie'] : '';
     }
 
-    // Requête pour récupérer les informations de la table infocarte avec filtrage par catégorie
-    $query = "SELECT id, titre, description, article, categorie, statut, image FROM infocarte";
+    // Requête pour récupérer les informations de la table infocarte et infoswiper avec filtrage par catégorie
+    $query = "SELECT id, titre, description, article, categorie, statut, image 
+    FROM (
+        SELECT id, titre, description, article, categorie, statut, image FROM infocarte 
+        UNION ALL 
+        SELECT id, titre, description, article, categorie, statut, image FROM infoswiper
+    ) AS combined_tables";
 
     // Ajouter le filtre de catégorie si une catégorie est sélectionnée
     if (!empty($categorie)) {
-        // Utilisez la catégorie dans la clause WHERE de la requête
-        $query .= " WHERE categorie = '" . $mysqli->real_escape_string($categorie) . "'";
+    $query .= " WHERE categorie = '" . $mysqli->real_escape_string($categorie) . "'";
     }
 
-    // Exécuter la requête
-    $result = $mysqli->query($query);
+// Exécuter la requête
+$result = $mysqli->query($query);
 
     // Vérification s'il y a des résultats
     if ($result->num_rows > 0) {
@@ -281,25 +285,24 @@ if ($logged_in) {
                     <h1>Notre Blog :</h1>
                 </div>
 
-
                 <form method="post" class="mb-4 flex items-center justify-center">
-    <label for="categorie" class="mr-2">Filtrer par catégorie :</label>  
-    <select name="categorie" id="categorie" class="border rounded p-1 mr-2" style="margin-top: -3px;">
-        <option value="">Toutes les catégories</option>
-        
-        <?php
-        $categoriesQuery = "SELECT DISTINCT categorie, categorie.label FROM infocarte INNER JOIN categorie ON infocarte.categorie = categorie.id";
-   
-        error_log($categoriesQuery);
-        $categoriesResult = $mysqli->query($categoriesQuery);
 
+                <label for="categorie" class="mr-2">Filtrer par catégorie :</label>  
+        <select name="categorie" id="categorie" class="border rounded p-1 mr-2" style="margin-top: -3px;">
+            <option value="">Toutes les catégories</option>
+            
+            <?php
+            // Requête pour récupérer les libellés des catégories
+            $categoriesQuery = "SELECT id, label FROM categorie";
+            $categoriesResult = $mysqli->query($categoriesQuery);
 
-        while ($categorieRow = $categoriesResult->fetch_assoc()) {
-            $selected = ($categorie === $categorieRow['categorie']) ? 'selected' : '';
-            echo '<option value="' . $categorieRow['categorie'] . '" ' . $selected . '>' . $categorieRow['label'] . '</option>';
-        }
-        ?>
-    </select>
+            while ($categorieRow = $categoriesResult->fetch_assoc()) {
+                // Vérifier si cette catégorie est celle sélectionnée
+                $selected = ($categorie === $categorieRow['id']) ? 'selected' : '';
+                echo '<option value="' . $categorieRow['id'] . '" ' . $selected . '>' . $categorieRow['label'] . '</option>';
+            }
+            ?>
+        </select>
     <button type="submit" class="btncat text-white px-2 py-1 rounded" style="margin-top: -3px;">Filtrer</button>
 </form>
 
