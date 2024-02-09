@@ -1,13 +1,45 @@
 <?php
+session_start();
+
 require_once('connect.php');
 
-if(isset($_POST)){
-    if(isset($_POST['id']) && !empty($_POST['id'])
+// Vérifiez si l'utilisateur est connecté
+$logged_in = isset($_SESSION['username']);
+
+// Si l'utilisateur est connecté, récupérez le nom d'utilisateur
+$username = '';
+$is_admin = false; // Par défaut, l'utilisateur n'est pas un administrateur
+if ($logged_in) {
+    // Supposons que vous stockiez le nom d'utilisateur dans une variable de session appelée 'username'
+    $username = $_SESSION['username'];
+
+    // Préparation de la requête SQL pour récupérer isadmin de la base de données
+    $sql1 = "SELECT isadmin FROM utilisateur WHERE nom = :username";
+
+    // Préparation de la requête
+    $query = $db->prepare($sql1);
+
+    // Exécution de la requête
+    $query->execute([':username' => $username]);
+
+    // Récupération des résultats
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+
+    // Si la requête a retourné un résultat valide, mettez à jour la variable $is_admin
+    if ($result !== false) {
+        $is_admin = (int) $result['isadmin']; // Convertit la valeur en entier
+    }
+}
+
+if (isset($_POST)) {
+    if (
+        isset($_POST['id']) && !empty($_POST['id'])
         && isset($_POST['titre']) && !empty($_POST['titre'])
         && isset($_POST['description']) && !empty($_POST['description'])
         && isset($_POST['article']) && !empty($_POST['article'])
         && isset($_POST['categorie']) && !empty($_POST['categorie'])
-        && isset($_POST['statut']) && !empty($_POST['statut'])){
+        && isset($_POST['statut']) && !empty($_POST['statut'])
+    ) {
         $id = strip_tags($_GET['id']);
         $titre = strip_tags($_POST['titre']);
         $description = strip_tags($_POST['description']);
@@ -28,11 +60,11 @@ if(isset($_POST)){
 
         $query->execute();
 
-        header('Location: backend.php');
-    }
-    }
 
-if(isset($_GET['id']) && !empty($_GET['id'])){
+    }
+}
+
+if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id = strip_tags($_GET['id']);
     $sql = "SELECT * FROM `infocarte` WHERE `id`=:id;";
 
@@ -50,6 +82,7 @@ require_once('close.php');
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,6 +94,21 @@ require_once('close.php');
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
+        button.btn {
+            background-color: #055634;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        a.btn {
+            text-decoration: none;
+            color: white;
+            background-color: #055634;
+        }
+
         footer {
             background-color: #055634;
             color: white;
@@ -110,72 +158,6 @@ require_once('close.php');
         .superposition-simple .texte-normal {
             transition: .5s ease;
         }
-
-        .btn {
-            --color2: #055634;
-            --color1: grey;
-            perspective: 1000px;
-            padding: 1em 1em;
-            background: linear-gradient(var(--color1), var(--color2));
-            border: none;
-            outline: none;
-            font-size: 20px;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #fff;
-            text-shadow: 0 10px 10px #000;
-            cursor: pointer;
-            transform: rotateX(70deg) rotateZ(30deg);
-            transform-style: preserve-3d;
-            transition: transform 0.5s;
-        }
-
-        .btn::before {
-            content: "";
-            width: 100%;
-            height: 15px;
-            background-color: var(--color2);
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            transform: rotateX(90deg);
-            transform-origin: bottom;
-        }
-
-        .btn::after {
-            content: "";
-            width: 15px;
-            height: 100%;
-            background-color: var(--color1);
-            position: absolute;
-            top: 0;
-            right: 0;
-            transform: rotateY(-90deg);
-            transform-origin: right;
-        }
-
-        .btn:hover {
-            transform: rotateX(30deg) rotateZ(0);
-        }
-
-
-        button {
-  border: none;
-  outline: none;
-  background-color: #055634;
-  padding: 10px 20px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #fff;
-  border-radius: 5px;
-  transition: all ease 0.1s;
-  box-shadow: 0px 5px 0px 0px #a29bfe;
-}
-
-button:active {
-  transform: translateY(5px);
-  box-shadow: 0px 0px 0px 0px #a29bfe;
-}
     </style>
 </head>
 <header
@@ -249,13 +231,15 @@ button:active {
         </div>
     </nav>
 </header>
+
 <body class="bg-gray-100">
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">Modifier un produit</h1>
         <form method="post">
             <div class="mb-4">
                 <label for="titre" class="block text-sm font-semibold">Titre</label>
-                <input type="text" name="titre" id="titre" value="<?= $result['titre'] ?>" class="w-full border p-2 rounded">
+                <input type="text" name="titre" id="titre" value="<?= $result['titre'] ?>"
+                    class="w-full border p-2 rounded">
             </div>
             <div class="mb-4">
                 <label for="description" class="block text-sm font-semibold">Description</label>
@@ -277,17 +261,57 @@ button:active {
                 <input type="number" name="statut" id="statut" value="<?= $result['statut'] ?>"
                     class="w-full border p-2 rounded">
             </div>
-            <div class="mb-4">
-                <button><span>Enregistrer</span></button>
-                <button onclick="window.location.href = 'backend.php';"><span>Retour</span></button>
+            <div class="mb-4 flex flex-col md:flex-row gap-2">
+
+                <?php if ($logged_in && $is_admin === 1) { ?>
+                    <button type="submit" class="btn w-full" onclick="window.location.href = 'backend.php';">
+                        Enregistrer
+                    </button>
+                    <?php
+                    echo "Vous avez modifier un article";
+                    ?>
+                <?php } ?>
+                <?php if ($logged_in && $is_admin != 1) { ?>
+
+                    <button type="submit " class="btn w-full" onclick="window.location.href = 'backuser.php';">
+                        Enregistrer
+                    </button>
+
+
+                <?php } ?>
+
+                <?php if ($logged_in && $is_admin === 1) { ?>
+                    <a href="backend.php" class="btn w-full text-center p-2 rounded">
+                        <button type="button">
+                            Retour
+                        </button>
+                    </a>
+                <?php } ?>
+                <?php if ($logged_in && $is_admin != 1) { ?>
+                    <a href="backuser.php" class="btn w-full text-center p-2 rounded">
+                        <button type="button">
+                            Retour
+                        </button>
+                    </a>
+                <?php } ?>
             </div>
+            <div class="mx-auto">
+                <?php
+                if (!empty($_POST)) {
+                    echo "<p class='font-bold text-green-700 text-2xl'>Vous avez modifié un article.</p>";
+                }
+                ?>
+            </div>
+
             <input type="hidden" name="id" value="<?= $result['id'] ?>">
         </form>
     </div>
 </body>
+
 <footer class="p-4 w-full">
-        <p class="flex justify-center">@SIO2Groupe2</p>
-        <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
-            Azoulay, Hugo Moreaux</p>
-    </footer>
+    <p class="flex justify-center">@SIO2Groupe2</p>
+    <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
+        Azoulay, Hugo Moreaux</p>
+</footer>
+
 </html>

@@ -1,36 +1,33 @@
 <?php
 session_start();
 
-require_once "connect.php";
-
 // Vérifiez si l'utilisateur est connecté
 $logged_in = isset($_SESSION['username']);
 
 // Si l'utilisateur est connecté, récupérez le nom d'utilisateur
 $username = '';
-$is_admin = false; // Par défaut, l'utilisateur n'est pas un administrateur
 if ($logged_in) {
     // Supposons que vous stockiez le nom d'utilisateur dans une variable de session appelée 'username'
     $username = $_SESSION['username'];
-
-    // Préparation de la requête SQL pour récupérer isadmin de la base de données
-    $sql = "SELECT isadmin FROM utilisateur WHERE nom = :username";
-
-    // Préparation de la requête
-    $query = $db->prepare($sql);
-
-    // Exécution de la requête
-    $query->execute([':username' => $username]);
-
-    // Récupération des résultats
-    $result = $query->fetch(PDO::FETCH_ASSOC);
-
-    // Si la requête a retourné un résultat valide, mettez à jour la variable $is_admin
-    if ($result !== false) {
-        $is_admin = (int) $result['isadmin']; // Convertit la valeur en entier
-    }
 }
 
+// Vérifiez si le formulaire de déconnexion a été soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
+    // Détruire toutes les variables de session
+    $_SESSION = array();
+
+    // Détruire la session
+    session_destroy();
+
+    // Rediriger vers la page d'accueil avec un message d'alerte
+    header('Location: accueil.php?logout=true');
+    exit;
+}
+
+// Vérifiez si un message de déconnexion est présent dans l'URL et affichez l'alerte correspondante
+if (isset($_GET['logout']) && $_GET['logout'] === 'true') {
+    echo '<script>alert("Vous êtes déconnecté.");</script>';
+}
 ?>
 
 <!DOCTYPE html>
@@ -54,11 +51,10 @@ if ($logged_in) {
     <style>
         html,
         body {
-
             padding: 0;
             margin: 0;
             position: relative;
-            transition: background 4s ease;
+            transition: background 1s ease;
             /* Transition pour le changement de fond */
         }
 
@@ -172,59 +168,12 @@ if ($logged_in) {
         }
 
         body.rainy footer {
-
             background-color: #333;
             overflow: hidden;
-            transition: background 4s ease;
+            transition: background 1s ease;
             /* Fond gris clair */
 
         }
-
-        .cookie-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #f5f5f5;
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  z-index: 1000;
-}
-
-.cookie-container p {
-  flex: 1;
-  margin-right: 1rem;
-}
-
-.accept-cookies-btn {
-  appearance: none;
-  background-color: #4CAF50;
-  color: white;
-  padding: 0.5rem 1rem;
-  text-transform: uppercase;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.accept-cookies-btn:hover {
-  background-color: #3e8e41;
-}
-
-.accept-cookies-btn:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px #3e8e41;
-}
-
-.cookie-container.hide {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.5s ease;
-}
     </style>
     <script type="text/javascript">
 
@@ -345,17 +294,10 @@ if ($logged_in) {
         };
 
         window.addEventListener('keydown', function (event) {
-            if (event.key === 'q' && event.ctrlKey) {
+            if (event.key === '1' && event.ctrlKey) {
                 snow.toggleSnow();
             }
         });
-
-        $(document).ready(function() {
-  $('.accept-cookies-btn').on('click', function() {
-    $('.cookie-container').addClass('hide');
-    // Ici, vous pouvez aussi stocker un cookie pour indiquer que l'utilisateur a accepté les cookies
-  });
-});
 
     </script>
 </head>
@@ -374,6 +316,7 @@ if ($logged_in) {
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
+
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex mb-2 sm:mb-0 sm:mr-2">
                         <div class="superposition-simple  "><a href="accueil.php">
                                 <div class="texte-normal ">
@@ -412,56 +355,23 @@ if ($logged_in) {
                             </a></div>
                     </div>
                 </li>
-                <?php if ($logged_in && $is_admin != 1): ?>
-
-                    <li class="nav-item">
-                        <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
-                            <div class="superposition-simple "><a href="backuser.php">
-                                    <div class="texte-normal ">
-                                        <div class="texte-original">Carte</div>
-                                    </div>
-                                    <div class="texte-hover "><img decoding="async" class="image-originale "
-                                            src="Images/feuillemorte.png" />
-                                        <div class="texte-original">Carte</div>
-                                    </div>
-                                </a></div>
-                        </div>
-                    </li>
-                <?php endif; ?>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
                         <div class="superposition-simple "><a href="apropos.php">
                                 <div class="texte-normal ">
-                                    <div class="texte-original">Nous</div>
+                                    <div class="texte-original">À propos</div>
                                 </div>
                                 <div class="texte-hover "><img decoding="async" class="image-originale "
                                         src="Images/glace.png" />
-                                    <div class="texte-original">Nous</div>
+                                    <div class="texte-original">À propos</div>
                                 </div>
                             </a></div>
                     </div>
                 </li>
-                <?php if ($logged_in && $is_admin === 1): ?>
-
-                    <li class="nav-item">
-                        <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
-                            <div class="superposition-simple "><a href="backend.php">
-                                    <div class="texte-normal ">
-                                        <div class="texte-original">Back</div>
-                                    </div>
-                                    <div class="texte-hover "><img decoding="async" class="image-originale "
-                                            src="Images/feuillemorte.png" />
-                                        <div class="texte-original">Back</div>
-                                    </div>
-                                </a></div>
-                        </div>
-                    </li>
-                <?php endif; ?>
             </ul>
         </div>
     </nav>
 
-    <!-- Lien de connexion / déconnexion -->
     <a class="testa" href="<?php echo $logged_in ? 'logout.php' : 'login.php'; ?>"
         class="flex items-center mb-2 sm:mb-0 sm:mr-2">
         <img src="Images/logo.png" alt="logo" class="w-12 h-12 rounded-full ">
@@ -473,22 +383,24 @@ if ($logged_in) {
             <?php endif; ?>
         </span>
     </a>
-</header>
 
+
+
+
+
+
+</header>
 
 <body class="bg-gray-100 ">
 
     <?php
     // Connexion à la base de données
-    $mysqli = new mysqli("localhost", "root", "rootroot", "infoclimat");
+    $mysqli = new mysqli("localhost", "root", "", "infoclimat");
 
     // Vérification de la connexion
     if ($mysqli->connect_error) {
         die("La connexion à la base de données a échoué : " . $mysqli->connect_error);
     }
-
-    // Format
-    $mysqli->set_charset("utf8");
 
     // Requête pour récupérer les trois cartes les plus récentes de la table infocarte
     $result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, image FROM infocarte ");
@@ -667,10 +579,10 @@ if ($logged_in) {
                             </div>
 
                             <div class="boutonvalidation p-2 justify-end flex">
-                                <a href="article.php?id=<?php echo $row['id']; ?>"
-                                    class="bg-white px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
-                                    <span class="text-black text-sm">En savoir plus</span>
-                                </a>
+                                <button
+                                    class="bg-white  px-3 py-1 rounded-3xl transition-all duration-300 transform hover:scale-105 hover:bg-black border-2">
+                                    <a href="#" class="text-black hover:text-black text-sm">En savoir plus</a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -690,11 +602,6 @@ if ($logged_in) {
     ?>
 
 </body>
-
-<div class="cookie-container">
-  <p>En visitant ce site web, vous acceptez notre politique d'utilisation des cookies. <a href="Images/louis.jpg">En savoir plus</a>.</p>
-  <button class="accept-cookies-btn">Accepter tous les cookies</button>
-</div>
 
 <footer class=" rainy footerpage  p-4  w-full">
     <p class="flex justify-center">@SIO2Groupe2</p>
