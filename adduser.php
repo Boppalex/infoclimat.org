@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $article = htmlspecialchars($_POST['article']);
         $categorie = htmlspecialchars($_POST['categorie']);
         $statut = htmlspecialchars($_POST['statut']);
+        $user_id = $_SESSION["user_id"];
 
         // Requête SQL pour insérer un nouvel article dans la table infocarte
         $sql = "INSERT INTO `infocarte` (`titre`, `description`, `article`, `categorie`, `statut`, `creerpar`) VALUES (:titre, :description, :article, :categorie, :statut, :user_id)";
@@ -42,9 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $query->execute();
 
         // Redirection vers la page de blog avec un message de succès
-        $_SESSION['message'] = "Produit ajouté avec succès !";
-        header('Location: blog.php');
-        exit();
+        
     } else {
         // Redirection vers la page de blog avec un message d'erreur si des champs sont manquants
         $_SESSION['error'] = "Tous les champs doivent être remplis.";
@@ -190,7 +189,7 @@ require_once('close.php');
             </div>
             <div class="flex flex-row">
                 <button type="submit">Enregistrer</button>
-                <button type="button" onclick="window.location.href='blog.php'">Retour</button>
+                <button type="button" onclick="window.location.href='backuser.php'">Retour</button>
             </div>
         </form>
     </div>

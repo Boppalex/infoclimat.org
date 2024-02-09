@@ -11,12 +11,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
-    <style>
-        .btncat {
-            background-color: #055634;
-        }
-    </style>
-
 </head>
 <?php
 include 'header.php';
@@ -138,9 +132,7 @@ include 'header.php';
                 </div>
                 
             </div>
-            <div class= "justify-center flex pb-8">
-<button type="submit" class="btncat text-white px-2 py-1 rounded ml-2 centered-button" onclick="window.location.href = 'adduser.php';">Créer un article</button>
-            </div>
+            
 
 
         <?php

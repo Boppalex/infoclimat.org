@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,7 +12,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <title>CRUD admin</title>
     <style>
-        
         .btn {
             --color2: #055634;
             --color1: grey;
@@ -73,7 +70,7 @@ include 'header.php';
 
 require_once('connect.php');
 // Requête SQL pour récupérer les données
-$sql = 'SELECT infocarte.*, categorie.label as categorie FROM infocarte, categorie WHERE infocarte.categorie = categorie.id' ;
+$sql = 'SELECT infocarte.*, categorie.label as categorie FROM infocarte, categorie WHERE infocarte.categorie = categorie.id';
 
 // Préparation de la requête
 $query = $db->prepare($sql);
@@ -91,59 +88,64 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
         <h1 class="text-3xl" style="text-align: center; margin-top:50px;">Welcome,
             <?php echo $_SESSION["username"]; ?>!
         </h1>
-
-        <table style="border-collapse: separate; border-spacing: 10px;">
-            <thead>
-                <th>ID</th>
-                <th>Titre</th>
-                <th>Description</th>
-                <th>Article</th>
-                <th>Catégorie</th>
-                <th>Statut</th>
-            </thead>
-            <tbody>
-                <?php
-                foreach ($result as $carte) {
-                    ?>
-                    <tr>
-                        <td>
-                            <?= $carte['id'] ?>
-                        </td>
-                        <td>
-                            <?= $carte['titre'] ?>
-                        </td>
-                        <td>
-                            <?= $carte['description'] ?>
-                        </td>
-                        <td>
-                            <?= $carte['article'] ?>
-                        </td>
-                        <td>
-                            <?= $carte['categorie'] ?>
-                        </td>
-                        <td>
-                            <?= $carte['statut'] ?>
-                        </td>
-                        <td>
-                            </br>
-                            <a href="edit.php?id=<?= $carte['id'] ?>">Modifier</a>
-                            <a href="delete.php?id=<?= $carte['id'] ?>">Supprimer</a>
-                        </td>
-                    </tr>
+        <div class=" overflow-scroll" style="height: 450px;">
+            <table style="border-collapse: separate; border-spacing: 10px;">
+                <thead>
+                    <th>ID</th>
+                    <th>Titre</th>
+                    <th>Description</th>
+                    <th>Article</th>
+                    <th>Catégorie</th>
+                    <th>Statut</th>
+                </thead>
+                <tbody>
                     <?php
-                }
-                ?>
-            </tbody>
-        </table>
+                    foreach ($result as $carte) {
+                        ?>
+                        <tr>
+                            <td>
+                                <?= $carte['id'] ?>
+                            </td>
+                            <td>
+                                <?= $carte['titre'] ?>
+                            </td>
+                            <td>
+                                <?= $carte['description'] ?>
+                            </td>
+                            <td>
+                                <?= $carte['article'] ?>
+                            </td>
+                            <td>
+                                <?= $carte['categorie'] ?>
+                            </td>
+                            <td>
+                                <?= $carte['statut'] ?>
+                            </td>
+                            <td>
+                                </br>
+                                <a href="edit.php?id=<?= $carte['id'] ?>">Modifier</a>
+                                <a href="delete.php?id=<?= $carte['id'] ?>">Supprimer</a>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+
         <a href="add.php" class="text-white">
             <button class="btn">Ajouter
             </button>
         </a>
 
     </div>
-   
+
 </body>
- <?php
-include 'footer.php';
-?>
+<div class="fixed bottom-0 w-full">
+    <?php
+    include 'footer.php';
+    ?>
+</div>
+
 </html>
