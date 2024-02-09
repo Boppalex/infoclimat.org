@@ -133,9 +133,6 @@ include 'header.php';
                         <p class="text-lg mb-4">Auteur:
                             <?php echo $nom; ?>
                         </p>
-                        <p class="text-lg mb-4">Source:
-                            à récupérer
-                        </p>
                     </div>
                 </div>
             </div>
