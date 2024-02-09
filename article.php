@@ -48,6 +48,14 @@ if (isset($_GET['id'])) {
     header("Location: passerelle.php");
     exit();
 }
+$sql="SELECT nom
+FROM utilisateur
+INNER JOIN infocarte ON utilisateur.id = infocarte.creerpar
+WHERE infocarte.id = :article_id;";
+$query = $db->prepare($sql);
+$query->bindParam(':article_id', $article_id, PDO::PARAM_INT);
+$query->execute();
+$nom = $query->fetchColumn(); // Récupérer le nom de l'utilisateur
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -119,10 +127,7 @@ include 'header.php';
                     </div>
                     <div>
                         <p class="text-lg mb-4">Auteur:
-                            à récupérer
-                        </p>
-                        <p class="text-lg mb-4">Source:
-                            à récupérer
+                            <?php echo $nom; ?>
                         </p>
                     </div>
                 </div>
