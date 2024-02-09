@@ -14,6 +14,42 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <title>CRUD admin</title>
+    <script>
+    function sortTable(columnName) {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.querySelector('table   ');
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("td")[getIndex(columnName)].textContent;
+                y = rows[i + 1].getElementsByTagName("td")[getIndex(columnName)].textContent;
+                if (columnName === 'titre') {
+                    shouldSwitch = x.toLowerCase() > y.toLowerCase();
+                } else {
+                    shouldSwitch = Number(x) > Number(y);
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    function getIndex(columnName) {
+        var headers = document.querySelectorAll('th');
+        for (var i = 0; i < headers.length; i++) {
+            if (headers[i].id === columnName) {
+                return i;
+            }
+        }
+        return -1;
+    }
+</script>
     <style>
         button.btn {
             background-color: #055634;
@@ -114,46 +150,9 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </body>
 
-<footer class="p-4 w-full absolute bottom-0">
-    <p class="flex justify-center">@SIO2Groupe2</p>
-    <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
-        Azoulay, Hugo Moreaux</p>
-</footer>
-<script>
-    function sortTable(columnName) {
-        var table, rows, switching, i, x, y, shouldSwitch;
-        table = document.querySelector('table   ');
-        switching = true;
-        while (switching) {
-            switching = false;
-            rows = table.rows;
-            for (i = 1; i < (rows.length - 1); i++) {
-                shouldSwitch = false;
-                x = rows[i].getElementsByTagName("td")[getIndex(columnName)].textContent;
-                y = rows[i + 1].getElementsByTagName("td")[getIndex(columnName)].textContent;
-                if (columnName === 'titre') {
-                    shouldSwitch = x.toLowerCase() > y.toLowerCase();
-                } else {
-                    shouldSwitch = Number(x) > Number(y);
-                }
-                if (shouldSwitch) {
-                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                    switching = true;
-                    break;
-                }
-            }
-        }
-    }
+<?php
+include 'footer.php';
+?>
 
-    function getIndex(columnName) {
-        var headers = document.querySelectorAll('th');
-        for (var i = 0; i < headers.length; i++) {
-            if (headers[i].id === columnName) {
-                return i;
-            }
-        }
-        return -1;
-    }
-</script>
 
 </html>
