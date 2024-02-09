@@ -10,7 +10,7 @@ if (!isset($_SESSION["username"])) {
 
 require_once('connect.php');
 // Requête SQL pour récupérer les données
-$sql = 'SELECT * FROM `infocarte`';
+$sql = 'SELECT infocarte.*, categorie.label as categorie FROM infocarte, categorie WHERE infocarte.categorie = categorie.id' ;
 
 // Préparation de la requête
 $query = $db->prepare($sql);

@@ -343,8 +343,13 @@ if ($logged_in) {
                     }
                     ?>
                 </div>
+                
             </div>
-        </body>
+            <div class= "justify-center flex pb-8">
+<button type="submit" class="btncat text-white px-2 py-1 rounded ml-2 centered-button" onclick="window.location.href = 'adduser.php';">Créer un article</button>
+            </div>
+
+
         <?php
     } else {
         echo "Aucun résultat trouvé dans la base de données.";

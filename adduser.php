@@ -2,12 +2,35 @@
 session_start();
 require_once('connect.php');
 
-// Vérifier si l'utilisateur est connecté
-if (!isset($_SESSION["username"])) {
-    // Si l'utilisateur n'est pas connecté, rediriger vers la page de connexion
-    header("Location: login.php");
-    exit();
+// Vérifiez si l'utilisateur est connecté
+$logged_in = isset($_SESSION['username']);
+
+// Si l'utilisateur est connecté, récupérez le nom d'utilisateur
+$username = '';
+$is_admin = false; // Par défaut, l'utilisateur n'est pas un administrateur
+if ($logged_in) {
+    // Supposons que vous stockiez le nom d'utilisateur dans une variable de session appelée 'username'
+    $username = $_SESSION['username'];
+
+    // Préparation de la requête SQL pour récupérer isadmin de la base de données
+    $sql = "SELECT isadmin FROM utilisateur WHERE nom = :username";
+
+    // Préparation de la requête
+    $query = $db->prepare($sql);
+
+    // Exécution de la requête
+    $query->execute([':username' => $username]);
+
+    // Récupération des résultats
+    $result = $query->fetch(PDO::FETCH_ASSOC);
+
+    // Si la requête a retourné un résultat valide, mettez à jour la variable $is_admin
+    if ($result !== false) {
+        $is_admin = (int) $result['isadmin']; // Convertit la valeur en entier
+    }
 }
+
+
 if (isset($_POST)) {
     if (
         isset($_POST['titre']) && !empty($_POST['titre'])
@@ -35,7 +58,7 @@ if (isset($_POST)) {
 
         $query->execute();
         $_SESSION['message'] = "Produit ajouté avec succès !";
-        header('Location: backend.php');
+        header('Location: blog.php');
     }
 }
 
@@ -56,10 +79,37 @@ require_once('close.php');
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
     <style>
+
+        html,
+        body{
+            padding: 0;
+            margin: 0;
+            position: relative;
+            transition: background 4s ease;
+            /* Transition pour le changement de fond */
+        }
+
+        /* CSS */
+        a.testa .hidden.sm\:inline-block {
+            display: none;
+        }
+
+        a.testa:hover .hidden.sm\:inline-block {
+            display: inline-block;
+        }
+
+
+        /* Ajout d'une classe pour le fond pendant l'easter egg */
+        body.rainy {
+            background: #333;
+            /* Couleur du fond pendant l'easter egg */
+        }
+        
         footer {
             background-color: #055634;
             color: white;
         }
+        
 
         .superposition-simple {
             position: relative;
@@ -104,6 +154,62 @@ require_once('close.php');
 
         .superposition-simple .texte-normal {
             transition: .5s ease;
+        }
+        body {
+            margin: 0;
+            background-color: #f3f4f6;
+        }
+
+        footer {
+            background-color: #055634;
+            color: white;
+
+        }
+
+        header {
+            background-image: url('Images/wave.png');
+        }
+
+
+        div.testclass {
+            background-color: #fff;
+            /* Fond gris clair */
+        }
+
+        body.rainy div.testclass {
+            background-color: #ffff;
+            color: #fff;
+            /* Fond gris clair */
+        }
+
+        body.rainy div.intro {
+            color: #fff;
+            /* Fond gris clair */
+        }
+
+
+
+        div.card1 {
+            background-color: #fff;
+            /* Fond gris clair */
+        }
+
+        body.rainy div.card1 {
+            background-color: #ffff;
+            /* Fond gris clair */
+        }
+
+        body.rainy header {
+            background-image: none;
+        }
+
+        body.rainy footer {
+
+            background-color: #333;
+            overflow: hidden;
+            transition: background 4s ease;
+            /* Fond gris clair */
+
         }
 
         .btn {
@@ -173,8 +279,7 @@ require_once('close.php');
     </style>
 </head>
 <header
-    class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500"
-    style="background-image: url('Images/wave.png');">
+    class="entete flex flex-col sm:flex-row justify-center items-center p-1 sm:p-8 md:p-16 lg:p-20 xl:p-24 bg-cover bg-center h-300 sm:h-200 md:h-250 lg:h-300 xl:h-500">
     <a href="accueil.php" class="mb-2 sm:mb-0 sm:mr-2">
         <img src="images/terre1.jpg" alt="logo" class="w-32 h-32">
     </a>
@@ -226,23 +331,69 @@ require_once('close.php');
                             </a></div>
                     </div>
                 </li>
+                <?php if ($logged_in && $is_admin != 1): ?>
+
+                    <li class="nav-item">
+                        <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
+                            <div class="superposition-simple "><a href="backuser.php">
+                                    <div class="texte-normal ">
+                                        <div class="texte-original">Carte</div>
+                                    </div>
+                                    <div class="texte-hover "><img decoding="async" class="image-originale "
+                                            src="Images/feuillemorte.png" />
+                                        <div class="texte-original">Carte</div>
+                                    </div>
+                                </a></div>
+                        </div>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item">
                     <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
                         <div class="superposition-simple "><a href="apropos.php">
                                 <div class="texte-normal ">
-                                    <div class="texte-original">À propos</div>
+                                    <div class="texte-original">Nous</div>
                                 </div>
                                 <div class="texte-hover "><img decoding="async" class="image-originale "
                                         src="Images/glace.png" />
-                                    <div class="texte-original">À propos</div>
+                                    <div class="texte-original">Nous</div>
                                 </div>
                             </a></div>
                     </div>
                 </li>
+                <?php if ($logged_in && $is_admin === 1): ?>
+
+                    <li class="nav-item">
+                        <div class=" rounded-full w-full sm:w-20 h-20 text-center flex">
+                            <div class="superposition-simple "><a href="blog.php">
+                                    <div class="texte-normal ">
+                                        <div class="texte-original">Back</div>
+                                    </div>
+                                    <div class="texte-hover "><img decoding="async" class="image-originale "
+                                            src="Images/feuillemorte.png" />
+                                        <div class="texte-original">Back</div>
+                                    </div>
+                                </a></div>
+                        </div>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
     </nav>
+
+    <!-- Lien de connexion / déconnexion -->
+    <a class="testa" href="<?php echo $logged_in ? 'logout.php' : 'login.php'; ?>"
+        class="flex items-center mb-2 sm:mb-0 sm:mr-2">
+        <img src="Images/logo.png" alt="logo" class="w-12 h-12 rounded-full ">
+        <span class="hidden sm:inline-block ml-1 text-white rounded-full hover:inline-block">
+            <?php if ($logged_in): ?>
+                <?php echo $username; ?>
+            <?php else: ?>
+                Connexion
+            <?php endif; ?>
+        </span>
+    </a>
 </header>
+
 
 <body class="bg-gray-100">
     <div class="container">
@@ -264,28 +415,22 @@ require_once('close.php');
                     rows="6"></textarea>
             </div>
             <div class="mb-4">
-                <label for="categorie" class="block text-sm font-semibold">Catégorie</label>
-                <select name="categorie" id="categorie" class="w-full border p-2 rounded">
+                <label for="categorie" class="block text-gray-700 text-sm font-bold mb-2">Catégorie</label>
+                <select name="categorie" id="categorie"
+                    class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
                     <?php
                     try {
-                        $db = new PDO("mysql:host=localhost;dbname=infoclimat", "root", "");
-                        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                        $conn = new PDO("mysql:host=localhost;dbname=infoclimat", "root", "");
+                        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                         // Récupération des catégories depuis la base de données
-                        $query = $db->query("SELECT * FROM categorie;");
-                        $categories = $query->fetchAll(PDO::FETCH_ASSOC);
+                        $query = $conn->query("SELECT `id` FROM `categorie`");
+                        $categories = $query->fetchAll(PDO::FETCH_COLUMN);
 
+                        // Génération des options pour le champ select
                         foreach ($categories as $category) {
-                            $selected = ($category['id'] == $result['categorie_id']) ? 'selected' : '';
-                            $idcat = $category['id'];
-                            $idlab = $category['label'];
-
-                            // Générer l'option pour chaque catégorie
-                            ?>
-                            <option <?= $selected ?> value="<?= $idcat ?>">
-                                <?= $idlab ?>
-                            </option>
-                            <?php
+                            $selected = ($category == $result['categorie']) ? 'selected' : '';
+                            echo "<option value=\"$category\" $selected>$category</option>";
                         }
                     } catch (PDOException $e) {
                         echo "Connection failed: " . $e->getMessage();
@@ -293,20 +438,20 @@ require_once('close.php');
                     ?>
                 </select>
             </div>
-
-            <div class="mb-4">
+            <div class="mb-4 hidden">
                 <label for="statut" class="block text-gray-700 text-sm font-bold mb-2">Statut</label>
-                <input type="number" name="statut" id="statut" min="1" max="2"
+                <input type="number" name="statut" id="statut" min="2" max="2" value="2" readonly
                     class="w-full px-3 py-2 border rounded shadow appearance-none focus:outline-none focus:shadow-outline-blue">
             </div>
             <div class="flex flex-row">
                 <button type="submit">Enregistrer</button>
-                <button type="button" onclick="window.location.href='backend.php'">Retour</button>
+                <button type="button" onclick="window.location.href='blog.php'">Retour</button>
             </div>
         </form>
     </div>
 </body>
 
+</body>
 <footer class="p-4 w-full ">
     <p class="flex justify-center">@SIO2Groupe2</p>
     <p class="flex justify-center">By Adrien Cirade, Roman Bourguignon, Steven Thomassin, Alexandre Bopp, Samuel
