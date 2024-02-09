@@ -480,7 +480,7 @@ if ($logged_in) {
 
     <?php
     // Connexion à la base de données
-    $mysqli = new mysqli("localhost", "root", "rootroot", "infoclimat");
+    $mysqli = new mysqli("localhost", "root", "", "infoclimat");
 
     // Vérification de la connexion
     if ($mysqli->connect_error) {
@@ -491,7 +491,7 @@ if ($logged_in) {
     $mysqli->set_charset("utf8");
 
     // Requête pour récupérer les trois cartes les plus récentes de la table infocarte
-    $result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, image FROM infocarte ");
+    $result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, pays, image FROM infoswiper");
 
     // Vérification s'il y a des résultats
     if ($result->num_rows > 0) {
@@ -517,7 +517,7 @@ if ($logged_in) {
                             ?>
                             <div class="testclass rainy swiper-slide relative border-2 bg-gray-100 rounded-2xl p-4  shadow-lg">
                                 <div class="image1 relative h-64">
-                                    <a href="article.php?id=<?php echo $row['id']; ?>">
+                                    <a href="article_catastrophe.php?id=<?php echo $row['id']; ?>">
                                         <?php
                                         if (empty($row['image'])) {
                                             // Afficher l'image par défaut si la colonne "image" est vide
