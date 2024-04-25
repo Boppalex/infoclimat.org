@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,15 +27,16 @@ include 'header.php';
     </div>
     <?php
     // Connexion à la base de données
-    $mysqli = new mysqli("localhost", "root", "", "infoclimat");
+    $dsn = "mysql:host=localhost;dbname=infoclimat;charset=utf8";
+    $username = "root";
+    $password = "";
 
-    // Vérification de la connexion
-    if ($mysqli->connect_error) {
-        die("La connexion à la base de données a échoué : " . $mysqli->connect_error);
+    try {
+        $pdo = new PDO($dsn, $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        die("La connexion à la base de données a échoué : " . $e->getMessage());
     }
-
-    // Format
-    $mysqli->set_charset("utf8");
 
     // Initialiser la variable de catégorie
     $categorie = '';
@@ -48,19 +48,27 @@ include 'header.php';
     }
 
     // Requête pour récupérer les informations de la table infocarte avec filtrage par catégorie
-    $query = "SELECT id, titre, description, article, categorie, statut, image FROM infocarte Where statut = '1'";
+    $query = "SELECT id, titre, description, article, categorie, statut, image FROM infocarte WHERE statut = '1'";
 
     // Ajouter le filtre de catégorie si une catégorie est sélectionnée
     if (!empty($categorie)) {
         // Utilisez la catégorie dans la clause WHERE de la requête
-        $query .= " AND categorie = '" . $mysqli->real_escape_string($categorie) . "'";
+        $query .= " AND categorie = :categorie";
+    }
+
+    // Préparer la requête
+    $stmt = $pdo->prepare($query);
+
+    // Binder les paramètres
+    if (!empty($categorie)) {
+        $stmt->bindParam(':categorie', $categorie);
     }
 
     // Exécuter la requête
-    $result = $mysqli->query($query);
+    $stmt->execute();
 
     // Vérification s'il y a des résultats
-    if ($result->num_rows > 0) {
+    if ($stmt->rowCount() > 0) {
         ?>
         <!DOCTYPE html>
         <html lang="fr">
@@ -74,32 +82,29 @@ include 'header.php';
 
 
                 <form method="post" class="mb-4 flex items-center justify-center">
-    <label for="categorie" class="mr-2">Filtrer par catégorie :</label>  
-    <select name="categorie" id="categorie" class="border rounded p-1 mr-2" style="margin-top: -3px;">
-        <option value="">Toutes les catégories</option>
-        
-        <?php
-        $categoriesQuery = "SELECT DISTINCT categorie, categorie.label FROM infocarte INNER JOIN categorie ON infocarte.categorie = categorie.id";
-   
-        error_log($categoriesQuery);
-        $categoriesResult = $mysqli->query($categoriesQuery);
+                    <label for="categorie" class="mr-2">Filtrer par catégorie :</label>
+                    <select name="categorie" id="categorie" class="border rounded p-1 mr-2" style="margin-top: -3px;">
+                        <option value="">Toutes les catégories</option>
+
+                        <?php
+                        $categoriesQuery = "SELECT DISTINCT categorie, categorie.label FROM infocarte INNER JOIN categorie ON infocarte.categorie = categorie.id";
+
+                        $categoriesStmt = $pdo->query($categoriesQuery);
+
+                        while ($categorieRow = $categoriesStmt->fetch(PDO::FETCH_ASSOC)) {
+                            $selected = ($categorie === $categorieRow['categorie']) ? 'selected' : '';
+                            echo '<option value="' . $categorieRow['categorie'] . '" ' . $selected . '>' . $categorieRow['label'] . '</option>';
+                        }
+                        ?>
+                    </select>
+                    <button type="submit" class="btncat text-white px-2 py-1 rounded" style="margin-top: -3px;">Filtrer</button>
+                </form>
 
 
-        while ($categorieRow = $categoriesResult->fetch_assoc()) {
-            $selected = ($categorie === $categorieRow['categorie']) ? 'selected' : '';
-            echo '<option value="' . $categorieRow['categorie'] . '" ' . $selected . '>' . $categorieRow['label'] . '</option>';
-        }
-        ?>
-    </select>
-    <button type="submit" class="btncat text-white px-2 py-1 rounded" style="margin-top: -3px;">Filtrer</button>
-</form>
-
-
-                <div
-                    class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:grid-rows-2  gap-8">
+                <div class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 xl:grid-rows-2  gap-8">
                     <?php
 
-                    while ($row = $result->fetch_assoc()) {
+                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         ?>
                         <div class="flex flex-col sm:flex-row col-span-1 row-span-1 sm:hover:shadow-lg rounded-3xl">
                             <div class="card1 border bg-white w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
@@ -138,10 +143,10 @@ include 'header.php';
                     }
                     ?>
                 </div>
-                
+
             </div>
-            <div class= "justify-center flex pb-8">
-<button type="submit" class="btncat text-white px-2 py-1 rounded ml-2 centered-button" onclick="window.location.href = 'adduser.php';">Créer un article</button>
+            <div class="justify-center flex pb-8">
+                <button type="submit" class="btncat text-white px-2 py-1 rounded ml-2 centered-button" onclick="window.location.href = 'adduser.php';">Créer un article</button>
             </div>
 
 
@@ -151,7 +156,7 @@ include 'header.php';
     }
 
     // Fermer la connexion à la base de données
-    $mysqli->close();
+    $pdo = null;
     ?>
 
 </body>

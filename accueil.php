@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemple Tailwind CSS</title>
+    <title>Page d'accueil</title>
     <!-- Utilisation du CDN pour Tailwind CSS (à des fins de démonstration) -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
@@ -26,21 +26,23 @@ include 'header.php';
 
     <?php
     // Connexion à la base de données
-    $mysqli = new mysqli("localhost", "root", "", "infoclimat");
+    $dsn = "mysql:host=localhost;dbname=infoclimat;charset=utf8";
+    $username = "root";
+    $password = "";
 
-    // Vérification de la connexion
-    if ($mysqli->connect_error) {
-        die("La connexion à la base de données a échoué : " . $mysqli->connect_error);
+    try {
+        $pdo = new PDO($dsn, $username, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        die("La connexion à la base de données a échoué : " . $e->getMessage());
     }
 
-    // Format
-    $mysqli->set_charset("utf8");
-
     // Requête pour récupérer les trois cartes les plus récentes de la table infocarte
-    $result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, image FROM infocarte ");
+    $query = "SELECT id, titre, description, article, categorie, statut, pays, image FROM infoswiper";
+    $stmt = $pdo->query($query);
 
     // Vérification s'il y a des résultats
-    if ($result->num_rows > 0) {
+    if ($stmt->rowCount() > 0) {
         ?>
         <!DOCTYPE html>
         <html lang="fr">
@@ -59,11 +61,11 @@ include 'header.php';
                     <div class="swiper-wrapper">
                         <?php
                         // Boucle à travers les résultats
-                        while ($row = $result->fetch_assoc()) {
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             ?>
                             <div class="testclass rainy swiper-slide relative border-2 bg-gray-100 rounded-2xl p-4  shadow-lg">
                                 <div class="image1 relative h-64">
-                                    <a href="#">
+                                    <a href="article_catastrophe.php?id=<?php echo $row['id']; ?>">
                                         <?php
                                         if (empty($row['image'])) {
                                             // Afficher l'image par défaut si la colonne "image" est vide
@@ -72,7 +74,7 @@ include 'header.php';
                                             // Encodage de l'image en base64
                                             $imageData = base64_encode($row['image']);
                                             $imageType = "image/jpeg"; // Ajustez selon le type d'image dans votre base de données
-                                
+
                                             // Affichage de l'image
                                             echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="Image ' . $row['id'] . '" class="w-full h-full object-fit rounded-2xl">';
                                         }
@@ -155,16 +157,12 @@ include 'header.php';
         echo "Aucun résultat trouvé dans la base de données.";
     }
 
-
-
-
-
     // Requête pour récupérer les trois cartes les plus récentes de la table infocarte
-    $result = $mysqli->query("SELECT id, titre, description, article, categorie, statut, image FROM infocarte Where statut = 1  ORDER BY datecreation DESC LIMIT 3");
-
+    $query = "SELECT id, titre, description, article, categorie, statut, image FROM infocarte WHERE statut = 1 ORDER BY datecreation DESC LIMIT 3";
+    $stmt = $pdo->query($query);
 
     // Vérification s'il y a des résultats
-    if ($result->num_rows > 0) {
+    if ($stmt->rowCount() > 0) {
         ?>
         <!DOCTYPE html>
         <html lang="fr">
@@ -182,7 +180,7 @@ include 'header.php';
             <div class="grille grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3   gap-8">
                 <?php
                 // Boucle à travers les résultats
-                while ($row = $result->fetch_assoc()) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     ?>
                     <div class="flex flex-col sm:flex-row col-span-1 row-span-1 sm:hover:shadow-lg rounded-3xl">
                         <div class=" rainy card1  border  w-96 h-full rounded-3xl shadow-lg text-black bg-green-600">
@@ -197,7 +195,7 @@ include 'header.php';
 
                                     // Type de contenu de l'image (assurez-vous que cela correspond au type d'image dans votre base de données)
                                     $imageType = "image/jpeg"; // Exemple pour le format JPEG, ajustez selon votre besoin
-                        
+
                                     // Affichage de l'image
                                     echo '<img src="data:' . $imageType . ';base64,' . $imageData . '" alt="image' . $row['id'] . '" class="w-full h-44 rounded-t-3xl object-cover">';
                                 }
@@ -232,16 +230,10 @@ include 'header.php';
     }
 
     // Fermer la connexion à la base de données
-    $mysqli->close();
+    $pdo = null;
     ?>
 
 </body>
-
-<div class="cookie-container">
-    <p>En visitant ce site web, vous acceptez notre politique d'utilisation des cookies. <a href="Images/louis.jpg">En
-            savoir plus</a>.</p>
-    <button class="accept-cookies-btn">Accepter tous les cookies</button>
-</div>
 
 <?php
 include 'footer.php';
