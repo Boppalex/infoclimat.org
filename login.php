@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $userId = getUserId($username);
         $_SESSION["user_id"] = $userId;
         $_SESSION["username"] = $username;
-        
+
         header("Location: accueil.php");
         exit();
     } else {
@@ -33,40 +33,34 @@ function validateCredentials($username, $password)
     $dbPassword = "";
     $dbName = "infoclimat";
 
-    // Connexion à la base de données
-    $conn = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
+    try {
+        // Connexion à la base de données en utilisant PDO
+        $conn = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUser, $dbPassword);
 
-    // Vérifier la connexion
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        // Utilisation d'une requête préparée pour éviter les injections SQL
+        $query = "SELECT * FROM utilisateur WHERE nom=:username AND motpasse=:password";
+
+        // Préparer la requête
+        $stmt = $conn->prepare($query);
+
+        // Lier les paramètres
+        $stmt->bindParam(":username", $username);
+        $stmt->bindParam(":password", $password);
+
+        // Exécuter la requête
+        $stmt->execute();
+
+        // Récupérer le résultat
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Fermer la connexion à la base de données
+        $conn = null;
+
+        // Vérifier si la requête a renvoyé une correspondance
+        return ($result !== false);
+    } catch (PDOException $e) {
+        die("Error: " . $e->getMessage());
     }
-
-    // Utilisation d'une requête préparée pour éviter les injections SQL
-    $query = "SELECT * FROM utilisateur WHERE nom=? AND motpasse=?";
-
-    // Préparer la requête
-    $stmt = $conn->prepare($query);
-
-    // Vérifier si la préparation a échoué
-    if (!$stmt) {
-        die("Error in preparing statement: " . $conn->error);
-    }
-
-    // Lier les paramètres
-    $stmt->bind_param("ss", $username, $password);
-
-    // Exécuter la requête
-    $stmt->execute();
-
-    // Récupérer le résultat
-    $result = $stmt->get_result();
-
-    // Fermer la connexion à la base de données
-    $stmt->close();
-    $conn->close();
-
-    // Vérifier si la requête a renvoyé une correspondance
-    return ($result->num_rows > 0);
 }
 
 // Fonction pour récupérer l'ID de l'utilisateur
@@ -78,44 +72,36 @@ function getUserId($username)
     $dbPassword = "";
     $dbName = "infoclimat";
 
-    // Connexion à la base de données
-    $conn = new mysqli($dbHost, $dbUser, $dbPassword, $dbName);
+    try {
+        // Connexion à la base de données en utilisant PDO
+        $conn = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUser, $dbPassword);
 
-    // Vérifier la connexion
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+        // Utilisation d'une requête préparée pour éviter les injections SQL
+        $query = "SELECT id FROM utilisateur WHERE nom=:username";
 
-    // Utilisation d'une requête préparée pour éviter les injections SQL
-    $query = "SELECT id FROM utilisateur WHERE nom=?";
+        // Préparer la requête
+        $stmt = $conn->prepare($query);
 
-    // Préparer la requête
-    $stmt = $conn->prepare($query);
+        // Lier les paramètres
+        $stmt->bindParam(":username", $username);
 
-    // Vérifier si la préparation a échoué
-    if (!$stmt) {
-        die("Error in preparing statement: " . $conn->error);
-    }
+        // Exécuter la requête
+        $stmt->execute();
 
-    // Lier les paramètres
-    $stmt->bind_param("s", $username);
+        // Récupérer le résultat
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Exécuter la requête
-    $stmt->execute();
+        // Fermer la connexion à la base de données
+        $conn = null;
 
-    // Récupérer le résultat
-    $result = $stmt->get_result();
-
-    // Fermer la connexion à la base de données
-    $stmt->close();
-    $conn->close();
-
-    // Récupérer l'ID de l'utilisateur s'il existe
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        return $row["id"];
-    } else {
-        return null;
+        // Récupérer l'ID de l'utilisateur s'il existe
+        if ($result !== false) {
+            return $result["id"];
+        } else {
+            return null;
+        }
+    } catch (PDOException $e) {
+        die("Error: " . $e->getMessage());
     }
 }
 ?>
