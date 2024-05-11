@@ -42,49 +42,50 @@
             </div>
         </form>
         <div class="text-center mt-6">
-            <?php
-            require_once('connect.php');
+        <?php
+require_once('connect.php');
 
-            if (isset($_POST['submit'])) {
-                if (
-                    isset($_POST['username']) && !empty($_POST['username'])
-                    && isset($_POST['password']) && !empty($_POST['password'])
-                ) {
-                    $username = strip_tags($_POST['username']);
-                    $password = strip_tags($_POST['password']);
-                    $confirm_password = strip_tags($_POST['confirm_password']);
+if (isset($_POST['submit'])) {
+    if (
+        isset($_POST['username']) && !empty($_POST['username'])
+        && isset($_POST['password']) && !empty($_POST['password'])
+    ) {
+        $username = strip_tags($_POST['username']);
+        $password = strip_tags($_POST['password']);
+        $confirm_password = strip_tags($_POST['confirm_password']);
 
-                    // Vérification que les mots de passe correspondent
-                    if ($password === $confirm_password) {
-                        // Hashage du mot de passe
-                        //$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        // Vérification que les mots de passe correspondent
+        if ($password === $confirm_password) {
+            // Hashage du mot de passe
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-                        // Préparation de la requête SQL pour insérer l'utilisateur dans la base de données
-                        $sql = "INSERT INTO utilisateur (nom, motpasse, isadmin) VALUES (:username, :password, 2)";
+            // Préparation de la requête SQL pour insérer l'utilisateur dans la base de données
+            $sql = "INSERT INTO utilisateur (nom, motpasse, isadmin) VALUES (:username, :password, 2)";
 
-                        // Préparation de la requête
-                        $query = $db->prepare($sql);
+            // Préparation de la requête
+            $query = $db->prepare($sql);
 
-                        // Liaison des paramètres avec les valeurs postées depuis le formulaire
-                        $query->bindParam(':username', $username, PDO::PARAM_STR);
-                        $query->bindParam(':password', $password, PDO::PARAM_STR);
+            // Liaison des paramètres avec les valeurs postées depuis le formulaire
+            $query->bindParam(':username', $username, PDO::PARAM_STR);
+            $query->bindParam(':password', $hashed_password, PDO::PARAM_STR);
 
-                        // Exécution de la requête
-                        if ($query->execute()) {
-                            echo '<span class="text-green-500">Inscription réussie pour l\'utilisateur : ' . $username . '</span>';
-                        } else {
-                            echo '<span class="text-red-500">Une erreur s\'est produite lors de l\'inscription.</span>';
-                        }
-                    } else {
-                        echo '<span class="text-red-500">Les mots de passe ne correspondent pas.</span>';
-                    }
-                } else {
-                    echo '<span class="text-red-500">Veuillez remplir tous les champs du formulaire.</span>';
-                }
+            // Exécution de la requête
+            if ($query->execute()) {
+                echo '<span class="text-green-500">Inscription réussie pour l\'utilisateur : ' . $username . '</span>';
+            } else {
+                echo '<span class="text-red-500">Une erreur s\'est produite lors de l\'inscription.</span>';
             }
+        } else {
+            echo '<span class="text-red-500">Les mots de passe ne correspondent pas.</span>';
+        }
+    } else {
+        echo '<span class="text-red-500">Veuillez remplir tous les champs du formulaire.</span>';
+    }
+}
 
-            require_once('close.php');
-            ?>
+require_once('close.php');
+?>
+
         </div>
     </div>
 
