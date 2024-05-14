@@ -26,15 +26,15 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         $user = $query->fetch(PDO::FETCH_ASSOC);
         
         // Vérification des données utilisateur
-        echo "Données de l'utilisateur : ";
-        print_r($user);
+        //echo "Données de l'utilisateur : ";
+        //print_r($user);
         if ($user) {
             // Vérification du mot de passe
-            echo "Mot de passe hashé depuis la base de données : " . $user['motpasse'] . "<br>";
-            echo "Mot de passe saisi par l'utilisateur : " . $password . "<br>";
+            //echo "Mot de passe hashé depuis la base de données : " . $user['motpasse'] . "<br>";
+            // echo "Mot de passe saisi par l'utilisateur : " . $password . "<br>";
             
             $password_match = password_verify($password, $user['motpasse']);
-            echo "Le mot de passe correspond : " . ($password_match ? 'true' : 'false') . "<br>";
+            // echo "Le mot de passe correspond : " . ($password_match ? 'true' : 'false') . "<br>";
             
             if ($password_match) {
                 $_SESSION['username'] = $username;
