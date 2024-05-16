@@ -88,10 +88,10 @@ include 'header.php';
                 <?php echo $article_title; ?>
             </h1>
 
-            <div class="container h-72 overflow-hidden rounded-lg mb-8 border-2">
+            <div class="container h-72 overflow-hidden rounded-lg mb-8 ">
                 <?php if (empty($article_image)): ?>
                     <!-- Afficher l'image par défaut si la colonne "image" est vide -->
-                    <img src="Images/ImageClimat2.jpg" alt="Image par défaut" class="w-full object-fit">
+                    <img src="Images/ImageClimat2.jpg" alt="Image par défaut" class="w-full object-cover">
                 <?php else: ?>
                     <?php
                     // Encodage de l'image en base64
@@ -102,7 +102,7 @@ include 'header.php';
                     ?>
                     <!-- Affichage de l'image -->
                     <img src="data:<?php echo $imageType; ?>;base64,<?php echo $imageData; ?>"
-                        alt="<?php echo $article_title; ?>" class="object-fit object-center h-full w-full">
+                        alt="<?php echo $article_title; ?>" class="object-cover object-center h-full w-full">
                 <?php endif; ?>
             </div>
 

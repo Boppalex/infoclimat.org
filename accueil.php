@@ -82,7 +82,7 @@ include 'header.php';
 
                                         <div
                                             class="overlay absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                                            <p class="text-black font-bold">
+                                            <p class="text-black bg-white font-bold text-3xl font-bold">
                                                 <?php echo $row['description']; ?>
                                             </p>
                                         </div>
