@@ -12,7 +12,21 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <title>CRUD admin</title>
     <style>
-        
+        thead {
+            background-color: #055634;
+            color: white;
+        }
+
+        button.btn {
+            background-color: #055634;
+            color: white;
+        }
+
+        th.bgtabl {
+            background-color: #055634;
+        }
+
+
         .btn {
             --color2: #055634;
             --color1: grey;
@@ -67,7 +81,12 @@ include 'header.php';
 <?php
 require_once('connect.php');
 // Requête SQL pour récupérer les données
-$sql = 'SELECT infocarte.*, categorie.label as categorie FROM infocarte, categorie WHERE infocarte.categorie = categorie.id' ;
+$sql = 'SELECT DISTINCT infocarte.id, infocarte.titre, infocarte.description, infocarte.article, infocarte.statut, categorie.label as categorie
+        FROM infocarte
+        JOIN categorie ON infocarte.categorie = categorie.id
+        Order by infocarte.id DESC'
+        ;
+
 
 // Préparation de la requête
 $query = $db->prepare($sql);
@@ -85,66 +104,85 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
         <h1 class="text-3xl" style="text-align: center; margin-top:50px;">Welcome,
             <?php echo $_SESSION["username"]; ?>!
         </h1>
-        <div class="container mt-4 mb-4">
-            <form action="" method="GET" class="form-inline justify-content-center">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Rechercher par titre" name="search">
-                </div>
-                <button type="submit" class="ml-3">Rechercher</button>
-            </form>
-        </div>
-        <table style="border-collapse: separate; border-spacing: 10px;">
-            <thead>
-                <th>ID</th>
-                <th>Titre</th>
-                <th>Description</th>
-                <th>Article</th>
-                <th>Catégorie</th>
-                <th>Statut</th>
-            </thead>
-            <tbody>
-                <?php
-                foreach ($result as $carte) {
-                    ?>
+        <div class=" overflow-scroll" style="height: 450px;">
+            <table style="">
+                <thead>
+
                     <tr>
-                        <td>
-                            <?= $carte['id'] ?>
-                        </td>
-                        <td>
-                            <?= $carte['titre'] ?>
-                        </td>
-                        <td>
-                            <?= $carte['description'] ?>
-                        </td>
-                        <td>
-                            <?= $carte['article'] ?>
-                        </td>
-                        <td>
-                            <?= $carte['categorie'] ?>
-                        </td>
-                        <td>
-                            <?= $carte['statut'] ?>
-                        </td>
-                        <td>
-                            </br>
-                            <a href="edit.php?id=<?= $carte['id'] ?>">Modifier</a>
-                            <a href="delete.php?id=<?= $carte['id'] ?>">Supprimer</a>
-                        </td>
+                        <th class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
+                            ID</th>
+                        <th id="titre"
+                            class="bgtabl px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                            array_multisort()>
+                            Titre <button onclick="sortTable('titre')">Trier</button>
+                        </th>
+
+                        <th class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
+                            Description</th>
+                        <th class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
+                            Article</th>
+
+                        <th id="categorie"
+                            class="bgtabl px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+                            Catégorie
+                        </th>
+                        <th class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
+                            Statut</th>
+                        <th class="bgtabl px-6 py-3  text-left text-xs font-medium text-white uppercase tracking-wider">
+                            Crud</th>
                     </tr>
+                </thead>
+                <tbody>
                     <?php
-                }
-                ?>
-            </tbody>
-        </table>
+                    foreach ($result as $carte) {
+                        ?>
+                        <tr>
+                            <td class="p-4 bg-gray-700 border-2 text-white">
+                                <?= $carte['id'] ?>
+                            </td>
+                            <td class="p-4 bg-gray-700 border-2">
+                                <a class="text-black hover:text-black" href="article.php?id=<?= $carte['id'] ?>"><button
+                                        class="w-full h-full border-2 rounded bg-white">
+                                        <?= substr($carte['titre'], 0, 255) . (strlen($carte['titre']) > 255 ? '...' : '') ?>
+                                    </button></a>
+                            </td>
+                            <td class="p-4 border-2">
+                                <?= substr($carte['description'], 0, 255) . (strlen($carte['description']) > 255 ? '...' : '') ?>
+                            </td>
+                            <td class="p-4 border-2">
+                                <?= substr($carte['article'], 0, 255) . (strlen($carte['article']) > 255 ? '...' : '') ?>
+                            </td>
+                            <td class="p-4 border-2">
+                                <?= substr($carte['categorie'], 0, 255) . (strlen($carte['categorie']) > 255 ? '...' : '') ?>
+                            </td>
+                            <td class="p-4 border-2">
+                                <?= $carte['statut'] ?>
+                            </td>
+                            <td class="p-4 border-2">
+                                </br>
+                                <a href="edit.php?id=<?= $carte['id'] ?>">Modifier</a>
+                                <a href="delete.php?id=<?= $carte['id'] ?>">Supprimer</a>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+
         <a href="add.php" class="text-white">
             <button class="btn">Ajouter
             </button>
         </a>
 
     </div>
-   
+
 </body>
- <?php
-include 'footer.php';
-?>
+<div class="fixed bottom-0 w-full">
+    <?php
+    include 'footer.php';
+    ?>
+</div>
+
 </html>
