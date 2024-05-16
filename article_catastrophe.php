@@ -1,10 +1,13 @@
 <?php
+include 'header.php';
+
 // Connexion à la base de données
 require_once "connect.php";
 
 // Initialisation des variables
 $article_title = '';
 $article_description = '';
+$article_pays = '';
 $article_article = '';
 $article_categorie = '';
 $article_image = '';
@@ -16,26 +19,29 @@ if (isset($_GET['id'])) {
     $article_id = $_GET['id'];
 
     // Requête SQL pour récupérer les informations de l'article depuis la base de données
-    $sql = "SELECT infocarte.*, categorie.label as categorie_label, categorie.id as categorie_id  FROM infocarte JOIN categorie ON infocarte.categorie = categorie.id WHERE infocarte.id=:id;";
+    $sql = 'SELECT * FROM `infoswiper` WHERE id = :article_id';
+
     // Préparation de la requête
     $query = $db->prepare($sql);
 
     // Liaison du paramètre :article_id avec la valeur de l'ID de l'article
-    $query->bindParam(':id', $article_id, PDO::PARAM_INT);
+    $query->bindParam(':article_id', $article_id, PDO::PARAM_INT);
 
     // Exécution de la requête
     $query->execute();
 
     // Récupération des résultats dans un tableau associatif
     $article = $query->fetch(PDO::FETCH_ASSOC);
+    $nom = $query->fetchColumn(); 
 
     // Vérifier si l'article existe
     if ($article) {
         // Récupérer les informations de l'article
         $article_title = $article['titre'];
         $article_description = $article['description'];
+        $article_pays = $article['pays'];
         $article_article = $article['article'];
-        $article_categorie = $article['categorie_label'];
+        $article_categorie = $article['categorie'];
         $article_image = $article['image'];
         $article_datecreation = $article['datecreation']; // Ajout de la date de création de l'article
     } else {
@@ -57,6 +63,7 @@ $query->bindParam(':article_id', $article_id, PDO::PARAM_INT);
 $query->execute();
 $nom = $query->fetchColumn(); // Récupérer le nom de l'utilisateur
 ?>
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -64,21 +71,8 @@ $nom = $query->fetchColumn(); // Récupérer le nom de l'utilisateur
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Article</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
-
-
 </head>
-<?php
-include 'header.php';
-?>
 
 <body class="bg-gray-100 text-gray-800 font-sans">
 
@@ -91,7 +85,7 @@ include 'header.php';
             <div class="container h-72 overflow-hidden rounded-lg mb-8 border-2">
                 <?php if (empty($article_image)): ?>
                     <!-- Afficher l'image par défaut si la colonne "image" est vide -->
-                    <img src="Images/ImageClimat2.jpg" alt="Image par défaut" class="w-full object-fit">
+                    <img src="Images/ImageClimat2.jpg" alt="Image par défaut" class="w-full object-cover">
                 <?php else: ?>
                     <?php
                     // Encodage de l'image en base64
@@ -102,7 +96,7 @@ include 'header.php';
                     ?>
                     <!-- Affichage de l'image -->
                     <img src="data:<?php echo $imageType; ?>;base64,<?php echo $imageData; ?>"
-                        alt="<?php echo $article_title; ?>" class="object-fit object-center h-full w-full">
+                        alt="<?php echo $article_title; ?>" class="object-cover object-center h-full w-full">
                 <?php endif; ?>
             </div>
 
@@ -114,6 +108,10 @@ include 'header.php';
 
                 <p class="text-lg mb-8 leading-relaxed">
                     <?php echo $article_article; ?>
+                </p>
+
+                <p class="text-lg mb-8 leading-relaxed">
+                    <?php echo $article_pays; ?>
                 </p>
 
                 <div class="flex items-center justify-between">
@@ -132,13 +130,20 @@ include 'header.php';
                     </div>
                 </div>
             </div>
-            
-        </div>
 
+            <div class="mt-8">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2677.6248912325027!2d2.024501576823527!3d47.846859871354965!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e51d8afbda55d5%3A0x3f7ab15696bf7746!2s473%20Rte%20d&#39;Orl%C3%A9ans%2C%2045640%20Sandillon!5e0!3m2!1sfr!2sfr!4v1707490827292!5m2!1sfr!2sfr"
+                    style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                    class="w-full h-72"></iframe>
+            </div>
+
+        </div>
     </div>
 
 </body>
 <?php
+
 include 'footer.php';
 ?>
 

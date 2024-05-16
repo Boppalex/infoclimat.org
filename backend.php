@@ -177,6 +177,7 @@ $result = $query->fetchAll(PDO::FETCH_ASSOC);
         </a>
 
     </div>
+    
 
 </body>
 <div class="fixed bottom-0 w-full">
